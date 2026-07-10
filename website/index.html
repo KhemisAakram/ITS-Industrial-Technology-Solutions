@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ITS — Industrial Technology Solutions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--orange:#FF9F00;--orange-dark:#E08A00;--dark:#1A1A1A;--gray:#4B5563;--gray-2:#6B7280;--warm:#FAF8F5;--warm-2:#F5F2ED;--white:#FFFFFF;--green:#10B981;--red:#EF4444;--border:#E5E7EB;--border-light:#F3F4F6;--border-dark:#D1D5DB}
+[data-theme=dark]{--dark:#F3F4F6;--gray:#9CA3AF;--gray-2:#6B7280;--warm:#1A1A1A;--warm-2:#2A2A2A;--white:#111827;--border:#2A2A2A;--border-light:#1F1F1F;--border-dark:#374151}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,sans-serif;color:var(--dark);background:var(--white);line-height:1.6;-webkit-font-smoothing:antialiased}
+[dir=rtl] body{font-family:'Tajawal','Inter',-apple-system,sans-serif}
+.container{max-width:1120px;margin:0 auto;padding:0 24px}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:6px;font-weight:600;font-size:13px;text-decoration:none;transition:all 0.25s;cursor:pointer;border:none;letter-spacing:0.2px}
+[dir=rtl] .btn{letter-spacing:0}
+.btn-primary{background:var(--orange);color:var(--white)}
+.btn-primary:hover{background:var(--orange-dark);transform:translateY(-2px)}
+.btn-outline{background:transparent;color:var(--dark);border:1.5px solid var(--border-dark)}
+.btn-outline:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px)}
+
+.section-label{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--orange);text-transform:uppercase;margin-bottom:8px}
+[dir=rtl] .section-label{letter-spacing:0}
+.section-title{font-size:32px;font-weight:800;color:var(--dark);letter-spacing:-0.5px;margin-bottom:12px;line-height:1.15}
+[dir=rtl] .section-title{letter-spacing:0}
+.section-sub{font-size:14px;color:var(--gray);max-width:560px;margin-bottom:40px;line-height:1.7}
+[dir=rtl] .section-sub{max-width:100%}
+
+/* ─── EMERGENCY BAR ─── */
+.emergency-bar{background:var(--orange);color:var(--white);text-align:center;padding:10px 16px;font-size:13px;font-weight:600;position:fixed;top:0;left:0;right:0;z-index:2000;display:flex;align-items:center;justify-content:center;gap:8px}
+
+/* ─── NAV ─── */
+nav{position:fixed;top:34px;left:0;right:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(14px);z-index:1000;border-bottom:1px solid var(--border)}
+[data-theme=dark] nav{background:rgba(17,24,39,0.95)}
+nav .container{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0}
+.logo-mark{width:40px;height:40px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.logo-mark img{width:100%;height:100%;object-fit:contain}
+[data-theme=dark] .logo-mark img{filter:brightness(1.1)}
+.logo-text{font-weight:700;font-size:14px;color:var(--dark);letter-spacing:-0.2px}
+[dir=rtl] .logo-text{letter-spacing:0}
+.logo-text small{display:block;font-weight:400;font-size:10px;color:var(--orange)}
+.nav-links{display:flex;gap:28px;list-style:none;align-items:center}
+[dir=rtl] .nav-links{gap:16px}
+.nav-links a{color:var(--gray);text-decoration:none;font-size:13px;font-weight:500;transition:color 0.2s}
+.nav-links a:hover{color:var(--orange)}
+.nav-cta{background:var(--orange);color:var(--white)!important;padding:7px 18px;border-radius:6px;font-weight:600!important;font-size:13px!important}
+.nav-cta:hover{background:var(--orange-dark)!important}
+.lang-btn{background:none;border:1.5px solid var(--border);border-radius:6px;cursor:pointer;padding:5px 10px;font-size:12px;font-weight:600;color:var(--gray);font-family:inherit;transition:all 0.2s}
+.lang-btn:hover{border-color:var(--orange);color:var(--orange)}
+.menu-toggle{display:none;flex-direction:column;gap:4px;cursor:pointer;background:none;border:none;padding:4px}
+.menu-toggle span{width:22px;height:2px;background:var(--dark);border-radius:2px;transition:0.3s}
+
+/* ─── HERO ─── */
+.hero{min-height:100vh;background:var(--white);display:flex;align-items:center;padding-top:98px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60%;right:-10%;width:900px;height:900px;background:radial-gradient(circle,rgba(255,159,0,0.04)0%,transparent 70%);pointer-events:none}
+[dir=rtl] .hero::before{right:auto;left:-10%}
+.hero-content{position:relative;z-index:1;max-width:720px}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,159,0,0.08);color:var(--orange);font-size:11px;font-weight:600;letter-spacing:1px;padding:5px 14px;border-radius:4px;margin-bottom:20px;text-transform:uppercase;border:1px solid rgba(255,159,0,0.12)}
+[dir=rtl] .hero-badge{letter-spacing:0}
+.hero h1{font-size:56px;font-weight:900;color:var(--dark);line-height:1.03;letter-spacing:-1.5px;margin-bottom:14px}
+[dir=rtl] .hero h1{letter-spacing:0}
+.hero h1 span{color:var(--orange)}
+.hero p{font-size:16px;color:var(--gray);max-width:520px;margin-bottom:28px;line-height:1.7}
+[dir=rtl] .hero p{max-width:100%}
+.hero-buttons{display:flex;gap:12px;flex-wrap:wrap}
+.hero-strip{display:flex;align-items:center;gap:32px;margin-top:32px;padding-top:28px;border-top:1px solid var(--border)}
+[dir=rtl] .hero-strip{gap:24px}
+.hero-strip-item{display:flex;align-items:center;gap:10px}
+.hero-strip-item .num{font-size:18px;font-weight:800;color:var(--orange)}
+.hero-strip-item .lbl{font-size:11px;color:var(--gray-2)}
+.hero-contact{display:flex;gap:20px;margin-top:24px;flex-wrap:wrap}
+.hero-contact a{color:var(--gray-2);text-decoration:none;font-size:12px;transition:color 0.2s;display:flex;align-items:center;gap:6px}
+.hero-contact a:hover{color:var(--orange)}
+.scroll-indicator{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--gray-2);font-size:10px;animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+.scroll-indicator .arrow{width:16px;height:16px;border-right:2px solid var(--gray-2);border-bottom:2px solid var(--gray-2);transform:rotate(45deg)}
+[dir=rtl] .scroll-indicator .arrow{transform:rotate(-135deg)}
+
+/* ─── SECTIONS ─── */
+section{padding:88px 0}
+
+/* ─── HOW IT WORKS ─── */
+
+
+/* ─── SERVICES ─── */
+#services{background:var(--white)}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.service-card{background:var(--warm);border-radius:8px;padding:32px 28px;border:1px solid var(--border);transition:all 0.3s}
+.service-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,0.04);border-color:rgba(255,159,0,0.2);background:var(--warm-2)}
+.service-icon{width:44px;height:44px;border-radius:8px;background:rgba(255,159,0,0.08);display:flex;align-items:center;justify-content:center;margin-bottom:16px;color:var(--orange)}
+.service-card h3{font-size:15px;font-weight:700;color:var(--dark);margin-bottom:8px}
+[dir=rtl] .service-card h3{font-size:16px}
+.service-card p{font-size:13px;color:var(--gray);line-height:1.65}
+
+/* ─── TRUST ─── */
+#trust{background:var(--warm);text-align:center;padding:72px 0}
+.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-bottom:36px}
+.trust-num{font-size:42px;font-weight:900;color:var(--orange);line-height:1}
+.trust-lbl{font-size:13px;color:var(--gray);margin-top:6px}
+.testimonial{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:28px;text-align:left;max-width:640px;margin:0 auto}
+[dir=rtl] .testimonial{text-align:right}
+.testimonial p{font-size:13px;color:var(--gray);line-height:1.7;font-style:italic}
+.testimonial .author{font-size:12px;font-weight:600;color:var(--dark);margin-top:12px}
+.testimonial .role{font-size:11px;color:var(--gray-2)}
+
+/* ─── GUIDE + CONTACT ─── */
+#contact{background:var(--warm);border-top:1px solid var(--border)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.guide-card{background:var(--white);border-radius:10px;padding:36px;border:1px solid var(--border)}
+.guide-card h3{font-size:17px;font-weight:700;color:var(--dark);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.guide-card h3 span{color:var(--orange)}
+.guide-card .desc{font-size:13px;color:var(--gray);margin-bottom:18px;line-height:1.6}
+.guide-card ul{list-style:none}
+.guide-card ul li{font-size:12px;color:var(--gray);padding:7px 0;border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:8px}
+.guide-card ul li::before{content:'▸';color:var(--orange);font-size:10px}
+[dir=rtl] .guide-card ul li::before{content:'◂'}
+.contact-details{margin-top:24px}
+.contact-row{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+[dir=rtl] .contact-row{gap:16px}
+.contact-row .ico{width:36px;height:36px;border-radius:8px;background:rgba(255,159,0,0.08);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;color:var(--orange)}
+.contact-row .lbl{font-size:11px;color:var(--gray-2)}
+.contact-row .val{font-size:13px;color:var(--dark);font-weight:500}
+.contact-form{display:flex;flex-direction:column;gap:12px}
+.contact-form input,.contact-form select,.contact-form textarea{padding:13px 16px;border-radius:6px;border:1.5px solid var(--border);font-family:inherit;font-size:13px;transition:all 0.2s;background:var(--white);color:var(--dark)}
+.contact-form textarea{min-height:80px;resize:vertical}
+.contact-form input:focus,.contact-form select:focus,.contact-form textarea:focus{outline:none;border-color:var(--orange);box-shadow:0 0 0 3px rgba(255,159,0,0.08)}
+.contact-form input::placeholder,.contact-form textarea::placeholder{color:var(--gray-2)}
+.contact-form .btn{align-self:flex-start}
+.contact-check{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--gray);cursor:pointer}
+.contact-check input{width:16px;height:16px;accent-color:var(--orange)}
+.contact-note{font-size:11px;color:var(--gray-2);margin-top:6px}
+
+/* ─── FOOTER ─── */
+footer{background:#1A1A1A;padding:32px 0;text-align:center}
+[data-theme=dark] footer{background:#0A0A0A}
+footer p{font-size:12px;color:rgba(255,255,255,0.25)}
+footer span{color:var(--orange)}
+
+/* ─── MODAL ─── */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);backdrop-filter:blur(4px);z-index:3000;display:none;align-items:center;justify-content:center;padding:24px}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:12px;max-width:640px;width:100%;max-height:85vh;overflow-y:auto;padding:40px;position:relative;box-shadow:0 24px 64px rgba(0,0,0,0.15)}
+[dir=rtl] .modal{direction:rtl}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;cursor:pointer;color:var(--gray-2);padding:4px;border-radius:4px;transition:color 0.2s}
+[dir=rtl] .modal-close{right:auto;left:16px}
+.modal-close:hover{color:var(--dark)}
+.modal-icon{width:48px;height:48px;border-radius:10px;background:rgba(255,159,0,0.08);display:flex;align-items:center;justify-content:center;margin-bottom:16px;color:var(--orange)}
+.modal h3{font-size:22px;font-weight:800;color:var(--dark);margin-bottom:10px}
+[dir=rtl] .modal h3{font-size:24px}
+.modal .modal-desc{font-size:14px;color:var(--gray);line-height:1.7;margin-bottom:20px}
+.modal h4{font-size:13px;font-weight:700;color:var(--dark);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+[dir=rtl] .modal h4{letter-spacing:0}
+.modal ul{list-style:none;margin-bottom:24px}
+.modal ul li{font-size:13px;color:var(--gray);padding:8px 0;border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:10px}
+.modal ul li::before{content:'▸';color:var(--orange);font-size:10px;flex-shrink:0}
+[dir=rtl] .modal ul li::before{content:'◂'}
+.modal .btn{margin-top:4px}
+
+/* ─── GALLERY ─── */
+#gallery{background:var(--warm)}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.gallery-card{background:var(--white);border-radius:8px;border:1px solid var(--border);overflow:hidden;transition:all 0.3s}
+.gallery-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,0.04);border-color:rgba(255,159,0,0.2)}
+.gallery-img{height:160px;background:var(--warm-2);display:flex;align-items:center;justify-content:center;color:var(--border-dark);border-bottom:1px solid var(--border);overflow:hidden}
+.gallery-img svg{width:40px;height:40px;opacity:0.4}
+.gallery-img--card{height:auto;background:var(--white);padding:12px}
+.gallery-img--card img{width:100%;height:auto;max-height:200px;object-fit:contain;border-radius:4px}
+.gallery-img--work{height:auto;background:var(--warm-2);padding:0}
+.gallery-img--work img{width:100%;height:180px;object-fit:cover;display:block}
+.gallery-body{padding:20px}
+.gallery-tag{display:inline-block;font-size:10px;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;color:var(--orange);background:rgba(255,159,0,0.08);padding:3px 8px;border-radius:3px;margin-bottom:8px}
+.gallery-body h3{font-size:14px;font-weight:700;color:var(--dark);margin-bottom:4px}
+.gallery-body p{font-size:12px;color:var(--gray);line-height:1.6}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:768px){
+.emergency-bar{font-size:11px;padding:8px 12px;flex-wrap:wrap}
+nav{top:32px}
+nav .container{height:56px}
+.nav-links{display:none;gap:12px}.menu-toggle{display:flex}
+.nav-links.open{display:flex;flex-direction:column;position:absolute;top:56px;left:0;right:0;background:var(--white);padding:20px;border-bottom:1px solid var(--border);gap:12px;box-shadow:0 4px 20px rgba(0,0,0,0.06)}
+[dir=rtl] .nav-links.open{left:0;right:0}
+.hero h1{font-size:34px}
+.hero p{font-size:15px}
+.hero-strip{flex-wrap:wrap;gap:16px}
+.contact-grid,.services-grid,.gallery-grid{grid-template-columns:1fr}
+.trust-grid{grid-template-columns:1fr;max-width:240px;margin:0 auto 36px}
+section{padding:60px 0}
+.section-title{font-size:26px}
+.trust-num{font-size:34px}
+}
+@media(min-width:769px)and(max-width:1024px){
+.trust-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+<symbol id="i-grid" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></symbol>
+<symbol id="i-terminal" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></symbol>
+<symbol id="i-tool" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></symbol>
+<symbol id="i-zap" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></symbol>
+<symbol id="i-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+<symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+<symbol id="i-phone" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></symbol>
+<symbol id="i-map-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></symbol>
+<symbol id="i-list" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></symbol>
+<symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></symbol>
+<symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+<symbol id="i-eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></symbol>
+<symbol id="i-image" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></symbol>
+<symbol id="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></symbol>
+<symbol id="i-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></symbol>
+<symbol id="i-briefcase" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></symbol>
+<symbol id="i-hard-drive" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="12" x2="2" y2="12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/><line x1="6" y1="16" x2="6.01" y2="16"/><line x1="10" y1="16" x2="10.01" y2="16"/></symbol>
+</svg>
+
+<div class="emergency-bar" data-i18n="emergency">Production stopped? Immediate dispatch available.</div>
+
+<nav>
+<div class="container">
+<a href="#" class="logo">
+<div class="logo-mark"><img src="IMAGES/LOGO BGR.png" alt="ITS Logo"></div>
+<div class="logo-text">Industrial Technology Solutions<small>Power, Control & Machinery</small></div>
+</a>
+<button class="menu-toggle" id="menuToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+<ul class="nav-links" id="navLinks">
+<li><a href="#process" data-i18n="nav-how">How It Works</a></li>
+<li><a href="#services" data-i18n="nav-services">Services</a></li>
+<li><a href="#contact" class="nav-cta" data-i18n="nav-contact">Contact Us</a></li>
+<li><button class="lang-btn" id="langToggle">ع</li>
+<li><button id="darkToggle" style="background:none;border:none;cursor:pointer;padding:4px;display:flex;color:var(--gray)" aria-label="Toggle dark mode"><svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></li>
+</ul>
+</div>
+</nav>
+
+<section class="hero">
+<div class="container">
+<div class="hero-content">
+<div class="hero-badge" data-i18n="hero-badge">Engineering Uptime for Industry</div>
+<h1 data-i18n-html="hero-title">Power, Control &amp; Machinery.<br><span>One Reliable Partner.</span></h1>
+<p data-i18n="hero-desc">Most plants in Skikda source electrical work, electronics, and machine building from separate providers — creating costly delays and coordination headaches. ITS delivers all three under one roof.</p>
+<div class="hero-buttons">
+<a href="#contact" class="btn btn-primary" data-i18n="hero-cta">Request a Quote</a>
+<a href="#contact" class="btn btn-outline" data-i18n="hero-learn">Learn More</a>
+</div>
+<div class="hero-strip">
+<div class="hero-strip-item">
+<div>
+<div class="num">1,000</div>
+<div class="lbl" data-i18n="hero-rate">DA/hr standard rate</div>
+</div>
+</div>
+<div class="hero-strip-item">
+<div>
+<div class="num">&lt;2</div>
+<div class="lbl" data-i18n="hero-response">hour response time</div>
+</div>
+</div>
+<div class="hero-strip-item">
+<div>
+<div class="num">24/7</div>
+<div class="lbl" data-i18n="hero-support">emergency support</div>
+</div>
+</div>
+</div>
+<div class="hero-contact">
+<a href="tel:0699324076">0699 32 40 76</a>
+<a href="mailto:industrialtechnologysolutions2@gmail.com">industrialtechnologysolutions2@gmail.com</a>
+<a data-i18n="hero-location">El Harrouch, Skikda, Algeria</a>
+</div>
+</div>
+</div>
+<div class="scroll-indicator">
+<span data-i18n="scroll">Scroll</span>
+<div class="arrow"></div>
+</div>
+</section>
+
+<section id="services">
+<div class="container">
+<div class="section-label" data-i18n="services-label">What We Deliver</div>
+<h2 class="section-title" data-i18n="services-title">Full-Spectrum Industrial Services</h2>
+<p class="section-sub" data-i18n="services-sub">Electrical systems, electronics, PCB repair, and machine building — no more juggling separate contractors.</p>
+<div class="services-grid">
+<div class="service-card">
+<div class="service-icon"><svg width="20" height="20"><use href="#i-grid"/></svg></div>
+<h3 data-i18n="svc1-title">Control Panel Design &amp; Assembly</h3>
+<p data-i18n="svc1-desc">Custom electrical panels built to spec — from single-machine control to multi-line automation hubs.</p>
+</div>
+<div class="service-card">
+<div class="service-icon"><svg width="20" height="20"><use href="#i-terminal"/></svg></div>
+<h3 data-i18n="svc2-title">PLC Programming &amp; Automation</h3>
+<p data-i18n="svc2-desc">Siemens, Schneider, and Allen-Bradley — program, troubleshoot, and optimize your control logic.</p>
+</div>
+<div class="service-card">
+<div class="service-icon"><svg width="20" height="20"><use href="#i-tool"/></svg></div>
+<h3 data-i18n="svc3-title">Machine Build &amp; Commissioning</h3>
+<p data-i18n="svc3-desc">From concept to production line — custom machine design, fabrication, installation, and handover.</p>
+</div>
+<div class="service-card">
+<div class="service-icon"><svg width="20" height="20"><use href="#i-zap"/></svg></div>
+<h3 data-i18n="svc4-title">Industrial Wiring &amp; Installation</h3>
+<p data-i18n="svc4-desc">Power distribution, motor control circuits, and instrumentation wiring for new and existing lines.</p>
+</div>
+<div class="service-card">
+<div class="service-icon"><svg width="20" height="20"><use href="#i-search"/></svg></div>
+<h3 data-i18n="svc5-title">Advanced Diagnostics &amp; Troubleshooting</h3>
+<p data-i18n="svc5-desc">Thermal imaging, VFD analysis, logic tracing — find the root cause, not just the symptom.</p>
+</div>
+<div class="service-card">
+<div class="service-icon"><svg width="20" height="20"><use href="#i-clock"/></svg></div>
+<h3 data-i18n="svc6-title">SLA Preventive Maintenance</h3>
+<p data-i18n="svc6-desc">Remote monitoring + monthly on-site inspections to catch failures before they stop your line.</p>
+</div>
+<div class="service-card">
+<div class="service-icon"><svg width="20" height="20"><use href="#i-hard-drive"/></svg></div>
+<h3 data-i18n="svc7-title">PCB &amp; Power Supply Repair</h3>
+<p data-i18n="svc7-desc">Industrial circuit board diagnostics and repair — CNC, PLC, VFD, power supplies. Same-day service available.</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="trust">
+<div class="container">
+<div class="section-label" data-i18n="trust-label">Why Industry Trusts ITS</div>
+<h2 class="section-title" data-i18n="trust-title">Built to Keep You Running</h2>
+<p class="section-sub" style="margin:0 auto 36px" data-i18n="trust-sub">Every project carries the Master Guarantee — Lead Engineer sign-off before handover.</p>
+<div class="trust-grid">
+<div>
+<div class="trust-num">3</div>
+<div class="trust-lbl" data-i18n="trust-verticals">Service Verticals</div>
+</div>
+<div>
+<div class="trust-num">1</div>
+<div class="trust-lbl" data-i18n="trust-partner">Accountable Partner</div>
+</div>
+<div>
+<div class="trust-num">100%</div>
+<div class="trust-lbl" data-i18n="trust-qa">QA First-Pass Target</div>
+</div>
+<div>
+<div class="trust-num">24/7</div>
+<div class="trust-lbl" data-i18n="trust-support">Emergency Support</div>
+</div>
+</div>
+<div class="testimonial">
+<p data-i18n="testimonial-text">"We used to source electrical and machine services from different providers — every breakdown turned into a blame game. ITS handles all of it. Our downtime dropped by over half in the first month."</p>
+<div class="author" data-i18n="testimonial-author">— Plant Manager, Skikda Processing Facility</div>
+<div class="role" data-i18n="testimonial-role">(Reference available on request)</div>
+</div>
+</div>
+</section>
+
+<section id="gallery">
+<div class="container">
+<div class="section-label" data-i18n="gallery-label">Our Work</div>
+<h2 class="section-title" data-i18n="gallery-title">Projects &amp; Brand</h2>
+<p class="section-sub" data-i18n="gallery-sub">Our brand identity and recent industrial projects.</p>
+<div class="gallery-grid">
+<div class="gallery-card">
+<div class="gallery-img gallery-img--card"><img src="IMAGES/CARD FRONT.jpg" alt="Business Card Front"></div>
+<div class="gallery-body">
+<div class="gallery-tag" data-i18n="gallery-brand-tag">Branding</div>
+<h3 data-i18n="gallery-card1-title">Business Card — Front</h3>
+<p data-i18n="gallery-card1-desc">ITS Industrial Technology Solutions — Power, Control & Machinery. El Harrouch, Skikda, Algeria.</p>
+</div>
+</div>
+<div class="gallery-card">
+<div class="gallery-img gallery-img--card"><img src="IMAGES/CARD BACK.jpg" alt="Business Card Back"></div>
+<div class="gallery-body">
+<div class="gallery-tag" data-i18n="gallery-brand-tag">Branding</div>
+<h3 data-i18n="gallery-card2-title">Business Card — Back</h3>
+<p data-i18n="gallery-card2-desc">Contact details: 0699 32 40 76 | industrialtechnologysolutions2@gmail.com | El Harrouch, Skikda.</p>
+</div>
+</div>
+<div class="gallery-card">
+<div class="gallery-img gallery-img--work"><img src="IMAGES/Our Works/CNC Panales.jpg" alt="CNC Panels"></div>
+<div class="gallery-body">
+<div class="gallery-tag" data-i18n="gallery-project-tag">Project</div>
+<h3 data-i18n="gallery-card3-title">CNC Control Panels</h3>
+<p data-i18n="gallery-card3-desc">Custom CNC control panel assembly and wiring completed for local manufacturing.</p>
+</div>
+</div>
+<div class="gallery-card">
+<div class="gallery-img gallery-img--work"><img src="IMAGES/Our Works/Controls panels.jpg" alt="Control Panels"></div>
+<div class="gallery-body">
+<div class="gallery-tag" data-i18n="gallery-project-tag">Project</div>
+<h3 data-i18n="gallery-card4-title">Industrial Control Panels</h3>
+<p data-i18n="gallery-card4-desc">Electrical control panels designed, assembled, and commissioned for industrial automation.</p>
+</div>
+</div>
+<div class="gallery-card">
+<div class="gallery-img gallery-img--work"><img src="IMAGES/Our Works/Somik.jpg" alt="Somik Project"></div>
+<div class="gallery-body">
+<div class="gallery-tag" data-i18n="gallery-project-tag">Project</div>
+<h3 data-i18n="gallery-card5-title">Somik Installation</h3>
+<p data-i18n="gallery-card5-desc">On-site electrical installation and commissioning for industrial equipment.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="contact">
+<div class="container">
+<div class="section-label" data-i18n="contact-label">Get Started</div>
+<h2 class="section-title" data-i18n="contact-title">Get the Guide &amp; Get in Touch</h2>
+<p class="section-sub" data-i18n="contact-sub">Download our free checklist and tell us about your project — we typically respond within 2 hours.</p>
+<div class="contact-grid">
+<div>
+<div class="guide-card">
+<h3><svg width="18" height="18" style="vertical-align:middle;flex-shrink:0"><use href="#i-list"/></svg> <span data-i18n="guide-title">Equipment Health Checklist</span></h3>
+<p class="desc" data-i18n="guide-desc">A 10-point inspection checklist used by our engineers to assess equipment condition. Free.</p>
+<ul>
+<li data-i18n="check1">Electrical panel inspection points</li>
+<li data-i18n="check2">Motor &amp; drive system health check</li>
+<li data-i18n="check3">PLC &amp; control system diagnostics</li>
+<li data-i18n="check4">Mechanical wear indicators</li>
+<li data-i18n="check5">Hydraulic &amp; pneumatic system checks</li>
+<li data-i18n="check6">Safety system verification</li>
+<li data-i18n="check7">Thermal imaging scan points</li>
+<li data-i18n="check8">Lubrication schedule review</li>
+<li data-i18n="check9">Spare parts criticality assessment</li>
+<li data-i18n="check10">Master Guarantee sign-off criteria</li>
+</ul>
+</div>
+<div class="contact-details">
+<div class="contact-row">
+<div class="ico"><svg width="16" height="16"><use href="#i-phone"/></svg></div>
+<div><div class="lbl" data-i18n="contact-phone-label">Phone (Emergency)</div><div class="val">0699 32 40 76</div></div>
+</div>
+<div class="contact-row">
+<div class="ico"><svg width="16" height="16"><use href="#i-mail"/></svg></div>
+<div><div class="lbl" data-i18n="contact-email-label">Email</div><div class="val">industrialtechnologysolutions2@gmail.com</div></div>
+</div>
+<div class="contact-row">
+<div class="ico"><svg width="16" height="16"><use href="#i-map-pin"/></svg></div>
+<div><div class="lbl" data-i18n="contact-location-label">Location</div><div class="val" data-i18n="contact-location-val">El Harrouch, Skikda, Algeria</div></div>
+</div>
+<div class="contact-row">
+<div class="ico"><svg width="16" height="16"><use href="#i-clock"/></svg></div>
+<div><div class="lbl" data-i18n="contact-response-label">Response Time</div><div class="val" data-i18n="contact-response-val">&lt; 2 hours on business days</div></div>
+</div>
+</div>
+</div>
+<div>
+<form class="contact-form" id="combinedForm">
+<input type="text" name="name" placeholder="Your Name" data-i18n="form-name" required>
+<input type="email" name="email" placeholder="Email Address" data-i18n="form-email" required>
+<input type="tel" name="phone" placeholder="Phone Number" data-i18n="form-phone" value="+213">
+<input type="text" name="company" placeholder="Company Name" data-i18n="form-company">
+<select name="service" id="serviceSelectCombined">
+<option value="" data-i18n="form-select-default">What service do you need?</option>
+<option value="emergency" style="font-weight:700" data-i18n="form-emergency">Emergency Repair</option>
+<option value="sla" selected data-i18n="form-sla">Preventive Maintenance (SLA)</option>
+<option value="electrical" data-i18n="form-electrical">Electrical / Automation</option>
+<option value="machine" data-i18n="form-machine">Machine Building / CNC</option>
+<option value="diagnostic" data-i18n="form-diagnostic">Free Diagnostic Assessment</option>
+<option value="other" data-i18n="form-other">Other</option>
+</select>
+<textarea name="message" placeholder="Briefly describe your equipment or issue..." data-i18n="form-message" id="msgFieldCombined">I'm interested in preventive maintenance (SLA). Please contact me.</textarea>
+<label class="contact-check">
+<input type="checkbox" name="sendGuide" value="Yes" checked id="sendGuideCheck"> <span data-i18n="form-guide">Also send me the free Equipment Health Checklist</span>
+</label>
+<button type="submit" class="btn btn-primary" data-i18n="form-submit">Send Message</button>
+</form>
+<p class="contact-note" data-i18n="form-note">No spam. We'll email the PDF and follow up only if you want.</p>
+</div>
+</div>
+</div>
+</section>
+
+<footer>
+<div class="container">
+<p>&copy; 2026 <span>ITS</span> — <span data-i18n="footer-text">Industrial Technology Solutions. Power, Control &amp; Machinery. | El Harrouch, Skikda, Algeria</span></p>
+</div>
+</footer>
+
+<div class="modal-overlay" id="modalOverlay">
+<div class="modal">
+<button class="modal-close" id="modalClose" aria-label="Close"><svg width="20" height="20"><use href="#i-x"/></svg></button>
+<div class="modal-icon" id="modalIcon"><svg width="22" height="22"><use href="#i-grid"/></svg></div>
+<h3 id="modalTitle">Service Title</h3>
+<p class="modal-desc" id="modalDesc">Service description goes here.</p>
+<h4 data-i18n="modal-what">What This Includes</h4>
+<ul id="modalList">
+<li>Feature one</li>
+<li>Feature two</li>
+<li>Feature three</li>
+</ul>
+<a href="#contact" class="btn btn-primary" id="modalCta" data-i18n="modal-cta">Request This Service</a>
+</div>
+</div>
+
+<script>
+// Service modal data
+const serviceModals=[
+{
+icon:'i-grid',title_en:'Control Panel Design & Assembly',title_ar:'تصميم وتجميع لوحات التحكم',
+desc_en:'Custom electrical panels built to spec — from single-machine control to multi-line automation hubs. We design, assemble, and test enclosures integrating low-voltage switchgear, VFDs, safety relays, and PLC I/O.',
+desc_ar:'لوحات كهربائية مخصصة حسب المواصفات — من التحكم بآلة واحدة إلى مراكز أتمتة متعددة الخطوط.',
+items_en:['Full CAD electrical schematic design','IEC/NEMA compliant assembly','VFD & soft starter integration','Safety relay & emergency stop circuits','On-site commissioning & testing','Documentation & as-built drawings'],
+items_ar:['تصميم كامل للمخططات الكهربائية (CAD)','تجميع وفق معايير IEC/NEMA','دمج محركات التردد المتغير (VFD)','دوائر مرحلات السلامة والتوقف الطارئ','التشغيل والاختبار في الموقع','التوثيق والرسومات كما بنيت']
+},
+{
+icon:'i-terminal',title_en:'PLC Programming & Automation',title_ar:'برمجة PLC والأتمتة',
+desc_en:'Siemens, Schneider, and Allen-Bradley — program, troubleshoot, and optimize your control logic. From simple relay replacements to full SCADA integration.',
+desc_ar:'Siemens، Schneider، وAllen-Bradley — برمجة واستكشاف وتحسين منطق التحكم.',
+items_en:['Ladder, FBD, SCL, and STL programming','HMI/SCADA development (WinCC, FactoryTalk)','Industrial networking: Profinet, Modbus TCP','Logic optimization for cycle time reduction','Legacy PLC migration & upgrades','Remote diagnostics & monitoring setup'],
+items_ar:['برمجة Ladder, FBD, SCL, STL','تطوير HMI/SCADA','الشبكات الصناعية: Profinet, Modbus TCP','تحسين المنطق لتقليل وقت الدورة','ترقية وترحيل PLC القديم','إعداد التشخيص والمراقبة عن بعد']
+},
+{
+icon:'i-tool',title_en:'Machine Build & Commissioning',title_ar:'بناء وتشغيل الآلات',
+desc_en:'From concept to production line — custom machine design, fabrication, installation, and handover. We build machines that do exactly what your process needs.',
+desc_ar:'من الفكرة إلى خط الإنتاج — تصميم وتصنيع وتركيب وتسليم آلات مخصصة.',
+items_en:['CAD/CAM mechanical design','Structural frame fabrication','Pneumatic & hydraulic system integration','Electrical control integration','Load testing & performance validation','Operator training & handover documentation'],
+items_ar:['تصميم ميكانيكي CAD/CAM','تصنيع الهيكل','دمج الأنظمة الهوائية والهيدروليكية','دمج التحكم الكهربائي','اختبار الأحمال والتحقق من الأداء','تدريب المشغلين وتوثيق التسليم']
+},
+{
+icon:'i-zap',title_en:'Industrial Wiring & Installation',title_ar:'تمديدات كهربائية صناعية',
+desc_en:'Power distribution, motor control circuits, and instrumentation wiring for new and existing lines. Safe, code-compliant, and built to last.',
+desc_ar:'توزيع الطاقة، دوائر التحكم في المحركات، وأسلاك الأجهزة للخطوط الجديدة والحالية.',
+items_en:['Power distribution panel installation','Motor control center (MCC) wiring','Cable tray & conduit systems','Earthing & bonding per IEC','Instrumentation & signal wiring','Thermographic inspection post-install'],
+items_ar:['تركيب لوحات توزيع الطاقة','أسلاك مركز التحكم في المحركات','أنظمة أرفف الكابلات والمواسير','التأريض والربط حسب IEC','أسلاك الأجهزة والإشارات','الفحص الحراري بعد التركيب']
+},
+{
+icon:'i-search',title_en:'Advanced Diagnostics & Troubleshooting',title_ar:'تشخيص متقدم وحل المشاكل',
+desc_en:'Thermal imaging, VFD analysis, logic tracing — find the root cause, not just the symptom. We bring lab-grade tools to your floor.',
+desc_ar:'التصوير الحراري، تحليل VFD، تتبع المنطق — نجد الجذر، ليس فقط العرض.',
+items_en:['Thermal imaging (FLIR) surveys','Power quality & harmonics analysis','VFD parameter & performance audit','PLC logic tracing & simulation','Insulation resistance (Megger) testing','Detailed diagnostic report with recommendations'],
+items_ar:['مسح حراري (FLIR)','تحليل جودة الطاقة والتوافقيات','تدقيق معلمات وأداء VFD','تتبع ومحاكاة منطق PLC','اختبار مقاومة العزل (Megger)','تقرير تشخيصي مفصل مع توصيات']
+},
+{
+icon:'i-clock',title_en:'SLA Preventive Maintenance',title_ar:'الصيانة الوقائية (SLA)',
+desc_en:'Remote monitoring + monthly on-site inspections to catch failures before they stop your line. Three tiers to match your budget and criticality.',
+desc_ar:'مراقبة عن بعد + فحوصات شهرية في الموقع لاكتشاف الأعطال قبل توقف خطك.',
+items_en:['Tier 1: Remote monitoring & email support (from 6,000 DA/mo)','Tier 2: + monthly on-site inspection','Tier 3: + priority emergency dispatch','Quarterly thermal imaging scan','Spare parts criticality assessment','Annual system performance review'],
+items_ar:['المستوى 1: مراقبة عن بعد ودعم بالبريد (من 6,000 دينار/شهر)','المستوى 2: + فحص شهري في الموقع','المستوى 3: + أولوية التدخل الطارئ','مسح حراري فصلي','تقييم أهمية قطع الغيار','مراجعة أداء النظام السنوية']
+},
+{
+icon:'i-hard-drive',title_en:'PCB & Power Supply Repair',title_ar:'إصلاح PCB ومصادر الطاقة',
+desc_en:'Industrial circuit board diagnostics and repair — CNC, PLC, VFD, and power supply boards. Same-day flat-rate service. If we cannot fix it, you do not pay.',
+desc_ar:'تشخيص وإصلاح لوحات الدوائر الصناعية — CNC، PLC، VFD، ومصادر الطاقة. خدمة بنفس اليوم بسعر ثابت. إذا لم نتمكن من الإصلاح، لا تدفع.',
+items_en:['Full diagnostic assessment (3,000–5,000 DA flat rate)','Component-level repair & replacement','Post-repair functional testing under load','30-day warranty on all repairs','Custom PCB design & assembly available','Rush same-day service available'],
+items_ar:['تقييم تشخيصي كامل (3,000–5,000 دينار سعر ثابت)','إصلاح واستبدال على مستوى المكونات','اختبار وظيفي بعد الإصلاح تحت الحمل','ضمان 30 يوماً على جميع الإصلاحات','تصميم وتجميع PCB مخصص متاح','خدمة نفس اليوم متاحة']
+}
+];
+
+const i18n={en:{
+'emergency':'Production stopped? Immediate dispatch available.',
+'nav-how':'How It Works','nav-services':'Services','nav-contact':'Contact Us',
+'hero-badge':'Engineering Uptime for Industry',
+'hero-title':'Power, Control &amp; Machinery.<br><span>One Reliable Partner.</span>',
+'hero-desc':'Most plants in Skikda source electrical work, electronics, and machine building from separate providers — creating costly delays and coordination headaches. ITS delivers all three under one roof.',
+'hero-cta':'Request a Quote','hero-learn':'Learn More',
+'gallery-label':'Our Work','gallery-title':'Projects & Brand','gallery-sub':'Our brand identity and recent industrial projects.',
+'gallery-tag-coming':'Coming Soon','gallery-brand-tag':'Branding','gallery-project-tag':'Project',
+'gallery-card1-title':'Business Card \u2014 Front','gallery-card1-desc':'ITS Industrial Technology Solutions \u2014 Power, Control & Machinery. El Harrouch, Skikda, Algeria.',
+'gallery-card2-title':'Business Card \u2014 Back','gallery-card2-desc':'Contact details: 0699 32 40 76 | industrialtechnologysolutions2@gmail.com | El Harrouch, Skikda.',
+'gallery-card3-title':'CNC Control Panels','gallery-card3-desc':'Custom CNC control panel assembly and wiring completed for local manufacturing.',
+'gallery-card4-title':'Industrial Control Panels','gallery-card4-desc':'Electrical control panels designed, assembled, and commissioned for industrial automation.',
+'gallery-card5-title':'Somik Installation','gallery-card5-desc':'On-site electrical installation and commissioning for industrial equipment.',
+'modal-what':'What This Includes','modal-cta':'Request This Service',
+'hero-rate':'DA/hr standard rate','hero-response':'hour response time','hero-support':'emergency support',
+'hero-location':'El Harrouch, Skikda, Algeria','scroll':'Scroll',
+'process-label':'How It Works','process-title':'Your Path to Reliable Operations','process-sub':'Four steps. One accountable partner. Zero vendor friction.',
+'step1-label':'Diagnose','step1-sub':'Free on-site equipment assessment',
+'step2-label':'Quote','step2-sub':'Transparent fixed-price proposal',
+'step3-label':'Execute','step3-sub':'Cross-specialist team deployed',
+'step4-label':'Guarantee','step4-sub':'Master Engineer sign-off',
+'services-label':'What We Deliver','services-title':'Full-Spectrum Industrial Services','services-sub':'Electrical systems, electronics, PCB repair, and machine building — no more juggling separate contractors.',
+'svc1-title':'Control Panel Design & Assembly','svc1-desc':'Custom electrical panels built to spec — from single-machine control to multi-line automation hubs.',
+'svc2-title':'PLC Programming & Automation','svc2-desc':'Siemens, Schneider, and Allen-Bradley — program, troubleshoot, and optimize your control logic.',
+'svc3-title':'Machine Build & Commissioning','svc3-desc':'From concept to production line — custom machine design, fabrication, installation, and handover.',
+'svc4-title':'Industrial Wiring & Installation','svc4-desc':'Power distribution, motor control circuits, and instrumentation wiring for new and existing lines.',
+'svc5-title':'Advanced Diagnostics & Troubleshooting','svc5-desc':'Thermal imaging, VFD analysis, logic tracing — find the root cause, not just the symptom.',
+'svc6-title':'SLA Preventive Maintenance','svc6-desc':'Remote monitoring + monthly on-site inspections to catch failures before they stop your line.',
+'svc7-title':'PCB & Power Supply Repair','svc7-desc':'Industrial circuit board diagnostics and repair — CNC, PLC, VFD, power supplies. Same-day service available.',
+'trust-label':'Why Industry Trusts ITS','trust-title':'Built to Keep You Running','trust-sub':'Every project carries the Master Guarantee — Lead Engineer sign-off before handover.',
+'trust-verticals':'Service Verticals','trust-partner':'Accountable Partner','trust-qa':'QA First-Pass Target','trust-support':'Emergency Support',
+'testimonial-text':'"We used to source electrical and machine services from different providers — every breakdown turned into a blame game. ITS handles all of it. Our downtime dropped by over half in the first month."',
+'testimonial-author':'— Plant Manager, Skikda Processing Facility','testimonial-role':'(Reference available on request)',
+'contact-label':'Get Started','contact-title':'Get the Guide & Get in Touch','contact-sub':'Download our free checklist and tell us about your project — we typically respond within 2 hours.',
+'guide-title':'Equipment Health Checklist','guide-desc':'A 10-point inspection checklist used by our engineers to assess equipment condition. Free.',
+'check1':'Electrical panel inspection points','check2':'Motor & drive system health check','check3':'PLC & control system diagnostics','check4':'Mechanical wear indicators','check5':'Hydraulic & pneumatic system checks','check6':'Safety system verification','check7':'Thermal imaging scan points','check8':'Lubrication schedule review','check9':'Spare parts criticality assessment','check10':'Master Guarantee sign-off criteria',
+'contact-phone-label':'Phone (Emergency)','contact-email-label':'Email','contact-location-label':'Location','contact-location-val':'El Harrouch, Skikda, Algeria','contact-response-label':'Response Time','contact-response-val':'< 2 hours on business days',
+'form-name':'Your Name','form-email':'Email Address','form-phone':'Phone Number','form-company':'Company Name','form-select-default':'What service do you need?','form-emergency':'Emergency Repair','form-sla':'Preventive Maintenance (SLA)','form-electrical':'Electrical / Automation','form-machine':'Machine Building / CNC','form-diagnostic':'Free Diagnostic Assessment','form-other':'Other','form-message':'Briefly describe your equipment or issue...','form-guide':'Also send me the free Equipment Health Checklist','form-submit':'Send Message','form-note':'No spam. We\'ll email the PDF and follow up only if you want.',
+'footer-text':'Industrial Technology Solutions. Power, Control & Machinery. | El Harrouch, Skikda, Algeria'
+},ar:{
+'emergency':'توقف الإنتاج؟ فريقنا جاهز للتدخل الفوري.',
+'nav-how':'كيف نعمل','nav-services':'خدماتنا','nav-contact':'اتصل بنا',
+'hero-badge':'هندسة استمرارية الإنتاج للصناعة',
+'hero-title':'الطاقة، التحكم والآلات.<br><span>شريك واحد موثوق.</span>',
+'hero-desc':'معظم المصانع في سكيكدة تستعين بمقدمي خدمات منفصلين للأعمال الكهربائية والإلكترونية وبناء الآلات — مما يسبب تأخيرات مكلفة وصداع التنسيق. ITS تقدم الثلاثة تحت سقف واحد.',
+'hero-cta':'طلب عرض سعر','hero-learn':'اعرف المزيد',
+'gallery-label':'أعمالنا','gallery-title':'المشاريع والعلامة التجارية','gallery-sub':'هويتنا التجارية ومشاريعنا الصناعية الأخيرة.',
+'gallery-tag-coming':'قريباً','gallery-brand-tag':'العلامة التجارية','gallery-project-tag':'مشروع',
+'gallery-card1-title':'بطاقة الأعمال \u2014 الأمامي','gallery-card1-desc':'ITS حلول التكنولوجيا الصناعية \u2014 الطاقة، التحكم والآلات. الحروش، سكيكدة، الجزائر.',
+'gallery-card2-title':'بطاقة الأعمال \u2014 الخلفي','gallery-card2-desc':'للتواصل: 0699 32 40 76 | industrialtechnologysolutions2@gmail.com | الحروش، سكيكدة.',
+'gallery-card3-title':'لوحات تحكم CNC','gallery-card3-desc':'تجميع وأسلاك لوحات تحكم CNC مخصصة للتصنيع المحلي.',
+'gallery-card4-title':'لوحات تحكم صناعية','gallery-card4-desc':'لوحات تحكم كهربائية تم تصميمها وتجميعها وتشغيلها للأتمتة الصناعية.',
+'gallery-card5-title':'تركيب سوميك','gallery-card5-desc':'تركيب كهربائي وتشغيل في الموقع للمعدات الصناعية.',
+'modal-what':'ماذا يشمل','modal-cta':'طلب هذه الخدمة',
+'hero-rate':'دينار/ساعة السعر القياسي','hero-response':'ساعات وقت الاستجابة','hero-support':'دعم طارئ',
+'hero-location':'الحروش، سكيكدة، الجزائر','scroll':'أدناه',
+'process-label':'كيف نعمل','process-title':'طريقك إلى عمليات موثوقة','process-sub':'أربع خطوات. شريك واحد مسؤول. بدون تعقيد.',
+'step1-label':'التشخيص','step1-sub':'تقييم مجاني للمعدات في الموقع',
+'step2-label':'السعر','step2-sub':'عرض سعر ثابت وشفاف',
+'step3-label':'التنفيذ','step3-sub':'فريق متعدد التخصصات في الموقع',
+'step4-label':'الضمان','step4-sub':'اعتماد المهندس الرئيسي',
+'services-label':'ماذا نقدم','services-title':'خدمات صناعية متكاملة','services-sub':'الأنظمة الكهربائية، الإلكترونيات، إصلاح PCB، وبناء الآلات — لا مزيد من التنسيق بين مقاولين منفصلين.',
+'svc1-title':'تصميم وتجميع لوحات التحكم','svc1-desc':'لوحات كهربائية مخصصة حسب المواصفات — من التحكم بآلة واحدة إلى مراكز أتمتة متعددة الخطوط.',
+'svc2-title':'برمجة PLC والأتمتة','svc2-desc':'Siemens، Schneider، وAllen-Bradley — برمجة واستكشاف وتحسين منطق التحكم.',
+'svc3-title':'بناء وتشغيل الآلات','svc3-desc':'من الفكرة إلى خط الإنتاج — تصميم وتصنيع وتركيب وتسليم آلات مخصصة.',
+'svc4-title':'تمديدات كهربائية صناعية','svc4-desc':'توزيع الطاقة، دوائر التحكم في المحركات، وأسلاك الأجهزة للخطوط الجديدة والحالية.',
+'svc5-title':'تشخيص متقدم وحل المشاكل','svc5-desc':'التصوير الحراري، تحليل VFD، تتبع المنطق — نجد الجذر، ليس فقط العرض.',
+'svc6-title':'الصيانة الوقائية (SLA)','svc6-desc':'مراقبة عن بعد + فحوصات شهرية في الموقع لاكتشاف الأعطال قبل توقف خطك.',
+'svc7-title':'إصلاح PCB ومصادر الطاقة','svc7-desc':'تشخيص وإصلاح لوحات الدوائر الصناعية — CNC، PLC، VFD، ومصادر الطاقة. خدمة بنفس اليوم متاحة.',
+'trust-label':'لماذا تثق الصناعة في ITS','trust-title':'مصممون لإبقائك في العمل','trust-sub':'كل مشروع يحمل الضمان الرئيسي — اعتماد المهندس الرئيسي قبل التسليم.',
+'trust-verticals':'قطاعات الخدمة','trust-partner':'شريك مسؤول','trust-qa':'هدف الجودة من أول مرة','trust-support':'دعم طارئ',
+'testimonial-text':'"كنا نستعين بمقدمي خدمات منفصلين للأعمال الكهربائية وخدمات الآلات — كل عطل كان يتحول إلى لعبة إلقاء لوم. ITS تتولى كل شيء. انخفض وقت التوقف لدينا بأكثر من النصف في الشهر الأول."',
+'testimonial-author':'— مدير مصنع، سكيكدة','testimonial-role':'(مرجع متوفر عند الطلب)',
+'contact-label':'ابدأ الآن','contact-title':'احصل على الدليل وتواصل معنا','contact-sub':'حمّل قائمة الفحص المجانية وأخبرنا عن مشروعك — نرد عادةً خلال ساعتين.',
+'guide-title':'قائمة فحص صحة المعدات','guide-desc':'قائمة فحص من 10 نقاط يستخدمها مهندسونا لتقييم حالة المعدات. مجاناً.',
+'check1':'نقاط فحص اللوحات الكهربائية','check2':'فحص صحة المحرك ونظام الإدارة','check3':'تشخيص PLC وأنظمة التحكم','check4':'مؤشرات التآكل الميكانيكي','check5':'فحص الأنظمة الهيدروليكية والهوائية','check6':'التحقق من أنظمة السلامة','check7':'نقاط المسح الحراري','check8':'مراجعة جدول التشحيم','check9':'تقييم أهمية قطع الغيار','check10':'معايير اعتماد الضمان الرئيسي',
+'contact-phone-label':'الهاتف (طوارئ)','contact-email-label':'البريد الإلكتروني','contact-location-label':'الموقع','contact-location-val':'الحروش، سكيكدة، الجزائر','contact-response-label':'وقت الاستجابة','contact-response-val':'أقل من ساعتين في أيام العمل',
+'form-name':'الاسم','form-email':'البريد الإلكتروني','form-phone':'رقم الهاتف','form-company':'اسم الشركة','form-select-default':'ما الخدمة التي تحتاجها؟','form-emergency':'إصلاح طارئ','form-sla':'صيانة وقائية (SLA)','form-electrical':'كهرباء / أتمتة','form-machine':'بناء آلات / CNC','form-diagnostic':'تقييم تشخيصي مجاني','form-other':'أخرى','form-message':'صف بإيجاز معداتك أو مشكلتك...','form-guide':'أرسل لي أيضاً قائمة فحص المعدات المجانية','form-submit':'إرسال الرسالة','form-note':'لا بريد مزعج. سنرسل الدليل عبر البريد ونتواصل معك فقط إذا أردت.',
+'footer-text':'Industrial Technology Solutions. الطاقة، التحكم والآلات. | الحروش، سكيكدة، الجزائر'
+}};
+
+let currentLang=localStorage.getItem('lang')||'en';
+
+function applyLang(lang){
+currentLang=lang;
+const t=i18n[lang];
+document.documentElement.lang=lang;
+document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+document.getElementById('langToggle').textContent=lang==='ar'?'EN':'ع';
+document.title=lang==='ar'?'ITS — حلول التكنولوجيا الصناعية':'ITS — Industrial Technology Solutions';
+document.querySelectorAll('[data-i18n]').forEach(el=>{
+const key=el.getAttribute('data-i18n');
+if(t[key])el.textContent=t[key];
+});
+document.querySelectorAll('[data-i18n-html]').forEach(el=>{
+const key=el.getAttribute('data-i18n-html');
+if(t[key])el.innerHTML=t[key];
+});
+document.querySelectorAll('[data-i18n]').forEach(el=>{
+const key=el.getAttribute('data-i18n');
+if(t[key]&&el.placeholder!==void 0)el.placeholder=t[key];
+});
+localStorage.setItem('lang',lang);
+}
+
+document.getElementById('langToggle').addEventListener('click',()=>{
+const newLang=currentLang==='ar'?'en':'ar';
+applyLang(newLang);
+if(currentModalIdx>=0)openModal(currentModalIdx);
+});
+applyLang(currentLang);
+
+const html=document.documentElement;
+const stored=localStorage.getItem('theme');
+if(stored==='dark')html.setAttribute('data-theme','dark');
+
+const dt=document.getElementById('darkToggle');
+const moon=document.getElementById('moonIcon');
+const sun=document.getElementById('sunIcon');
+if(html.getAttribute('data-theme')==='dark'){moon.style.display='none';sun.style.display='block'}
+dt.addEventListener('click',()=>{
+const isDark=html.getAttribute('data-theme')==='dark';
+html.setAttribute('data-theme',isDark?'':'dark');
+moon.style.display=isDark?'block':'none';
+sun.style.display=isDark?'none':'block';
+localStorage.setItem('theme',isDark?'':'dark');
+});
+
+// Service card modal
+document.querySelectorAll('.service-card').forEach((card,i)=>{
+card.style.cursor='pointer';
+card.addEventListener('click',()=>openModal(i));
+});
+const overlay=document.getElementById('modalOverlay');
+const closeBtn=document.getElementById('modalClose');
+closeBtn.addEventListener('click',closeModal);
+overlay.addEventListener('click',e=>{if(e.target===overlay)closeModal()});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal()});
+function openModal(i){
+currentModalIdx=i;
+const s=serviceModals[i];
+const isAr=currentLang==='ar';
+document.getElementById('modalIcon').querySelector('use').setAttribute('href','#'+s.icon);
+document.getElementById('modalTitle').textContent=isAr?s.title_ar:s.title_en;
+document.getElementById('modalDesc').textContent=isAr?s.desc_ar:s.desc_en;
+const list=document.getElementById('modalList');
+list.innerHTML='';
+const items=isAr?s.items_ar:s.items_en;
+items.forEach(item=>{const li=document.createElement('li');li.textContent=item;list.appendChild(li)});
+overlay.classList.add('open');document.body.style.overflow='hidden';
+}
+function closeModal(){currentModalIdx=-1;overlay.classList.remove('open');document.body.style.overflow=''}
+let currentModalIdx=-1;
+
+const toggle=document.getElementById('menuToggle');
+const links=document.getElementById('navLinks');
+toggle.addEventListener('click',()=>{links.classList.toggle('open')});
+document.querySelectorAll('.nav-links a').forEach(l=>{l.addEventListener('click',()=>{links.classList.remove('open')})});
+
+document.getElementById('combinedForm').addEventListener('submit',function(e){
+e.preventDefault();
+const btn=this.querySelector('.btn');
+const orig=btn.textContent;
+const sendGuide=document.getElementById('sendGuideCheck').checked;
+const lang=currentLang;
+
+btn.disabled=true;
+btn.textContent=lang==='ar'?'جارٍ الإرسال...':'Sending...';
+
+const scriptUrl='https://script.google.com/macros/s/AKfycbxizX6nN1YIFTcc3C-NnwcGAkcyzuQGCoFIU6acF1sDpxedb3t3c_Gc3UPUZjQQ7OMp/exec';
+
+// Remove old iframe
+const old=document.getElementById('formFrame');if(old)old.remove();
+const iframe=document.createElement('iframe');
+iframe.name='formFrame';iframe.id='formFrame';
+iframe.style.display='none';
+document.body.appendChild(iframe);
+
+// Submit form to hidden iframe (bypasses CORS entirely)
+this.action=scriptUrl;this.target='formFrame';this.submit();
+
+btn.textContent=sendGuide
+?(lang==='ar'?'✓ تم إرسال الدليل والرسالة!':'Guide sent & message received! We\'ll respond within 2 hours.')
+:(lang==='ar'?'✓ تم إرسال الرسالة!':'Message sent! We\'ll respond within 2 hours.');
+btn.style.background='#10B981';btn.style.color='#fff';btn.disabled=false;
+setTimeout(()=>{
+btn.textContent=orig;btn.style.background='';btn.style.color='';
+this.querySelector('[data-i18n="form-name"]').value='';
+this.querySelector('[data-i18n="form-email"]').value='';
+this.querySelector('[data-i18n="form-phone"]').value='+213';
+this.querySelector('[data-i18n="form-company"]').value='';
+document.getElementById('serviceSelectCombined').value='sla';
+document.getElementById('msgFieldCombined').value="I'm interested in preventive maintenance (SLA). Please contact me.";
+document.getElementById('sendGuideCheck').checked=true;
+const f=document.getElementById('formFrame');if(f)f.remove();
+},4000);
+});
+</script>
+</body>
+</html>
