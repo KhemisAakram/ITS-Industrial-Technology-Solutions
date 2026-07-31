@@ -26,6 +26,7 @@ status:
 ## Courses — 45 + 45 min
 - [ ] SOMIK (45 min) → [[10_Courses]]
 - [ ] VFD (45 min) → [[10_Courses]]
+- [ ] Electronics/PCB (replaces the weakest track) → [[10_Courses]]
 
 ## Morning start
 - [ ] Q1 Day? Friday -> rest day, no blocks

@@ -5,7 +5,7 @@ tags: [courses, planning]
 
 # Courses — Ranked Watch List
 
-**Rule:** every work day · 45 min SOMIK + 45 min VFD · work top-down · tick off when watched.
+**Rule:** every work day · 45 min SOMIK + 45 min VFD (1h30 total) · the Electronics/PCB course replaces whichever track is behind · work top-down · tick off when watched.
 Take notes straight into the linked project file so each video feeds the job, not just the playlist.
 Friday = recovery, no courses.
 
@@ -57,3 +57,35 @@ Ranked by what actually fixes the 3 client units: repair/testing first, commissi
 - [ ] **11.** [Yaskawa J1000 VFD Complete Wiring & Programming Guide](https://www.youtube.com/watch?v=NQVavdCnrhE) — commissioning reference after repair
 - [ ] **12.** [Getting Started with Altivar Process ATV600](https://www.youtube.com/watch?v=1A_9ZUAXjpQ) — commissioning reference (Schneider)
 - [ ] **13.** [VFD Braking Resistor Sizing — Real Calculations](https://www.youtube.com/watch?v=9E-Z_fxoNIE) — sizing math, only if a unit needs a braking resistor
+
+---
+
+## Electronics / PCB (all about PCB)
+
+Foundation for the PCB-repair jobs + embedded work (STM32). The PCB course swaps in for whichever of SOMIK/VFD is behind that day.
+
+### Course anchor — take in order (Arabic)
+- [ ] [دبلومة الالكترونيات العملية — Practical Electronics Diploma (playlist)](https://www.youtube.com/playlist?list=PLww54WQ2wa5qVh1p8iPi7HspX7N9hbvbc) — the main structured course
+- [ ] [دورة الالكترونيات العملية :: 54- مضاعفات الجهد (Voltage Multiplier)](https://www.youtube.com/watch?v=6iKQEyuwbuA) — lesson 54, voltage multipliers
+
+### Power electronics (feeds VFD repair)
+- [ ] **1.** [How Buck, Boost & Buck-Boost DC-DC Converters Work](https://www.youtube.com/watch?v=PgTR7226sHU) — power conversion fundamentals
+- [ ] **2.** [في المختبر:: 178 — شرح دوائر التغذية النبضية (Switched Mode Power Supply) جزء 1](https://www.youtube.com/watch?v=Eb2KqEKlDsc) — SMPS theory behind VFD internals
+- [ ] **3.** [في المختبر:: 219 — Double Pulse Testing + اختبار الضياعات (Losses)](https://www.youtube.com/watch?v=Tl67mSy-dxw) — power-semiconductor testing (IGBTs)
+- [ ] **4.** [DIY Linear Power Supply | Part-1](https://www.youtube.com/watch?v=1rAUrbnq2WY) — build a bench supply
+- [ ] **5.** [Every Component of a Linear Power Supply Explained](https://www.youtube.com/watch?v=UTetQhGyUVg) — component-level understanding
+
+### PCB design — STM32 / embedded
+- [ ] **1.** [KiCad 6 STM32 PCB Design Full Tutorial — Phil's Lab #65](https://www.youtube.com/watch?v=aVUqaB0IMh4) — complete STM32 board: schematic → layout → routing → Gerber
+- [ ] **2.** [A simple way to design a professional board — Part 1](https://www.youtube.com/watch?v=d6N_W6E9dgE) — professional layout habits
+- [ ] **3.** [How to make your First PCB! Beginner KiCAD Design Tutorial](https://www.youtube.com/watch?v=TJPyqRnhytA) — beginner KiCad flow
+- [ ] **4.** [How To Make Your Own Printed Circuit Boards (PCB)](https://www.youtube.com/watch?v=djBMQhjfbys) — design → manufacture overview
+
+### Repair technique (feeds PCB-repair jobs)
+- [ ] **1.** [PCB Voltage Testing Explained — Find Faults Fast](https://www.youtube.com/watch?v=9kMwK1EUAzo) — safe voltage-point diagnosis before blind part swapping
+- [ ] **2.** [iPhone 15 Pro Max Turns On But NO DISPLAY? (Common Short Fixed!)](https://www.youtube.com/watch?v=5hf8dx5xdbc) — voltage injection + thermal camera short-finding
+
+### Practical / extras
+- [ ] **1.** [Connecting a Relay Module to a Microcontroller](https://www.youtube.com/watch?v=FWvEEtrTGRQ) — MCU I/O for controller builds
+- [ ] **2.** [Carvera Air Cnc — Double Sided PCB Milling](https://www.youtube.com/watch?v=EiicIzQ-ReA) — PCB milling on a CNC
+- **Channels:** [Phil's Lab](https://www.youtube.com/@PhilsLab) — STM32/embedded design · [EEVblog playlists](https://www.youtube.com/@EEVblog/playlists)

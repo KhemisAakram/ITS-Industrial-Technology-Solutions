@@ -20,7 +20,7 @@ Daily order: **Block 1 + 2 = High · Block 3 = Medium · Block 4 (optional) = Lo
 - [ ] Build CNC laser → [[CNC_Laser]]
 
 ### 🟢 Low priority
-- [ ] Courses every day — 45 min SOMIK + 45 min VFD → [[10_Courses]]
+- [ ] Courses every day — 45 min SOMIK + 45 min VFD (+ PCB swaps in for the weakest) → [[10_Courses]]
 - [ ] Rebuild FLOWAXS + job documentation → [[Flowaxs]]
 
 ## Demand lists (energy each task needs)
@@ -49,7 +49,7 @@ Within each priority, put **high-demand** tasks in Block 1/2 and **low-demand** 
 - [ ] Reading manuals / datasheets for components
 
 ### 🟢 Low demand (shallow — Block 4 / evenings / waiting)
-- [ ] Courses every day — 45 min SOMIK + 45 min VFD → [[10_Courses]]
+- [ ] Courses every day — 45 min SOMIK + 45 min VFD (+ PCB swaps in for the weakest) → [[10_Courses]]
 - [ ] WhatsApp + client messages (batch: 2× daily max)
 - [ ] Log hours + revenue in Yield Tracker
 - [ ] Update [[ITS_Kanban|Kanban]]

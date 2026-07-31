@@ -32,7 +32,7 @@ Q4  High-priority work — anything blocked?
 
 THEN fill the day:
     Block 1 = High · Block 2 = High · Block 3 = Medium · Block 4 (optional) = Low
-    Courses = SOMIK 45 min + VFD 45 min (two slots, spread across the day)
+    Courses = SOMIK 45 min + VFD 45 min (two slots, spread across the day; Electronics/PCB swaps in for the weakest track)
 ```
 
 **The rule: never start a task without knowing what's blocked and what your energy is.**
