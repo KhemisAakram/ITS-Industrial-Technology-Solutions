@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Prospect Tracker — ITS PCB Repair</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #FAF8F5; padding: 30px; color: #1A1A1A; }
+  h1 { font-size: 24px; margin-bottom: 6px; }
+  h1 span { color: #FF9F00; }
+  .sub { color: #6B7280; font-size: 13px; margin-bottom: 20px; }
+  .stats { display: flex; gap: 16px; margin-bottom: 24px; flex-wrap: wrap; }
+  .stat { background: #fff; border-radius: 10px; padding: 14px 24px; border: 1px solid #E5E7EB; text-align: center; }
+  .stat-num { font-size: 28px; font-weight: 800; color: #1A1A1A; }
+  .stat-lbl { font-size: 11px; color: #9CA3AF; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+  table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 10px; overflow: hidden; border: 1px solid #E5E7EB; font-size: 13px; }
+  th { background: #1A1A1A; color: #fff; padding: 10px 12px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+  td { padding: 10px 12px; border-bottom: 1px solid #F3F4F6; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: #FFF8F0; }
+
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .badge-new { background: #DBEAFE; color: #1E40AF; }
+  .badge-contacted { background: #FEF3C7; color: #92400E; }
+  .badge-interested { background: #D1FAE5; color: #065F46; }
+  .badge-quote { background: #EDE9FE; color: #5B21B6; }
+  .badge-won { background: #10B981; color: #fff; }
+  .badge-lost { background: #FEE2E2; color: #991B1B; }
+
+  .source { font-size: 11px; color: #9CA3AF; }
+  .actions { margin-top: 20px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn { padding: 8px 20px; border-radius: 7px; font-weight: 600; font-size: 12px; border: none; cursor: pointer; font-family: inherit; }
+  .btn-primary { background: #FF9F00; color: #1A1A1A; }
+  .btn-outline { background: transparent; color: #4B5563; border: 1.5px solid #D1D5DB; }
+  .example-row { background: #FFFBEB; }
+  .example-row td { color: #9CA3AF; }
+  .tag { display: inline-block; background: #F3F4F6; border-radius: 3px; padding: 2px 6px; font-size: 10px; color: #6B7280; }
+  .tips { background: #fff; border: 1px solid #E5E7EB; border-radius: 10px; padding: 18px 20px; margin-top: 20px; font-size: 13px; color: #4B5563; line-height: 1.7; }
+  .tips strong { color: #1A1A1A; }
+  .footer { text-align: center; padding: 20px; font-size: 10px; color: #9CA3AF; }
+</style>
+</head>
+<body>
+
+<h1><span>Prospect</span> Tracker</h1>
+<div class="sub">ITS — PCB Repair Service &bull; Skikda &bull; Last updated: July 2026</div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-num" id="totalCount">0</div><div class="stat-lbl">Total Prospects</div></div>
+  <div class="stat"><div class="stat-num" id="contactedCount">0</div><div class="stat-lbl">Contacted</div></div>
+  <div class="stat"><div class="stat-num" id="wonCount">0</div><div class="stat-lbl">Won</div></div>
+  <div class="stat"><div class="stat-num" id="pendingCount">0</div><div class="stat-lbl">Pending</div></div>
+</div>
+
+<table id="prospectTable">
+  <thead>
+    <tr>
+      <th style="width:28px">#</th>
+      <th>Business Name</th>
+      <th>Contact</th>
+      <th>Source</th>
+      <th>Status</th>
+      <th>Notes</th>
+      <th>Follow-up</th>
+    </tr>
+  </thead>
+  <tbody id="prospectBody">
+    <!-- Rows inserted by JS -->
+  </tbody>
+</table>
+
+<div class="tips">
+  <strong>How to use:</strong> Copy the table below into Google Sheets (<em>File → Paste → Text splitting by tab</em>).<br>
+  <strong>Statuses:</strong> <span class="badge badge-new">New</span> Not yet contacted &nbsp;
+  <span class="badge badge-contacted">Contacted</span> Reached out &nbsp;
+  <span class="badge badge-interested">Interested</span> Asked for info/quotes &nbsp;
+  <span class="badge badge-quote">Quote</span> Sent pricing &nbsp;
+  <span class="badge badge-won">Won</span> Got the job! &nbsp;
+  <span class="badge badge-lost">Lost</span> Not interested<br>
+  <strong>Tip:</strong> For Ouedkniss leads, note the ad reference. For Facebook, note the group name.
+</div>
+
+<div class="actions">
+  <button class="btn btn-primary" onclick="addRow()">+ Add Prospect</button>
+  <button class="btn btn-outline" onclick="resetExample()">Reset Examples</button>
+  <button class="btn btn-outline" onclick="copyTable()">📋 Copy Table</button>
+</div>
+
+<div class="footer">
+  ITS — Industrial Technology Solutions &bull; Power, Control & Machinery
+</div>
+
+<script>
+const STATUSES = ['New', 'Contacted', 'Interested', 'Quote', 'Won', 'Lost'];
+
+const examples = [
+  { name: 'Sarl Wise Technologie', contact: 'Phone? (Skikda)', source: 'Google Maps', status: 'New', notes: 'Manufacturing company, may have PCB repair needs', followup: '' },
+  { name: 'Sarl Thon Littoral', contact: '', source: 'Google Maps', status: 'New', notes: 'Food processing — conveyor controls, power supplies', followup: '' },
+  { name: 'LG Electronics Skikda', contact: '0540 00 52 60', source: 'Website', status: 'New', notes: 'Appliance repair — they may outsource PCB repairs', followup: '' },
+  { name: 'Réparation Caméra (Ouedkniss)', contact: 'Via Ouedkniss', source: 'Ouedkniss', status: 'New', notes: 'Competitor/partner? Could subcontract PCB work', followup: '' },
+  { name: 'Meciad Taghane & Cie', contact: 'Lotissement Bouabaz II, Skikda', source: 'Kompass', status: 'New', notes: 'Electronics installation & maintenance company', followup: '' },
+];
+
+let data = [];
+
+function addRow(name, contact, source, status, notes, followup) {
+  data.push({
+    id: data.length + 1,
+    name: name || '',
+    contact: contact || '',
+    source: source || 'Manual',
+    status: status || 'New',
+    notes: notes || '',
+    followup: followup || ''
+  });
+  render();
+}
+
+function render() {
+  const tbody = document.getElementById('prospectBody');
+  tbody.innerHTML = '';
+  data.forEach((row, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td style="color:#9CA3AF;font-size:11px">${i + 1}</td>
+      <td><input style="width:100%;border:none;background:transparent;font-family:inherit;font-size:13px;font-weight:500" value="${escapeHtml(row.name)}" onchange="data[${i}].name=this.value" placeholder="Business name"></td>
+      <td><input style="width:100%;border:none;background:transparent;font-family:inherit;font-size:13px" value="${escapeHtml(row.contact)}" onchange="data[${i}].contact=this.value" placeholder="Phone / email"></td>
+      <td>
+        <select style="border:none;background:transparent;font-family:inherit;font-size:13px;color:#6B7280;cursor:pointer" onchange="data[${i}].source=this.value">
+          ${['Facebook', 'Ouedkniss', 'Google Maps', 'Walk-in', 'Referral', 'Other'].map(s =>
+            `<option ${s === row.source ? 'selected' : ''}>${s}</option>`
+          ).join('')}
+        </select>
+      </td>
+      <td>
+        <select style="border:none;background:transparent;font-family:inherit;font-size:13px;cursor:pointer" onchange="data[${i}].status=this.value;updateStats();highlightRow(this)">
+          ${STATUSES.map(s =>
+            `<option ${s === row.status ? 'selected' : ''}>${s}</option>`
+          ).join('')}
+        </select>
+      </td>
+      <td><input style="width:100%;border:none;background:transparent;font-family:inherit;font-size:13px" value="${escapeHtml(row.notes)}" onchange="data[${i}].notes=this.value" placeholder="Notes"></td>
+      <td><input style="width:100%;border:none;background:transparent;font-family:inherit;font-size:13px" value="${escapeHtml(row.followup)}" onchange="data[${i}].followup=this.value" placeholder="Date"></td>
+    `;
+    tbody.appendChild(tr);
+  });
+  updateStats();
+}
+
+function highlightRow(select) {
+  const tr = select.closest('tr');
+  tr.style.background = select.value === 'Won' ? '#F0FDF4' :
+    select.value === 'Lost' ? '#FEF2F2' :
+    select.value === 'Interested' ? '#FFF8F0' : '';
+}
+
+function updateStats() {
+  document.getElementById('totalCount').textContent = data.length;
+  document.getElementById('contactedCount').textContent = data.filter(d => d.status !== 'New').length;
+  document.getElementById('wonCount').textContent = data.filter(d => d.status === 'Won').length;
+  document.getElementById('pendingCount').textContent = data.filter(d => ['Contacted', 'Interested', 'Quote'].includes(d.status)).length;
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function resetExample() {
+  data = examples.map((ex, i) => ({ ...ex, id: i + 1 }));
+  render();
+}
+
+function copyTable() {
+  let text = "Business Name\tContact\tSource\tStatus\tNotes\tFollow-up\n";
+  data.forEach(d => {
+    text += `${d.name}\t${d.contact}\t${d.source}\t${d.status}\t${d.notes}\t${d.followup}\n`;
+  });
+  navigator.clipboard.writeText(text).then(() => alert('Copied! Paste into Google Sheets.'));
+}
+
+// Init
+resetExample();
+</script>
+</body>
+</html>

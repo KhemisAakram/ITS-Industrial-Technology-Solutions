@@ -10,3 +10,6 @@ Thumbs.db
 
 # Node
 node_modules/
+
+# Obsidian vault config (local workspace, don't commit)
+.obsidian/

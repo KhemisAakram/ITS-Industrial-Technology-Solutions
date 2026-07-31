@@ -1,0 +1,47 @@
+---
+date: {{date:YYYY-MM-DD}}
+week:
+day:
+tags:
+  - daily
+energy:
+hours_worked:
+hours_billable:
+revenue_da:
+yield_da_hr:
+status:
+---
+
+# {{date:dddd, D MMMM YYYY}} — Day {{date:D} of 137}
+
+> [[02_Task_Bank|Task Bank]] · [[03_Scripted_Actions|Scripts]] · [[01_Milestones|Milestones]]
+
+## 3 Focus Tasks (highest demand first — do these first)
+- [ ] 
+- [ ] 
+- [ ] 
+
+## Energy blocks
+- **Morning (peak) — High demand:** 
+- **Afternoon — Medium demand / jobs:** 
+- **Evening (low energy) — Low demand:** 
+
+## ☀️ Morning start
+- [ ] Urgent WhatsApp checked (5 min max)
+- [ ] Focus tasks written
+- [ ] Deep-work block started — phone silent
+
+## 🌙 Shutdown
+- [ ] Hours + revenue logged in Yield Tracker
+- [ ] Kanban updated
+- [ ] Tomorrow's 3 tasks written
+- [ ] Blockers noted below
+
+## Log
+- Hours worked:
+- Billable hours:
+- Revenue (DA):
+- Yield (DA/hr) — target ≥ 1,000:
+- Blocker / one line:
+
+## Notes

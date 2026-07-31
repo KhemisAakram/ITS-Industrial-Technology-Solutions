@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Transistor Explained — ITS</title>
+<link rel="icon" type="image/png" href="../../../website/IMAGES/LOGO%20BGR.png">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; background: #FAF8F5; color: #1A1A1A; padding: 20px; }
+  .page { max-width: 900px; margin: 0 auto; }
+
+  /* ─── HEADER ─── */
+  .header { background: #1A1A1A; color: #fff; padding: 28px 32px; border-radius: 12px 12px 0 0; display: flex; align-items: center; gap: 16px; }
+  .header h1 { font-size: 28px; font-weight: 900; letter-spacing: -0.5px; }
+  .header h1 span { color: #FF9F00; }
+  .header .badge { background: #FF9F00; color: #1A1A1A; font-size: 11px; font-weight: 800; padding: 4px 12px; border-radius: 4px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ─── BODY ─── */
+  .body { background: #fff; border: 1px solid #E5E7EB; border-top: none; border-radius: 0 0 12px 12px; padding: 32px; }
+  .body h2 { font-size: 22px; font-weight: 800; color: #1A1A1A; margin: 32px 0 12px; }
+  .body h2:first-child { margin-top: 0; }
+  .body h2 .num { display: inline-block; background: #FF9F00; color: #fff; width: 32px; height: 32px; border-radius: 50%; text-align: center; line-height: 32px; font-size: 15px; margin-right: 10px; }
+  .body p { font-size: 15px; color: #4B5563; line-height: 1.7; margin-bottom: 16px; }
+  .body .highlight { background: #FFF8F0; border-left: 4px solid #FF9F00; padding: 14px 18px; border-radius: 0 6px 6px 0; margin-bottom: 20px; font-weight: 600; color: #1A1A1A; }
+  .body ul { list-style: none; margin-bottom: 20px; }
+  .body ul li { padding: 6px 0 6px 24px; position: relative; font-size: 14px; color: #4B5563; }
+  .body ul li::before { content: ''; position: absolute; left: 0; top: 12px; width: 10px; height: 10px; background: #FF9F00; border-radius: 50%; }
+
+  /* ─── SVG DIAGRAMS ─── */
+  .diagram { display: flex; justify-content: center; margin: 24px 0; }
+  .diagram svg { max-width: 100%; height: auto; }
+  .diagram-row { display: flex; gap: 24px; flex-wrap: wrap; justify-content: center; margin: 24px 0; }
+  .diagram-card { background: #FAF8F5; border: 1px solid #E5E7EB; border-radius: 10px; padding: 20px; text-align: center; flex: 1; min-width: 260px; }
+  .diagram-card h3 { font-size: 14px; font-weight: 700; color: #FF9F00; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* ─── COMPARISON GRID ─── */
+  .comp-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 24px 0; }
+  .comp-card { background: #FAF8F5; border: 1px solid #E5E7EB; border-radius: 10px; padding: 20px; text-align: center; }
+  .comp-card .icon { font-size: 32px; margin-bottom: 8px; }
+  .comp-card h3 { font-size: 14px; font-weight: 700; color: #1A1A1A; margin-bottom: 6px; }
+  .comp-card p { font-size: 13px; color: #6B7280; margin: 0; }
+
+  /* ─── QUIZ ─── */
+  .quiz-box { background: #1A1A1A; color: #fff; border-radius: 10px; padding: 24px; margin: 24px 0; }
+  .quiz-box h3 { color: #FF9F00; font-size: 16px; font-weight: 800; margin-bottom: 12px; }
+  .quiz-box p { color: rgba(255,255,255,0.8); font-size: 14px; margin-bottom: 12px; }
+  .quiz-btn { background: #FF9F00; color: #1A1A1A; border: none; padding: 8px 20px; border-radius: 6px; font-weight: 700; font-size: 13px; cursor: pointer; margin: 4px; transition: 0.2s; }
+  .quiz-btn:hover { transform: translateY(-2px); }
+  .quiz-btn.correct { background: #10B981; color: #fff; }
+  .quiz-btn.wrong { background: #EF4444; color: #fff; }
+  .quiz-feedback { margin-top: 12px; font-size: 14px; font-weight: 600; min-height: 24px; }
+
+  /* ─── LEGEND ─── */
+  .legend { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; margin: 16px 0 24px; font-size: 12px; color: #4B5563; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; }
+  .legend-dot.orange { background: #FF9F00; }
+  .legend-dot.blue { background: #3B82F6; }
+  .legend-dot.green { background: #10B981; }
+  .legend-dot.red { background: #EF4444; }
+  .legend-line { width: 24px; height: 3px; border-radius: 2px; display: inline-block; }
+  .legend-line.orange { background: #FF9F00; }
+  .legend-line.blue { background: #3B82F6; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes flow1 { 0% { opacity: 1; } 50% { opacity: 0.3; } 100% { opacity: 1; } }
+  @keyframes flow2 { 0% { opacity: 0.3; } 50% { opacity: 1; } 100% { opacity: 0.3; } }
+  @keyframes pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-in { animation: fadeIn 0.5s ease-out; }
+
+  .footer { text-align: center; padding: 20px; font-size: 11px; color: #9CA3AF; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="header">
+  <div>
+    <div class="badge">Learn Electronics</div>
+    <h1>What is a <span>Transistor</span>?</h1>
+  </div>
+</div>
+
+<div class="body">
+
+<!-- SECTION 1 -->
+<h2><span class="num">1</span>What is a Transistor?</h2>
+<p>A <strong>transistor</strong> is a tiny electronic component that acts like a <strong>switch</strong> or an <strong>amplifier</strong>. It's the fundamental building block of all modern electronics — computers, phones, radios, industrial controllers, everything.</p>
+<div class="highlight">Think of it as a <strong>tap</strong>: a small turn of the handle (base current) controls a huge flow of water (collector-emitter current).</div>
+<p>Invented in 1947 at Bell Labs, the transistor replaced bulky vacuum tubes and made electronics small, efficient, and reliable. A modern CPU contains <strong>billions</strong> of transistors on a chip smaller than your thumbnail.</p>
+
+<!-- VISUAL: TRANSISTOR STRUCTURE -->
+<div class="diagram-row">
+  <div class="diagram-card">
+    <h3>NPN Transistor</h3>
+    <svg width="260" height="180" viewBox="0 0 260 180">
+      <!-- NPN body -->
+      <rect x="95" y="30" width="70" height="120" rx="4" fill="#FFF8F0" stroke="#1A1A1A" stroke-width="2"/>
+      <text x="130" y="95" text-anchor="middle" font-size="14" font-weight="700" fill="#1A1A1A">NPN</text>
+      <!-- Collector (N) -->
+      <rect x="95" y="30" width="70" height="35" rx="4" fill="#FF9F00" opacity="0.2"/>
+      <text x="130" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#1A1A1A">N</text>
+      <!-- Base (P) -->
+      <rect x="95" y="65" width="70" height="30" rx="2" fill="#3B82F6" opacity="0.2"/>
+      <text x="130" y="85" text-anchor="middle" font-size="11" font-weight="700" fill="#1A1A1A">P</text>
+      <!-- Emitter (N) -->
+      <rect x="95" y="95" width="70" height="55" rx="4" fill="#FF9F00" opacity="0.2"/>
+      <text x="130" y="125" text-anchor="middle" font-size="11" font-weight="700" fill="#1A1A1A">N</text>
+      <!-- Pins -->
+      <line x1="165" y1="48" x2="200" y2="48" stroke="#1A1A1A" stroke-width="2"/>
+      <circle cx="205" cy="48" r="4" fill="#FF9F00"/>
+      <text x="212" y="52" font-size="13" font-weight="700" fill="#1A1A1A">C (Collector)</text>
+      <line x1="95" y1="80" x2="55" y2="80" stroke="#1A1A1A" stroke-width="2"/>
+      <circle cx="50" cy="80" r="4" fill="#3B82F6"/>
+      <text x="18" y="84" font-size="13" font-weight="700" fill="#1A1A1A">B (Base)</text>
+      <line x1="165" y1="125" x2="200" y2="125" stroke="#1A1A1A" stroke-width="2"/>
+      <circle cx="205" cy="125" r="4" fill="#FF9F00"/>
+      <text x="212" y="129" font-size="13" font-weight="700" fill="#1A1A1A">E (Emitter)</text>
+      <!-- Arrow -->
+      <path d="M 165 105 L 175 115 L 165 125" fill="none" stroke="#FF9F00" stroke-width="2"/>
+    </svg>
+  </div>
+  <div class="diagram-card">
+    <h3>PNP Transistor</h3>
+    <svg width="260" height="180" viewBox="0 0 260 180">
+      <rect x="95" y="30" width="70" height="120" rx="4" fill="#FFF8F0" stroke="#1A1A1A" stroke-width="2"/>
+      <text x="130" y="95" text-anchor="middle" font-size="14" font-weight="700" fill="#1A1A1A">PNP</text>
+      <rect x="95" y="30" width="70" height="35" rx="4" fill="#3B82F6" opacity="0.2"/>
+      <text x="130" y="52" text-anchor="middle" font-size="11" font-weight="700" fill="#1A1A1A">P</text>
+      <rect x="95" y="65" width="70" height="30" rx="2" fill="#FF9F00" opacity="0.2"/>
+      <text x="130" y="85" text-anchor="middle" font-size="11" font-weight="700" fill="#1A1A1A">N</text>
+      <rect x="95" y="95" width="70" height="55" rx="4" fill="#3B82F6" opacity="0.2"/>
+      <text x="130" y="125" text-anchor="middle" font-size="11" font-weight="700" fill="#1A1A1A">P</text>
+      <line x1="165" y1="48" x2="200" y2="48" stroke="#1A1A1A" stroke-width="2"/>
+      <circle cx="205" cy="48" r="4" fill="#3B82F6"/>
+      <text x="212" y="52" font-size="13" font-weight="700" fill="#1A1A1A">C (Collector)</text>
+      <line x1="95" y1="80" x2="55" y2="80" stroke="#1A1A1A" stroke-width="2"/>
+      <circle cx="50" cy="80" r="4" fill="#FF9F00"/>
+      <text x="18" y="84" font-size="13" font-weight="700" fill="#1A1A1A">B (Base)</text>
+      <line x1="165" y1="125" x2="200" y2="125" stroke="#1A1A1A" stroke-width="2"/>
+      <circle cx="205" cy="125" r="4" fill="#3B82F6"/>
+      <text x="212" y="129" font-size="13" font-weight="700" fill="#1A1A1A">E (Emitter)</text>
+      <path d="M 175 105 L 165 115 L 175 125" fill="none" stroke="#FF9F00" stroke-width="2"/>
+    </svg>
+  </div>
+</div>
+
+<!-- SECTION 2 -->
+<h2><span class="num">2</span>How Does It Work?</h2>
+<p>A transistor has <strong>3 terminals</strong>: <strong>Base (B)</strong>, <strong>Collector (C)</strong>, and <strong>Emitter (E)</strong>.</p>
+<p>In an <strong>NPN</strong> transistor (most common):</p>
+<ul>
+  <li>A small current flowing from <strong>Base → Emitter</strong> turns the transistor ON</li>
+  <li>This allows a much larger current to flow from <strong>Collector → Emitter</strong></li>
+  <li>No base current = no collector current = transistor is OFF</li>
+  <li>A small input controls a big output — that's <strong>amplification</strong>!</li>
+</ul>
+
+<!-- VISUAL: SWITCH ANALOGY -->
+<div class="diagram">
+  <svg width="700" height="200" viewBox="0 0 700 200">
+    <!-- Water Tap analogy -->
+    <rect x="30" y="20" width="280" height="160" rx="10" fill="#FFF8F0" stroke="#E5E7EB" stroke-width="2"/>
+    <text x="170" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#1A1A1A">Water Tap Analogy</text>
+    <!-- Pipe -->
+    <rect x="130" y="80" width="120" height="14" rx="7" fill="#3B82F6" opacity="0.3"/>
+    <rect x="130" y="80" width="50" height="14" rx="7" fill="#3B82F6" opacity="0.6" id="pipe1"/>
+    <text x="115" y="95" text-anchor="end" font-size="11" fill="#6B7280">Water in</text>
+    <line x1="250" y1="87" x2="290" y2="87" stroke="#3B82F6" stroke-width="3" stroke-dasharray="4,4"/>
+    <text x="310" y="92" font-size="11" fill="#6B7280">Water out</text>
+    <!-- Tap handle -->
+    <rect x="180" y="100" width="20" height="30" rx="3" fill="#FF9F00"/>
+    <rect x="170" y="128" width="40" height="6" rx="3" fill="#1A1A1A"/>
+    <text x="190" y="155" text-anchor="middle" font-size="10" fill="#6B7280">Small turn = big flow</text>
+
+    <!-- Transistor analogy -->
+    <rect x="370" y="20" width="280" height="160" rx="10" fill="#FFF8F0" stroke="#E5E7EB" stroke-width="2"/>
+    <text x="510" y="50" text-anchor="middle" font-size="13" font-weight="700" fill="#1A1A1A">Transistor Switch</text>
+    <!-- Collector-Emitter path -->
+    <rect x="440" y="80" width="100" height="14" rx="7" fill="#FF9F00" opacity="0.3"/>
+    <rect x="440" y="80" width="40" height="14" rx="7" fill="#FF9F00" opacity="0.6" id="ce1"/>
+    <text x="425" y="95" text-anchor="end" font-size="11" fill="#6B7280">Collector</text>
+    <line x1="540" y1="87" x2="580" y2="87" stroke="#FF9F00" stroke-width="3" stroke-dasharray="4,4"/>
+    <text x="595" y="92" font-size="11" fill="#6B7280">Emitter</text>
+    <!-- Base control -->
+    <rect x="480" y="100" width="14" height="30" rx="3" fill="#3B82F6"/>
+    <line x1="487" y1="130" x2="487" y2="145" stroke="#3B82F6" stroke-width="2"/>
+    <circle cx="487" cy="150" r="3" fill="#3B82F6"/>
+    <text x="505" y="153" font-size="10" fill="#3B82F6">Base (control)</text>
+    <text x="510" y="170" text-anchor="middle" font-size="10" fill="#6B7280">Small current = big current flow</text>
+  </svg>
+</div>
+
+<!-- SECTION 3 -->
+<h2><span class="num">3</span>Transistor as a Switch (Most Common Use)</h2>
+<p>This is how transistors are used in industrial electronics — to turn things ON and OFF based on a control signal.</p>
+<div class="diagram">
+  <svg width="600" height="300" viewBox="0 0 600 300">
+    <!-- Circuit: 5V -> Resistor -> LED -> Collector -> Emitter -> GND -->
+    <!-- Power rail -->
+    <line x1="80" y1="40" x2="80" y2="260" stroke="#EF4444" stroke-width="2" stroke-dasharray="4,4"/>
+    <text x="55" y="155" text-anchor="middle" font-size="11" fill="#EF4444" transform="rotate(-90,55,155)">+5V</text>
+    <!-- GND rail -->
+    <line x1="520" y1="40" x2="520" y2="260" stroke="#6B7280" stroke-width="2"/>
+    <text x="545" y="155" text-anchor="middle" font-size="11" fill="#6B7280" transform="rotate(90,545,155)">GND</text>
+
+    <!-- Resistor -->
+    <line x1="80" y1="60" x2="150" y2="60" stroke="#1A1A1A" stroke-width="2"/>
+    <rect x="150" y="55" width="30" height="10" rx="2" fill="#10B981"/>
+    <text x="165" y="50" text-anchor="middle" font-size="9" fill="#10B981">R</text>
+    <!-- LED -->
+    <line x1="180" y1="60" x2="230" y2="60" stroke="#1A1A1A" stroke-width="2"/>
+    <polygon points="230,50 250,60 230,70" fill="#FF9F00" opacity="0.8"/>
+    <polygon points="250,50 270,60 250,70" fill="none" stroke="#FF9F00" stroke-width="1.5"/>
+    <text x="250" y="88" text-anchor="middle" font-size="10" fill="#FF9F00">LED</text>
+
+    <!-- Transistor -->
+    <line x1="270" y1="60" x2="320" y2="60" stroke="#1A1A1A" stroke-width="2"/>
+    <!-- NPN body -->
+    <rect x="320" y="50" width="60" height="90" rx="3" fill="#FFF8F0" stroke="#1A1A1A" stroke-width="2"/>
+    <text x="350" y="100" text-anchor="middle" font-size="13" font-weight="700" fill="#1A1A1A">NPN</text>
+    <!-- Emitter to GND -->
+    <line x1="350" y1="140" x2="350" y2="170" stroke="#1A1A1A" stroke-width="2"/>
+    <line x1="320" y1="170" x2="520" y2="170" stroke="#1A1A1A" stroke-width="2"/>
+
+    <!-- Base control circuit -->
+    <line x1="320" y1="70" x2="280" y2="70" stroke="#3B82F6" stroke-width="2"/>
+    <line x1="280" y1="70" x2="280" y2="210" stroke="#3B82F6" stroke-width="2" stroke-dasharray="3,3"/>
+    <line x1="200" y1="210" x2="360" y2="210" stroke="#3B82F6" stroke-width="2"/>
+
+    <!-- Push button -->
+    <rect x="250" y="200" width="40" height="20" rx="3" fill="#3B82F6"/>
+    <text x="270" y="214" text-anchor="middle" font-size="10" font-weight="700" fill="#fff">SW</text>
+
+    <!-- 3.3V control -->
+    <line x1="80" y1="210" x2="200" y2="210" stroke="#3B82F6" stroke-width="2"/>
+    <text x="40" y="215" text-anchor="end" font-size="11" fill="#3B82F6">Control Signal</text>
+
+    <!-- Arrows showing current flow when switch is pressed -->
+    <path d="M 270 200 Q 270 140 300 140 Q 320 140 320 100" fill="none" stroke="#FF9F00" stroke-width="2" stroke-dasharray="4,3" opacity="0.5"/>
+
+    <!-- Labels -->
+    <text x="350" y="195" text-anchor="middle" font-size="11" font-weight="700" fill="#1A1A1A">Base resistor not shown for simplicity</text>
+  </svg>
+</div>
+
+<!-- COMPARISON TABLE -->
+<h2><span class="num">4</span>How a Transistor Thinks</h2>
+<div class="comp-grid">
+  <div class="comp-card">
+    <div class="icon">&#128278;</div>
+    <h3>Base (B) — The Gatekeeper</h3>
+    <p>A tiny signal here decides if the big current flows or not. No signal = OFF.</p>
+  </div>
+  <div class="comp-card">
+    <div class="icon">&#9889;</div>
+    <h3>Collector (C) — The Power In</h3>
+    <p>This is where the main current enters. Think of it as the water pipe inlet.</p>
+  </div>
+  <div class="comp-card">
+    <div class="icon">&#128640;</div>
+    <h3>Emitter (E) — The Power Out</h3>
+    <p>The current exits here. When Base is ON, Collector→Emitter flows freely.</p>
+  </div>
+  <div class="comp-card">
+    <div class="icon">&#128200;</div>
+    <h3>Gain (hFE) — Amplification Factor</h3>
+    <p>A typical transistor has gain of 100-800. 1mA at Base can control 100mA at Collector!</p>
+  </div>
+</div>
+
+<!-- REAL WORLD -->
+<h2><span class="num">5</span>Real-World PCB Examples</h2>
+<p>Here's where you'll find transistors in industrial boards:</p>
+<ul>
+  <li><strong>Power supply boards</strong> — Switching transistors in SMPS circuits (MOSFETs)</li>
+  <li><strong>Relay drivers</strong> — A transistor amplifies a PLC signal to energize a relay coil</li>
+  <li><strong>Sensor inputs</strong> — Transistor buffers protect the controller from voltage spikes</li>
+  <li><strong>Motor speed control</strong> — Power transistors (IGBTs) in VFD drives</li>
+  <li><strong>Signal amplifiers</strong> — Amplify weak thermocouple or RTD signals</li>
+</ul>
+
+<div class="highlight">When repairing PCBs, the most common transistor faults are: shorted C-E (stuck ON), open B-E junction (stuck OFF), or leaky C-E (partial ON). All easily checked with a multimeter.</div>
+
+<!-- FUN QUIZ -->
+<div class="quiz-box">
+  <h3>Quick Quiz</h3>
+  <p id="quizQ">In an NPN transistor, a small current at which terminal controls the large current flow?</p>
+  <button class="quiz-btn" onclick="checkQuiz(this,'wrong')">A) Collector</button>
+  <button class="quiz-btn" onclick="checkQuiz(this,'correct')">B) Base</button>
+  <button class="quiz-btn" onclick="checkQuiz(this,'wrong')">C) Emitter</button>
+  <button class="quiz-btn" onclick="checkQuiz(this,'wrong')">D) Substrate</button>
+  <div class="quiz-feedback" id="quizFb"></div>
+</div>
+
+<script>
+function checkQuiz(btn, result) {
+  document.querySelectorAll('.quiz-btn').forEach(b => { b.disabled = true; });
+  btn.classList.add(result);
+  const fb = document.getElementById('quizFb');
+  if (result === 'correct') {
+    fb.innerHTML = '&#10004; Correct! The Base controls the transistor. A small base current turns ON the large Collector-Emitter current.';
+    fb.style.color = '#10B981';
+  } else {
+    fb.innerHTML = '&#10008; Not quite. The Base is the control terminal. In an NPN, current flows Base &#8594; Emitter to turn ON Collector &#8594; Emitter.';
+    fb.style.color = '#EF4444';
+  }
+}
+</script>
+
+<div class="footer">
+  ITS — Industrial Technology Solutions &bull; Power, Control &amp; Machinery &bull; El Harrouch, Skikda
+</div>
+
+</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,37 @@
+---
+date:
+week:
+week_range:
+tags:
+  - weekly
+---
+
+# Week review
+
+> [[01_Milestones|Milestones]] · [[02_Task_Bank|Task Bank]] · [[03_Scripted_Actions|Weekly review script]]
+
+## Won this week
+- 
+
+## Numbers
+- Billable hours total:
+- Revenue total (DA):
+- Avg yield (DA/hr):
+- Projects moved: SOMIK / Workshop / Clients / Report
+
+## Slippage & fixes
+- What fell behind:
+- Why:
+- Next-week fix:
+
+## Next week's bank (pull from [[02_Task_Bank]])
+- [ ] High:
+- [ ] High:
+- [ ] Medium:
+- [ ] Low:
+- [ ] Client commitments:
+
+## Recovery check
+- Rest days taken: /1
+- Sleep ok? · Energy ok?
+- Planned Friday:

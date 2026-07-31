@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Transistor Quiz — ITS</title>
+<link rel="icon" type="image/png" href="../../../website/IMAGES/LOGO%20BGR.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Inter', -apple-system, sans-serif; background: #FAF8F5; color: #1A1A1A; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+  [dir=rtl] body { font-family: 'Tajawal', 'Inter', sans-serif; }
+
+  .quiz-wrap { max-width: 700px; width: 100%; }
+
+  .header { background: #1A1A1A; color: #fff; padding: 24px 28px; border-radius: 14px 14px 0 0; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+  .header h1 { font-size: 22px; font-weight: 800; letter-spacing: -0.3px; }
+  .header h1 span { color: #FF9F00; }
+  .header .badge { background: #FF9F00; color: #1A1A1A; font-size: 11px; font-weight: 800; padding: 5px 12px; border-radius: 5px; letter-spacing: 0.5px; }
+  [dir=rtl] .header .badge { letter-spacing: 0; }
+
+  .progress-bar { height: 4px; background: #E5E7EB; }
+  .progress-fill { height: 100%; background: #FF9F00; transition: width 0.4s ease; width: 0%; }
+
+  .body { background: #fff; border: 1px solid #E5E7EB; border-top: none; border-radius: 0 0 14px 14px; padding: 28px; min-height: 380px; display: flex; flex-direction: column; }
+
+  .q-num { font-size: 12px; font-weight: 700; color: #FF9F00; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+  [dir=rtl] .q-num { letter-spacing: 0; }
+  .q-text { font-size: 20px; font-weight: 700; color: #1A1A1A; margin-bottom: 24px; line-height: 1.4; }
+
+  .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  .opt { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border: 2px solid #E5E7EB; border-radius: 10px; cursor: pointer; transition: all 0.2s; font-size: 15px; color: #4B5563; font-weight: 500; background: #fff; }
+  .opt:hover { border-color: #FF9F00; background: #FFF8F0; }
+  .opt.selected { border-color: #FF9F00; background: #FFF8F0; color: #1A1A1A; font-weight: 600; }
+  .opt.correct { border-color: #10B981; background: #F0FDF4; color: #065F46; }
+  .opt.wrong { border-color: #EF4444; background: #FEF2F2; color: #991B1B; }
+  .opt .indicator { width: 22px; height: 22px; border-radius: 50%; border: 2px solid #D1D5DB; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 12px; font-weight: 700; transition: all 0.2s; }
+  .opt.selected .indicator { border-color: #FF9F00; background: #FF9F00; color: #fff; }
+  .opt.correct .indicator { border-color: #10B981; background: #10B981; color: #fff; }
+  .opt.wrong .indicator { border-color: #EF4444; background: #EF4444; color: #fff; }
+  .opt.disabled { pointer-events: none; opacity: 0.7; }
+
+  .explain { background: #FAF8F5; border-radius: 8px; padding: 14px 18px; margin-bottom: 20px; font-size: 13px; color: #4B5563; line-height: 1.6; display: none; border-left: 4px solid #FF9F00; }
+  [dir=rtl] .explain { border-left: none; border-right: 4px solid #FF9F00; }
+  .explain.show { display: block; }
+  .explain strong { color: #1A1A1A; }
+
+  .nav { display: flex; justify-content: space-between; align-items: center; margin-top: auto; gap: 12px; flex-wrap: wrap; }
+  .btn { padding: 10px 24px; border-radius: 8px; font-weight: 600; font-size: 13px; border: none; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+  .btn-primary { background: #FF9F00; color: #1A1A1A; }
+  .btn-primary:hover { background: #E08A00; transform: translateY(-1px); }
+  .btn-outline { background: transparent; color: #4B5563; border: 1.5px solid #D1D5DB; }
+  .btn-outline:hover { border-color: #FF9F00; color: #FF9F00; }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  .score-box { text-align: center; padding: 20px 0; }
+  .score-num { font-size: 64px; font-weight: 900; color: #FF9F00; }
+  .score-lbl { font-size: 16px; color: #1A1A1A; font-weight: 600; margin-top: 4px; }
+  .score-msg { font-size: 15px; color: #6B7280; margin-top: 8px; }
+  .score-detail { font-size: 13px; color: #9CA3AF; margin-top: 4px; }
+  .score-actions { margin-top: 20px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  .footer { text-align: center; padding: 16px; font-size: 10px; color: #9CA3AF; }
+
+  .lang-toggle { background: none; border: 1.5px solid rgba(255,255,255,0.3); border-radius: 6px; cursor: pointer; padding: 4px 10px; font-size: 11px; font-weight: 600; color: #fff; font-family: inherit; transition: 0.2s; }
+  .lang-toggle:hover { border-color: #FF9F00; color: #FF9F00; }
+</style>
+</head>
+<body>
+
+<div class="quiz-wrap">
+  <div class="header">
+    <div>
+      <div class="badge" id="langBadge">Transistor Quiz</div>
+      <h1><span id="langTitle">Test</span> Your Knowledge</h1>
+    </div>
+    <button class="lang-toggle" onclick="toggleLang()" id="langToggle">العربية</button>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+
+  <div class="body" id="quizBody">
+    <!-- loaded dynamically -->
+  </div>
+
+  <div class="footer">
+    ITS — Industrial Technology Solutions &bull; Power, Control &amp; Machinery
+  </div>
+</div>
+
+<script>
+const en = [
+  { q: "What does a transistor do?", opts: ["Stores electricity", "Acts as a switch or amplifier", "Generates power", "Measures voltage"], ans: 1, exp: "A transistor is a semiconductor device that can act as a switch (ON/OFF) or amplify signals. It's controlled by a small current at the base." },
+  { q: "How many terminals does a transistor have?", opts: ["2", "3", "4", "5"], ans: 1, exp: "A transistor has 3 terminals: Base (B), Collector (C), and Emitter (E). Each has a specific role in controlling current flow." },
+  { q: "In an NPN transistor, which terminal controls the current?", opts: ["Collector", "Emitter", "Base", "Substrate"], ans: 2, exp: "The Base (B) controls the transistor. A small current from Base to Emitter turns ON the larger Collector-to-Emitter current." },
+  { q: "What does NPN stand for?", opts: ["Negative-Positive-Negative", "Non-Polarized Node", "Neutral-Power-Neutral", "None of the above"], ans: 0, exp: "NPN stands for Negative-Positive-Negative, referring to the semiconductor layers: N-type (Emitter), P-type (Base), N-type (Collector)." },
+  { q: "A transistor is OFF when:", opts: ["Base current flows", "No base current flows", "Collector voltage is high", "Emitter is grounded"], ans: 1, exp: "No base current = transistor is OFF (cut-off region). A base current must flow to turn it ON (saturation region)." },
+  { q: "What is the most common use of a transistor in industrial PCBs?", opts: ["Generating heat", "Switching loads ON/OFF", "Storing data", "Rectifying AC"], ans: 1, exp: "In industrial electronics, transistors are most commonly used as electronic switches to turn relays, LEDs, motors, and other loads ON and OFF." },
+  { q: "What does a transistor's gain (hFE) represent?", opts: ["Voltage rating", "Power consumption", "Amplification factor", "Switching speed"], ans: 2, exp: "Gain (hFE) is the amplification factor. If hFE = 200, then 1mA at the Base can control 200mA at the Collector." },
+  { q: "Which transistor type is most commonly used?", opts: ["PNP", "NPN", "FET", "MOSFET"], ans: 1, exp: "NPN is the most common. Current flows from Collector (higher voltage) to Emitter (lower voltage) when a small current enters the Base." },
+  { q: "What happens when a transistor has a shorted C-E junction?", opts: ["It stops working", "It stays ON permanently", "It amplifies more", "Nothing changes"], ans: 1, exp: "A shorted Collector-Emitter means the transistor is stuck ON — current flows continuously regardless of the Base signal." },
+  { q: "What component did the transistor replace?", opts: ["Resistors", "Capacitors", "Vacuum tubes", "Transformers"], ans: 2, exp: "Transistors replaced bulky, hot vacuum tubes in the 1950s-60s, enabling miniaturization of radios, computers, and all modern electronics." }
+];
+
+const ar = [
+  { q: "ما هي وظيفة الترانزستور؟", opts: ["يخزن الكهرباء", "يعمل كمفتاح أو مضخم", "يولد الطاقة", "يقيس الجهد"], ans: 1, exp: "الترانزستور هو مكون شبه موصل يعمل كمفتاح (تشغيل/إيقاف) أو مضخم للإشارات. يتحكم فيه تيار صغير في القاعدة." },
+  { q: "كم عدد أطراف الترانزستور؟", opts: ["٢", "٣", "٤", "٥"], ans: 1, exp: "للترانزستور ٣ أطراف: القاعدة (B)، المجمع (C)، والباعث (E). لكل طرف دور محدد في التحكم بمرور التيار." },
+  { q: "في ترانزستور NPN، أي طرف يتحكم في التيار؟", opts: ["المجمع", "الباعث", "القاعدة", "الطبقة السفلية"], ans: 2, exp: "القاعدة (B) تتحكم في الترانزستور. تيار صغير من القاعدة إلى الباعث يُشغل التيار الكبير من المجمع إلى الباعث." },
+  { q: "ماذا يعني اختصار NPN؟", opts: ["سالب-موجب-سالب", "قطب غير مستقطب", "محايد-طاقة-محايد", "لا شيء مما سبق"], ans: 0, exp: "NPN تعني سالب-موجب-سالب، إشارة إلى طبقات أشباه الموصلات: من النوع N (الباعث)، من النوع P (القاعدة)، من النوع N (المجمع)." },
+  { q: "الترانزستور يكون مغلقاً (OFF) عندما:", opts: ["يتدفق تيار القاعدة", "لا يتدفق تيار القاعدة", "جهد المجمع مرتفع", "الباعث مؤرض"], ans: 1, exp: "لا تيار في القاعدة = الترانزستور مغلق (منطقة القطع). يجب أن يتدفق تيار القاعدة لتشغيله (منطقة الإشباع)." },
+  { q: "أكثر استخدام للترانزستور في لوحات PCB الصناعية؟", opts: ["توليد الحرارة", "تشغيل وإيقاف الأحمال", "تخزين البيانات", "تقويم التيار المتردد"], ans: 1, exp: "في الإلكترونيات الصناعية، الترانزستورات تستخدم كمفاتيح إلكترونية لتشغيل المرحلات، الـLEDs، المحركات، والأحمال الأخرى." },
+  { q: "ماذا يمثل كسب الترانزستور (hFE)؟", opts: ["تصنيف الجهد", "استهلاك الطاقة", "عامل التضخيم", "سرعة التبديل"], ans: 2, exp: "الكسب (hFE) هو عامل التضخيم. إذا كان hFE = 200، فإن 1mA في القاعدة يتحكم في 200mA في المجمع." },
+  { q: "أي نوع من الترانزستورات هو الأكثر استخداماً؟", opts: ["PNP", "NPN", "FET", "MOSFET"], ans: 1, exp: "NPN هو الأكثر شيوعاً. التيار يتدفق من المجمع (جهد أعلى) إلى الباعث (جهد أقل) عندما يدخل تيار صغير إلى القاعدة." },
+  { q: "ماذا يحدث عندما يكون الترانزستور مقصوراً بين C-E؟", opts: ["يتوقف عن العمل", "يظل مفتوحاً بشكل دائم", "يضخم أكثر", "لا شيء يتغير"], ans: 1, exp: "قصر بين المجمع والباعث يعني أن الترانزستور عالق في وضع التشغيل — التيار يتدفق باستمرار بغض النظر عن إشارة القاعدة." },
+  { q: "أي مكون حل الترانزستور محله؟", opts: ["المقاومات", "المكثفات", "الصمامات المفرغة", "المحولات"], ans: 2, exp: "الترانزستورات حلت محل الصمامات المفرغة الضخمة والحارة في الخمسينيات والستينيات، مما سمح بتصغير أجهزة الراديو والحواسيب والإلكترونيات الحديثة." }
+];
+
+let currentLang = 'en';
+let currentQ = 0;
+let score = 0;
+let answered = false;
+let quizFinished = false;
+let selectedAnswers = new Array(en.length).fill(-1);
+let quizResults = new Array(en.length).fill(null); // null | 'correct' | 'wrong'
+
+const qs = { en, ar };
+const langData = {
+  en: { badge: "Transistor Quiz", title: "Test", next: "Next", finish: "Finish", restart: "Try Again", retry: "Review Answers", scoreMsg: { perfect: "Perfect score! You're a transistor expert!", great: "Great job! You know your transistors well.", good: "Not bad! Review the ones you missed.", low: "Keep studying! Try again after reviewing." }, detail: "out of 10 correct" },
+  ar: { badge: "اختبار الترانزستور", title: "اختبر", next: "التالي", finish: "إنهاء", restart: "حاول مرة أخرى", retry: "مراجعة الإجابات", scoreMsg: { perfect: "درجة كاملة! أنت خبير في الترانزستورات!", great: "عمل رائع! تعرف الترانزستورات جيداً.", good: "ليس سيئاً! راجع الإجابات التي أخطأت فيها.", low: "استمر في الدراسة! حاول مرة أخرى بعد المراجعة." }, detail: "من ١٠ إجابات صحيحة" }
+};
+
+function toggleLang() {
+  currentLang = currentLang === 'en' ? 'ar' : 'en';
+  document.dir = currentLang === 'ar' ? 'rtl' : 'ltr';
+  document.getElementById('langToggle').textContent = currentLang === 'en' ? 'العربية' : 'English';
+  if (quizFinished) renderScore();
+  else renderQuestion();
+}
+
+function renderQuestion() {
+  const data = qs[currentLang];
+  const q = data[currentQ];
+  const lang = langData[currentLang];
+  const qIdx = currentQ;
+
+  document.getElementById('langBadge').textContent = lang.badge;
+  document.getElementById('langTitle').textContent = lang.title;
+
+  let html = `<div class="q-num">Question ${currentQ+1} / ${data.length}</div>`;
+  html += `<div class="q-text">${q.q}</div>`;
+  html += `<div class="options">`;
+
+  q.opts.forEach((opt, i) => {
+    let cls = 'opt';
+    if (quizResults[qIdx] !== null) {
+      cls += ' disabled';
+      if (i === q.ans) cls += ' correct';
+      else if (i === selectedAnswers[qIdx] && i !== q.ans) cls += ' wrong';
+      else if (selectedAnswers[qIdx] === -1 && i === q.ans) cls += ' correct';
+    } else if (selectedAnswers[qIdx] === i) {
+      cls += ' selected';
+    }
+    html += `<div class="${cls}" onclick="selectAnswer(${i})">`;
+    html += `<span class="indicator">${selectedAnswers[qIdx] === i ? '✓' : (i+1)}</span>`;
+    html += `<span>${opt}</span>`;
+    html += `</div>`;
+  });
+  html += `</div>`;
+
+  const explainDiv = document.createElement('div');
+  if (quizResults[qIdx] !== null) {
+    const isCorrect = quizResults[qIdx] === 'correct';
+    html += `<div class="explain show"><strong>${isCorrect ? '✓' : '✗'} ${isCorrect ? 'Correct!' : 'Incorrect.'}</strong> ${q.exp}</div>`;
+  } else if (selectedAnswers[qIdx] !== -1 && !answered) {
+    // answer was just selected, show confirmation but not explanation yet
+  } else {
+    html += `<div class="explain"></div>`;
+  }
+
+  html += `<div class="nav">`;
+  html += `<button class="btn btn-outline" onclick="prevQ()" ${currentQ === 0 ? 'disabled' : ''}>← Back</button>`;
+  if (currentQ < data.length - 1) {
+    const canNext = selectedAnswers[qIdx] !== -1;
+    html += `<button class="btn btn-primary" onclick="confirmAndNext()" ${!canNext ? 'disabled' : ''}>${lang.next}</button>`;
+  } else {
+    const canFinish = selectedAnswers[qIdx] !== -1;
+    html += `<button class="btn btn-primary" onclick="confirmAndFinish()" ${!canFinish ? 'disabled' : ''}>${lang.finish}</button>`;
+  }
+  html += `</div>`;
+
+  document.getElementById('quizBody').innerHTML = html;
+  document.getElementById('progressFill').style.width = `${((currentQ) / data.length) * 100}%`;
+
+  answered = false;
+}
+
+function selectAnswer(i) {
+  const qIdx = currentQ;
+  if (quizResults[qIdx] !== null) return; // already answered
+
+  selectedAnswers[qIdx] = i;
+  renderQuestion();
+}
+
+function confirmAndNext() {
+  const qIdx = currentQ;
+  if (selectedAnswers[qIdx] === -1) return;
+  if (quizResults[qIdx] === null) {
+    // First time confirming this question
+    const q = qs[currentLang][qIdx];
+    quizResults[qIdx] = selectedAnswers[qIdx] === q.ans ? 'correct' : 'wrong';
+    if (selectedAnswers[qIdx] === q.ans) score++;
+    answered = true;
+  }
+  if (currentQ < qs[currentLang].length - 1) {
+    currentQ++;
+    renderQuestion();
+  }
+}
+
+function confirmAndFinish() {
+  const qIdx = currentQ;
+  if (selectedAnswers[qIdx] === -1) return;
+  if (quizResults[qIdx] === null) {
+    const q = qs[currentLang][qIdx];
+    quizResults[qIdx] = selectedAnswers[qIdx] === q.ans ? 'correct' : 'wrong';
+    if (selectedAnswers[qIdx] === q.ans) score++;
+    answered = true;
+  }
+  quizFinished = true;
+  renderScore();
+}
+
+function prevQ() {
+  if (currentQ > 0) { currentQ--; renderQuestion(); }
+}
+
+function renderScore() {
+  const lang = langData[currentLang];
+  const total = qs[currentLang].length;
+  let msg;
+  if (score === total) msg = lang.scoreMsg.perfect;
+  else if (score >= 7) msg = lang.scoreMsg.great;
+  else if (score >= 4) msg = lang.scoreMsg.good;
+  else msg = lang.scoreMsg.low;
+
+  document.getElementById('langBadge').textContent = lang.badge;
+  document.getElementById('langTitle').textContent = lang.title;
+
+  let html = `<div class="score-box">`;
+  html += `<div class="score-num">${score}/${total}</div>`;
+  html += `<div class="score-lbl">${lang.detail}</div>`;
+  html += `<div class="score-msg">${msg}</div>`;
+  html += `<div class="score-detail">${score === total ? '✦' : score >= 7 ? '✦✦' : score >= 4 ? '✦' : ''}</div>`;
+  html += `<div class="score-actions">`;
+  html += `<button class="btn btn-primary" onclick="restartQuiz()">${lang.restart}</button>`;
+  if (score < total) {
+    html += `<button class="btn btn-outline" onclick="reviewAnswers()">${lang.retry}</button>`;
+  }
+  html += `</div>`;
+  html += `</div>`;
+
+  document.getElementById('quizBody').innerHTML = html;
+  document.getElementById('progressFill').style.width = `100%`;
+}
+
+function restartQuiz() {
+  currentQ = 0;
+  score = 0;
+  quizFinished = false;
+  selectedAnswers = new Array(en.length).fill(-1);
+  quizResults = new Array(en.length).fill(null);
+  renderQuestion();
+}
+
+function reviewAnswers() {
+  currentQ = 0;
+  quizFinished = false;
+  renderQuestion();
+}
+
+// Init
+renderQuestion();
+</script>
+</body>
+</html>
