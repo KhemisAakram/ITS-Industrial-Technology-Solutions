@@ -10,15 +10,14 @@ tags: [moc, planning]
 
 > System: flow-match tasks → run scripted actions → work the weekly bank → log everything → rest on schedule.
 
-## Setup (2 min, once)
-- [ ] Enable core plugin **Templates**
-- [ ] Enable core plugin **Daily notes**
-  - Date format: `YYYY-MM-DD` · New file location: `05_Daily_Notes` · Template: `07_Templates/daily_template.md`
-- [ ] Install community plugins (all optional — notes work fine without them):
-  - [ ] **Periodic Notes** (weekly notes) → weekly template: `07_Templates/weekly_template.md`
-  - [ ] **Dataview** (dashboard queries below)
-  - [ ] **Tasks** (open-task query below)
-  - [ ] **Kanban** (opens [[ITS_Kanban]] as a board)
+## Setup (mostly done automatically)
+- [x] Core plugins **Templates** + **Daily notes** enabled
+- [x] Daily notes → `Planning/05_Daily_Notes`, template `07_Templates/daily_template.md` (config file written)
+- [x] Templates folder → `Planning/07_Templates` (config file written)
+- [x] Community plugins installed: **Periodic Notes, Dataview, Tasks, Kanban, Git, Templater, Calendar, Excalidraw, QuickAdd, NL Dates, PDF++, Iconize**
+- [x] Templater triggers (daily + weekly) + Git auto-backup (20 min) configured (config files written)
+- [ ] First check: `Ctrl+P` → "Open today's daily note" → heading should read **Day X of 137 (Week W)**
+- [ ] First weekly review: `Ctrl+P` → "Open weekly note" → check `06_Weekly_Notes`
 
 ## Start here
 - [[01_Milestones|Milestones — 19.5-week map]]
