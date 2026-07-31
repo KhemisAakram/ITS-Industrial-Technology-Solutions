@@ -12,34 +12,27 @@ yield_da_hr:
 status:
 ---
 
-<%*
-const start = new Date("2026-08-01T00:00:00").getTime();
-const day = Math.floor((Date.now() - start) / 86400000) + 1;
-const week = Math.ceil(day / 7);
-tp.frontmatter.week = week;
-tp.frontmatter.day = day;
-%>
+# {{date:dddd, D MMMM YYYY}} - Day ___ of 137 (Week ___)
 
-# {{date:dddd, D MMMM YYYY}} — Day <%+ tp.frontmatter.day %> of 137 (Week <%+ tp.frontmatter.week %>)
+> Focus:
+> [[02_Task_Bank|Task Bank]] - [[03_Scripted_Actions|Scripts]] - [[01_Milestones|Milestones]]
 
-> [[02_Task_Bank|Task Bank]] · [[03_Scripted_Actions|Scripts]] · [[01_Milestones|Milestones]]
-
-## 3 Focus Tasks (highest demand first — do these first)
+## 3 Focus Tasks (highest demand first - do these first)
 - [ ] 
 - [ ] 
 - [ ] 
 
 ## Energy blocks
-- **Morning (peak) — High demand:** 
-- **Afternoon — Medium demand / jobs:** 
-- **Evening (low energy) — Low demand:** 
+- **Morning (peak) - High demand:** 
+- **Afternoon - Medium demand / jobs:** 
+- **Evening (low energy) - Low demand:** 
 
-## ☀️ Morning start
+## Morning start
 - [ ] Urgent WhatsApp checked (5 min max)
 - [ ] Focus tasks written
-- [ ] Deep-work block started — phone silent
+- [ ] Deep-work block started - phone silent
 
-## 🌙 Shutdown
+## Shutdown
 - [ ] Hours + revenue logged in Yield Tracker
 - [ ] Kanban updated
 - [ ] Tomorrow's 3 tasks written
@@ -49,7 +42,7 @@ tp.frontmatter.day = day;
 - Hours worked:
 - Billable hours:
 - Revenue (DA):
-- Yield (DA/hr) — target ≥ 1,000:
+- Yield (DA/hr) - target >= 1,000:
 - Blocker / one line:
 
 ## Notes

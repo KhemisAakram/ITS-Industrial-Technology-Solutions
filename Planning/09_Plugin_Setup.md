@@ -7,30 +7,27 @@ tags: [setup, plugins, planning]
 
 > `.obsidian/` is gitignored → plugin settings stay on **your machine only**. Vault notes (this one included) are committed to GitHub.
 
+## 0. The big one: all daily/weekly notes are pre-generated
+All **137 daily notes** (`05_Daily_Notes/YYYY-MM-DD.md`) and **20 weekly notes** (`06_Weekly_Notes/W01..W20.md`) already exist on disk with the correct **Day X of 137** and **Week W** filled in, mapped back from the deadline **Tue 15 Dec 2026**.
+
+- You never need Templater to create a daily note.
+- Just open the Calendar (or `Ctrl+P` → "Open today's daily note") and start filling it in.
+- Templates in `07_Templates` are a **fallback only** (used if a note is ever missing).
+
 ## 1. Git (obsidian-git) — auto backup to GitHub
-Settings → Git (obsidian-git):
-- **Auto backup after interval of operations** → on, minutes: `20`
-- **Auto backup after failed note commit** → on
-- **Push on backup** → **on**
-- **Pull on startup** → on
-- **Commit message on auto backup**: `vault: daily backup`
-- Leave "Username/Password" empty — uses your existing GitHub login (same one CLI git uses).
+Config already written to `.obsidian/plugins/obsidian-git/data.json` (verify in Settings → Git if needed):
+- `autoSaveInterval: 20` → auto **commit + push** every 20 min while Obsidian is open
+- `autoPullOnBoot: true` → pull once on startup
+- `pullBeforePush: true`, `disablePush: false`
+- `autoCommitMessage`: `vault: daily backup`
 
-What it does: every 20 min while Obsidian is open, it commits + pushes your vault. Daily notes are never lost. `.obsidian/` never gets committed.
+What it does: every 20 min your vault commits + pushes to GitHub. Daily notes are never lost. `.obsidian/` never gets committed.
 
-## 2. Templater — auto-fills day/week numbers
-Settings → Templater:
-- **Template folder location**: `07_Templates`
-- **Trigger Templater on new file creation** → Add:
-  - Template: `07_Templates/daily_template.md` · Folder: `05_Daily_Notes` · File pattern: `2026-*.md`
-  - Template: `07_Templates/weekly_template.md` · Folder: `06_Weekly_Notes` · File pattern: `W*.md`
-
-Test: `Ctrl+P` → "Open today's daily note" → the heading should read **Day X of 137 (Week W#)**. If you see raw `<% %>` text instead → the trigger didn't run: re-check the two triggers above, or use the **backup method** below.
-
-**Backup method (100% reliable):** `Ctrl+P` → **"Templater: Create new note from template"** → pick `daily_template.md` → save the new note as `Planning/05_Daily_Notes/YYYY-MM-DD.md` with the correct date. Use this any time the auto-trigger doesn't fire.
+## 2. Templater — NOT needed anymore (kept installed as fallback)
+All notes are pre-generated, so the auto-trigger does not matter. If you ever need a fresh note from a template: `Ctrl+P` → **"Templater: Create new note from template"** → pick the template → save with the correct name. Templates are core-safe (no raw `<% %>`).
 
 ## 3. Calendar — see/open days
-Community **Calendar** plugin: no config needed — it reads your daily-notes folder (`05_Daily_Notes`). Click a date to open/create that day.
+Community **Calendar** plugin: no config needed — it reads your daily-notes folder (`05_Daily_Notes`). Click a date to open that day.
 
 ## 4. QuickAdd — one-click captures
 Settings → QuickAdd → Manage choices → Add:
@@ -61,9 +58,9 @@ Open any PDF in the vault (e.g. `documents/00_reference/FLOWAXS.pdf`) → highli
 ## 8. Iconize — cosmetics only
 Right-click a folder → Iconize → pick an icon. Zero effect on notes.
 
-## Daily flow with all plugins
-1. `Ctrl+P` → "Open today's daily note" (Templater fills Day/Week automatically)
+## Daily flow
+1. Open today's daily note — Day/Week already filled in (`Ctrl+P` → "Open today's daily note", or Calendar)
 2. Run QuickAdd "Add task to today" from the workshop bench, even mid-task
 3. Type task dates with plain words (NL Dates)
 4. Evening: shutdown checklist → obsidian-git pushes everything automatically
-5. Friday: weekly review in `06_Weekly_Notes` (Periodic Notes → "Open weekly note")
+5. Friday: weekly review in `06_Weekly_Notes`
