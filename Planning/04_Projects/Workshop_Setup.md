@@ -23,6 +23,9 @@ Workshop is operational: bench + tools organized, electrical safe, inventory tra
 - 📅 2026-08-27 — baseline inventory done
 - 📅 2026-11-07 — workshop fully operational
 
+## Diagrams (Excalidraw — in `08_Diagrams/`)
+- [[08_Diagrams/Workshop_layout|Workshop layout]] — bench, tool walls, electrical, storage
+
 ## Links
 - [[02_Task_Bank|Task Bank]] → Medium: workshop tasks
 

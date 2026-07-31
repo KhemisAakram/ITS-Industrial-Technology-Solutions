@@ -26,7 +26,9 @@ tags: [moc, planning]
 - [[03_Scripted_Actions|Scripted Actions — checklists]]
 - **Projects:** [[SOMIK_CNC_Conversion]] · [[Workshop_Setup]] · [[Client_Jobs]] · [[Final_Report_Defense]]
 - [[ITS_Kanban|Kanban board]]
-- **Today:** open the daily note (Daily notes plugin) → created in `05_Daily_Notes`
+- [[09_Plugin_Setup|Plugin setup — Git, Templater, QuickAdd, diagrams]]
+- [[08_Diagrams|Diagrams — Excalidraw canvases (SOMIK wiring, workshop layout)]]
+- **Today:** open the daily note (Daily notes plugin) → created in `05_Daily_Notes` (Templater fills Day/Week automatically)
 - **Weekly review:** create a note in `06_Weekly_Notes` from the weekly template, every Thursday evening or Friday morning
 
 ## Vault notes already in this repo (linkable)

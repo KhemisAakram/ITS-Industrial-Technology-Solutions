@@ -12,7 +12,15 @@ yield_da_hr:
 status:
 ---
 
-# {{date:dddd, D MMMM YYYY}} — Day {{date:D} of 137}
+<%*
+const start = new Date("2026-08-01T00:00:00").getTime();
+const day = Math.floor((Date.now() - start) / 86400000) + 1;
+const week = Math.ceil(day / 7);
+tp.frontmatter.week = week;
+tp.frontmatter.day = day;
+%>
+
+# {{date:dddd, D MMMM YYYY}} — Day <%+ tp.frontmatter.day %> of 137 (Week <%+ tp.frontmatter.week %>)
 
 > [[02_Task_Bank|Task Bank]] · [[03_Scripted_Actions|Scripts]] · [[01_Milestones|Milestones]]
 

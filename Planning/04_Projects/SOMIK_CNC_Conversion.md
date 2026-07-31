@@ -33,6 +33,10 @@ KOTEC KTPG-320 CNC plasma machine converted from **Sentrol 2** (relay-based, no 
 - 📅 2026-10-08 — machine runs under Mach3
 - 📅 2026-11-05 — handed over + invoice followed up
 
+## Diagrams (Excalidraw — in `08_Diagrams/`)
+- [[08_Diagrams/SOMIK_wiring_plan|SOMIK wiring plan]] — Sentrol 2 → Mach3 layout
+- [[08_Diagrams/SOMIK_control_cabinet|Control cabinet layout]]
+
 ## Resources
 - Offer docs: [[Offer_SOMIK_Skikda_v3]] (docx in Services/)
 - Diagnosis/checklist template: [[PCB_Diagnosis_Checklist]]

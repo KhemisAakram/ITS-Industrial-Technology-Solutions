@@ -1,13 +1,17 @@
 ---
+
 kanban-plugin: board
-tags: [kanban, planning]
+tags:
+  - kanban
+  - planning
+
 ---
 
 ## Backlog
 
 - [ ] SOMIK: teardown + condition assessment
-- [ ] SOMIK: wiring plan (Sentrol 2 → Mach3)
 - [ ] SOMIK: hardware procurement
+- [ ] SOMIK: wiring plan (Sentrol 2 → Mach3)
 - [ ] Workshop: baseline inventory
 - [ ] Report: outline + skeleton
 - [ ] Report: Ch 1 — Introduction
@@ -18,14 +22,26 @@ tags: [kanban, planning]
 - [ ] Defense slides v1
 - [ ] Defense slides v2
 
+
 ## This Week
 
 - [ ] Pull from [[02_Task_Bank]] at weekly review
+
 
 ## In Progress
 
 - [ ] (move tasks here from Task Bank / daily note)
 
+
 ## Done
 
 - [ ] Planning system set up (2026-08-01)
+
+
+
+
+%% kanban:settings
+```
+{"kanban-plugin":"board"}
+```
+%%
