@@ -2,7 +2,7 @@
 date: 2026-08-01
 tags: [courses, planning]
 ---
-
+ 
 # Courses — Ranked Watch List
 
 **Rule:** every work day · **Electronics/PCB course is the 1st thing, BEFORE any task** · then 45 min SOMIK + 45 min VFD (1h30 total) · the Electronics/PCB course replaces whichever of SOMIK/VFD is behind · work top-down · tick off when watched.
