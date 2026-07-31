@@ -5,7 +5,7 @@ tags: [courses, planning]
 
 # Courses — Ranked Watch List
 
-**Rule:** every work day · 45 min SOMIK + 45 min VFD (1h30 total) · the Electronics/PCB course replaces whichever track is behind · work top-down · tick off when watched.
+**Rule:** every work day · **Electronics/PCB course is the 1st thing, BEFORE any task** · then 45 min SOMIK + 45 min VFD (1h30 total) · the Electronics/PCB course replaces whichever of SOMIK/VFD is behind · work top-down · tick off when watched.
 Take notes straight into the linked project file so each video feeds the job, not just the playlist.
 Friday = recovery, no courses.
 
@@ -60,30 +60,40 @@ Ranked by what actually fixes the 3 client units: repair/testing first, commissi
 
 ---
 
-## Electronics / PCB (all about PCB)
+## Electronics / PCB — all about PCB (1st thing every day)
 
-Foundation for the PCB-repair jobs + embedded work (STM32). The PCB course swaps in for whichever of SOMIK/VFD is behind that day.
+Foundation for the PCB-repair jobs + embedded work (STM32). **Watch BEFORE starting any task**, then the SOMIK/VFD 45+45 split applies after. Go Level 1 → 4 top-down, tick off when watched. Next-class link for each daily note: [[11_Course_Queue]].
 
-### Course anchor — take in order (Arabic)
-- [ ] [دبلومة الالكترونيات العملية — Practical Electronics Diploma (playlist)](https://www.youtube.com/playlist?list=PLww54WQ2wa5qVh1p8iPi7HspX7N9hbvbc) — the main structured course
-- [ ] [دورة الالكترونيات العملية :: 54- مضاعفات الجهد (Voltage Multiplier)](https://www.youtube.com/watch?v=6iKQEyuwbuA) — lesson 54, voltage multipliers
+### Level 1 — Fundamentals (Basic)
+- [ ] **1.** [دبلومة الالكترونيات العملية — Practical Electronics Diploma (playlist)](https://www.youtube.com/playlist?list=PLww54WQ2wa5qVh1p8iPi7HspX7N9hbvbc) — main structured course, go lesson by lesson
+- [ ] **2.** [How ELECTRICITY works — working principle](https://www.youtube.com/watch?v=mc979OhitAg) — current, voltage, resistance — the base model
+- [ ] **3.** [Capacitors Explained — the basics how capacitors work](https://www.youtube.com/watch?v=X4EUwTwZ110) — capacitance, types, RC behavior
+- [ ] **4.** [Diodes Explained — pn junction](https://www.youtube.com/watch?v=Fwj_d3uO5g8) — rectification, protection
+- [ ] **5.** [Transistors Explained — how transistors work](https://www.youtube.com/watch?v=J4oO7PT_nzQ) — BJT/MOSFET switching
+- [ ] **6.** [How LED Works — Unravel the Mysteries](https://www.youtube.com/watch?v=O8M2z2hIbag) — semiconductors in practice
+- [ ] **7.** [دورة الالكترونيات العملية :: 54- مضاعفات الجهد (Voltage Multiplier)](https://www.youtube.com/watch?v=6iKQEyuwbuA) — diploma lesson 54
 
-### Power electronics (feeds VFD repair)
+### Level 2 — Power electronics (Intermediate) — feeds VFD repair
 - [ ] **1.** [How Buck, Boost & Buck-Boost DC-DC Converters Work](https://www.youtube.com/watch?v=PgTR7226sHU) — power conversion fundamentals
 - [ ] **2.** [في المختبر:: 178 — شرح دوائر التغذية النبضية (Switched Mode Power Supply) جزء 1](https://www.youtube.com/watch?v=Eb2KqEKlDsc) — SMPS theory behind VFD internals
 - [ ] **3.** [في المختبر:: 219 — Double Pulse Testing + اختبار الضياعات (Losses)](https://www.youtube.com/watch?v=Tl67mSy-dxw) — power-semiconductor testing (IGBTs)
 - [ ] **4.** [DIY Linear Power Supply | Part-1](https://www.youtube.com/watch?v=1rAUrbnq2WY) — build a bench supply
 - [ ] **5.** [Every Component of a Linear Power Supply Explained](https://www.youtube.com/watch?v=UTetQhGyUVg) — component-level understanding
 
-### PCB design — STM32 / embedded
+### Level 3 — PCB design + embedded STM32 (Advanced)
 - [ ] **1.** [KiCad 6 STM32 PCB Design Full Tutorial — Phil's Lab #65](https://www.youtube.com/watch?v=aVUqaB0IMh4) — complete STM32 board: schematic → layout → routing → Gerber
-- [ ] **2.** [A simple way to design a professional board — Part 1](https://www.youtube.com/watch?v=d6N_W6E9dgE) — professional layout habits
-- [ ] **3.** [How to make your First PCB! Beginner KiCAD Design Tutorial](https://www.youtube.com/watch?v=TJPyqRnhytA) — beginner KiCad flow
-- [ ] **4.** [How To Make Your Own Printed Circuit Boards (PCB)](https://www.youtube.com/watch?v=djBMQhjfbys) — design → manufacture overview
+- [ ] **2.** [STM32 Programming Tutorial for Custom Hardware — SWD, PWM, USB, SPI (Phil's Lab #13)](https://www.youtube.com/watch?v=x_5rYfAyqq0) — firmware for the boards you design
+- [ ] **3.** [STM32 Board Bring-Up — Firmware and Test (Phil's Lab #54)](https://www.youtube.com/watch?v=dRKSs3wms4U) — power up + test your own board
+- [ ] **4.** [A simple way to design a professional board — Part 1](https://www.youtube.com/watch?v=d6N_W6E9dgE) — professional layout habits
+- [ ] **5.** [How to make your First PCB! Beginner KiCAD Design Tutorial](https://www.youtube.com/watch?v=TJPyqRnhytA) — beginner KiCad flow
+- [ ] **6.** [How To Make Your Own Printed Circuit Boards (PCB)](https://www.youtube.com/watch?v=djBMQhjfbys) — design → manufacture overview
 
-### Repair technique (feeds PCB-repair jobs)
+### Level 4 — Repair technique (Advanced) — feeds PCB-repair jobs
 - [ ] **1.** [PCB Voltage Testing Explained — Find Faults Fast](https://www.youtube.com/watch?v=9kMwK1EUAzo) — safe voltage-point diagnosis before blind part swapping
-- [ ] **2.** [iPhone 15 Pro Max Turns On But NO DISPLAY? (Common Short Fixed!)](https://www.youtube.com/watch?v=5hf8dx5xdbc) — voltage injection + thermal camera short-finding
+- [ ] **2.** [Every SMD Component Explained Like NEVER Before](https://www.youtube.com/watch?v=zigwH0aSVqc) — identify SMD parts on real boards
+- [ ] **3.** [SMD Capacitor Test With Digital Multimeter](https://www.youtube.com/shorts/SbWh8khW_U8) — quick SMD cap check
+- [ ] **4.** [How to Test Capacitor on Board Using Continuity Test](https://www.youtube.com/shorts/LXlBmX2yIec) — on-board cap test
+- [ ] **5.** [iPhone 15 Pro Max Turns On But NO DISPLAY? (Common Short Fixed!)](https://www.youtube.com/watch?v=5hf8dx5xdbc) — voltage injection + thermal camera short-finding
 
 ### Practical / extras
 - [ ] **1.** [Connecting a Relay Module to a Microcontroller](https://www.youtube.com/watch?v=FWvEEtrTGRQ) — MCU I/O for controller builds

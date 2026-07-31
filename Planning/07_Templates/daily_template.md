@@ -23,10 +23,10 @@ status:
 - [ ] **Block 3 [MEDIUM]:** 
 - [ ] **Block 4 [LOW] - optional:** 
 
-## Courses — 45 + 45 min
+## Courses — PCB 1st thing (before tasks), then 45 + 45 min
+- [ ] **PCB / Electronics — 1st thing, BEFORE tasks** → [[11_Course_Queue|next PCB class]]
 - [ ] SOMIK (45 min) → [[10_Courses]]
 - [ ] VFD (45 min) → [[10_Courses]]
-- [ ] Electronics/PCB (replaces the weakest track) → [[10_Courses]]
 
 ## Morning start
 - [ ] Q1 Day? Friday -> rest day, no blocks
