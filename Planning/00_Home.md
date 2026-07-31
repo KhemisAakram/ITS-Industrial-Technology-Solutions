@@ -16,8 +16,8 @@ tags: [moc, planning]
 - [x] Templates folder → `Planning/07_Templates` (config file written)
 - [x] Community plugins installed: **Periodic Notes, Dataview, Tasks, Kanban, Git, Templater, Calendar, Excalidraw, QuickAdd, NL Dates, PDF++, Iconize**
 - [x] Templater triggers (daily + weekly) + Git auto-backup (20 min) configured (config files written)
-- [ ] First check: `Ctrl+P` → "Open today's daily note" → heading should read **Day X of 137 (Week W)**
-- [ ] First weekly review: `Ctrl+P` → "Open weekly note" → check `06_Weekly_Notes`
+- [x] First check: `Ctrl+P` → "Open today's daily note" → heading should read **Day X of 137 (Week W)** ✅ 2026-07-31
+- [x] First weekly review: `Ctrl+P` → "Open weekly note" → check `06_Weekly_Notes` ✅ 2026-07-31
 
 ## Start here
 - [[01_Milestones|Milestones — 19.5-week map]]
