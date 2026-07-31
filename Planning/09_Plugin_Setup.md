@@ -25,7 +25,9 @@ Settings → Templater:
   - Template: `07_Templates/daily_template.md` · Folder: `05_Daily_Notes` · File pattern: `2026-*.md`
   - Template: `07_Templates/weekly_template.md` · Folder: `06_Weekly_Notes` · File pattern: `W*.md`
 
-Test: `Ctrl+P` → "Open today's daily note" → the heading should read **Day X of 137 (Week W#)**. If you see raw `<% %>` text instead → the trigger didn't run: re-check the two triggers above, or run `Ctrl+P` → "Templater: Create new note from template" → pick `daily_template.md`.
+Test: `Ctrl+P` → "Open today's daily note" → the heading should read **Day X of 137 (Week W#)**. If you see raw `<% %>` text instead → the trigger didn't run: re-check the two triggers above, or use the **backup method** below.
+
+**Backup method (100% reliable):** `Ctrl+P` → **"Templater: Create new note from template"** → pick `daily_template.md` → save the new note as `Planning/05_Daily_Notes/YYYY-MM-DD.md` with the correct date. Use this any time the auto-trigger doesn't fire.
 
 ## 3. Calendar — see/open days
 Community **Calendar** plugin: no config needed — it reads your daily-notes folder (`05_Daily_Notes`). Click a date to open/create that day.
