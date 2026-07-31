@@ -9,9 +9,21 @@ tags:
 
 ## Backlog
 
+- [ ] ITS: manage business (admin+finance, docs, website+social, client follow-up)
 - [ ] SOMIK: teardown + condition assessment
 - [ ] SOMIK: hardware procurement
 - [ ] SOMIK: wiring plan (Sentrol 2 → Mach3)
+- [ ] Client: VFD job (3 units) — High
+- [ ] Client: coil winding machine 1 — final touch — High
+- [ ] Client: coil winding machine 2 — final touch — High
+- [ ] Client: PCB repair 1 (custom) — Medium
+- [ ] Client: PCB repair 2 (custom) — Medium
+- [ ] Client: PCB repair 3 (custom) — Medium
+- [ ] Client: 3D printer 1 repair — Medium
+- [ ] Client: 3D printer 2 repair — Medium
+- [ ] CNC laser: build (frame, motion, electronics, laser, tests)
+- [ ] Course: 30 min every day — Low
+- [ ] FLOWAXS: rebuild + job documentation — Low
 - [ ] Workshop: baseline inventory
 - [ ] Report: outline + skeleton
 - [ ] Report: Ch 1 — Introduction

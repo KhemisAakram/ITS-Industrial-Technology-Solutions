@@ -22,12 +22,12 @@ tags: [milestones, planning]
 |------|-----------|-------|
 | W1 | 1–6 Aug | SOMIK teardown · baseline inventory · report outline |
 | W2 | 8–13 Aug | SOMIK wiring plan · Mach3 PC/software test bench |
-| W3 | 15–20 Aug | Hardware procurement (BOB, drives, plasma interface) |
-| W4 | 22–27 Aug | Mach3 bench test · workshop electrical baseline |
+| W3 | 15–20 Aug | Hardware procurement (BOB, drives, plasma interface) · VFD job |
+| W4 | 22–27 Aug | Mach3 bench test · workshop electrical baseline · **VFD done (22 Aug)** · coil winding ×2 done (27 Aug) |
 | W5 | 29 Aug – 3 Sep | **Gate: SOMIK parts confirmed + report skeleton** |
 | W6 | 5–10 Sep | SOMIK assembly starts · report Ch 1 |
 | W7 | 12–17 Sep | SOMIK wiring · report Ch 1 |
-| W8 | 19–24 Sep | Mach3 config + tuning · report Ch 2 |
+| W8 | 19–24 Sep | Mach3 config + tuning · report Ch 2 · **PCB + 3D printer repairs done (24 Sep)** |
 | W9 | 26 Sep – 1 Oct | Plasma integration · report Ch 2 |
 | W10 | 3–8 Oct | Commissioning · **gate: machine runs under Mach3** · report Ch 3 start |
 | W11 | 10–15 Oct | Trial cuts + calibration · report Ch 3 |
@@ -42,6 +42,8 @@ tags: [milestones, planning]
 | W20 | 12–15 Dec | **Submit · buffer · DEADLINE Tue 15 Dec** |
 
 ## North-star tasks (with dates — picked up by the Tasks dashboard)
+- [ ] VFD + coil winding jobs done 📅 2026-08-27
+- [ ] PCB + 3D printer repairs done 📅 2026-09-24
 - [ ] SOMIK parts list confirmed 📅 2026-09-03
 - [ ] Mach3 test bench running 📅 2026-08-27
 - [ ] SOMIK machine runs under Mach3 📅 2026-10-08
