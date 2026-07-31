@@ -23,6 +23,10 @@ status:
 - [ ] **Block 3 [MEDIUM]:** 
 - [ ] **Block 4 [LOW] - optional:** 
 
+## Courses — 45 + 45 min
+- [ ] SOMIK (45 min) → [[10_Courses]]
+- [ ] VFD (45 min) → [[10_Courses]]
+
 ## Morning start
 - [ ] Q1 Day? Friday -> rest day, no blocks
 - [ ] Q2 Urgent client? -> handle first (15 min max)
