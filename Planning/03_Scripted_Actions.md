@@ -7,11 +7,41 @@ tags: [scripts, planning]
 
 > A task is only "scheduled" once it has a script. If a task bounces more than twice, split it and script it here.
 
+## ☀️ Wake-up script (IF/THEN/ELSE — 2 min, first thing)
+Run before opening anything else. The answers decide your day.
+
+```
+Q1  Day?
+    IF Friday            → rest. No blocks. Stop here.
+    ELSE                 → continue
+
+Q2  Urgent client message?
+    IF yes (job-blocking) → handle it first (15 min max), THEN continue
+    ELSE                 → continue
+
+Q3  Energy?
+    IF very tired / sick → LIGHT DAY: only Medium + Low blocks, no deep work
+    IF medium            → 1 High block, then Medium
+    IF fresh             → full 4 blocks
+
+Q4  High-priority work — anything blocked?
+    IF SOMIK waiting on parts/delivery  → Block 1+2 = VFD + coil winding
+    IF VFD / coil winding blocked       → Block 1+2 = SOMIK + ITS manage
+    IF both blocked                     → Block 1+2 = report writing + ITS admin
+    IF nothing blocked                  → Block 1+2 = the 2 most profitable tasks
+
+THEN fill the day:
+    Block 1 = High · Block 2 = High · Block 3 = Medium · Block 4 (optional) = Low
+```
+
+**The rule: never start a task without knowing what's blocked and what your energy is.**
+
 ## ☀️ Morning start (15 min, every work day)
 - [ ] Tea/coffee
-- [ ] Check WhatsApp for urgent client messages — **5 min max, then close it**
+- [ ] Run the **Wake-up script** above → answers Q1–Q4
+- [ ] Check WhatsApp for urgent client messages — **5 min max, then close it** (already handled in Q2? skip)
 - [ ] Open today's daily note (Daily Notes plugin)
-- [ ] Write today's 3 focus tasks from [[02_Task_Bank]]
+- [ ] Write today's Blocks 1–4 from [[02_Task_Bank]]
 - [ ] First deep-work block starts — phone on silent, away from bench
 
 ## 🏭 Workshop session (any block)

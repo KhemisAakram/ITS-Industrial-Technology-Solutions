@@ -24,8 +24,11 @@ status:
 - [ ] **Block 4 [LOW] - optional:** 
 
 ## Morning start
-- [ ] Urgent WhatsApp checked (5 min max)
-- [ ] Block 1 task written (High)
+- [ ] Q1 Day? Friday -> rest day, no blocks
+- [ ] Q2 Urgent client? -> handle first (15 min max)
+- [ ] Q3 Energy? (fresh / medium / tired) -> choose blocks
+- [ ] Q4 High tasks blocked? -> [[03_Scripted_Actions|Wake-up script]]
+- [ ] Blocks 1-4 written
 - [ ] Deep-work block started - phone silent
 
 ## Shutdown
