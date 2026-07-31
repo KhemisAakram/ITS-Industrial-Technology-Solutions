@@ -12,18 +12,18 @@ tags: [project, clients]
 Existing clients served well on schedule — **no new prospecting**. Every job logged with hours + revenue (target yield ≥ 1,000 DA/hr).
 
 ## Active / known jobs
-| Job | Client | Type | Priority | Rate | Status | Hours | Revenue (DA) |
-|-----|--------|------|----------|------|--------|-------|--------------|
-| PCB-001 | — | control panel wiring repair | — | 3,000 DA | ✅ paid | | 3,000 |
-| SOMIK | SOMIK Skikda | CNC conversion | High | 550,000 DA | in progress | | |
-| VFD-001 | — | 3 VFD units (install/repair) | High | | in progress | | |
-| CW-001 | — | coil winding machine — final touch | High | | in progress | | |
-| CW-002 | — | coil winding machine — final touch | High | | in progress | | |
-| PCB-002 | — | custom PCB repair | Medium | | pending | | |
-| PCB-003 | — | custom PCB repair | Medium | | pending | | |
-| PCB-004 | — | custom PCB repair | Medium | | pending | | |
-| 3DP-001 | — | 3D printer repair | Medium | | pending | | |
-| 3DP-002 | — | 3D printer repair | Medium | | pending | | |
+| Job     | Client       | Type                               | Priority | Rate      | Status      | Hours | Revenue (DA) |
+| ------- | ------------ | ---------------------------------- | -------- | --------- | ----------- | ----- | ------------ |
+| PCB-001 | —            | control panel wiring repair        | —        | 3,000 DA  | ✅ paid      |       | 3,000        |
+| SOMIK   | SOMIK Skikda | CNC conversion                     | High     | 550,000DA | inprogress  |       |              |
+| VFD-001 | —            | 3 VFD units (install/repair)       | High     |           | in progress |       |              |
+| CW-001  | —            | coil winding machine — final touch | High     |           | in progress |       |              |
+| CW-002  | —            | coil winding machine — final touch | High     |           | in progress |       |              |
+| PCB-002 | —            | custom PCB repair                  | Medium   |           | pending     |       |              |
+| PCB-003 | —            | custom PCB repair                  | Medium   |           | pending     |       |              |
+| PCB-004 | —            | custom PCB repair                  | Medium   |           | pending     |       |              |
+| 3DP-001 | —            | 3D printer repair                  | Medium   |           | pending     |       |              |
+| 3DP-002 | —            | 3D printer repair                  | Medium   |           | pending     |       |              |
 
 ## Rules
 - New jobs from existing/referred clients only (you're not hunting).
