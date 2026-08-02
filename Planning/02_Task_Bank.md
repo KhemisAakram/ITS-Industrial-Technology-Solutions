@@ -62,10 +62,10 @@ Within each priority, put **high-demand** tasks in Block 1/2 and **low-demand** 
 
 ## How to fill a day
 1. Open today's daily note.
-2. Write the 4 blocks — **order only, no fixed hours**:
-   - **Block 1 = HIGH priority task**
-   - **Block 2 = HIGH priority task**
-   - **Block 3 = MEDIUM priority task**
-   - **Block 4 (optional) = LOW priority task**
-3. Pull tasks from this bank — don't invent new ones mid-day unless it's an emergency.
-4. If a task keeps bouncing: it's too big → split it into a checklist (see [[03_Scripted_Actions]]).
+2. Fill the 3 time slots — **order only, no fixed hours**:
+   - **Early morning:** Block 1 + 2 (HIGH) + PCB course first + SOMIK 45 min
+   - **Before noon:** Block 3 (MEDIUM) + VFD 45 min
+   - **Evening:** Block 4 (optional, LOW) + invoice + log hours/revenue + tomorrow's slots
+3. Previous evening (the day before): plan tomorrow's slots + pick courses from [[11_Course_Queue]].
+4. Pull tasks from this bank — don't invent new ones mid-day unless it's an emergency.
+5. If a task keeps bouncing: it's too big → split it into a checklist (see [[03_Scripted_Actions]]).

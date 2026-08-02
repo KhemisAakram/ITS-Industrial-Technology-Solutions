@@ -30,9 +30,11 @@ Q4  High-priority work — anything blocked?
     IF both blocked                     → Block 1+2 = report writing + ITS admin
     IF nothing blocked                  → Block 1+2 = the 2 most profitable tasks
 
-THEN fill the day:
-    Block 1 = High · Block 2 = High · Block 3 = Medium · Block 4 (optional) = Low
-    Courses = PCB/Electronics FIRST (1st thing, before any task) → [[11_Course_Queue|next PCB class]], then SOMIK 45 min + VFD 45 min (two slots, spread across the day; PCB replaces the weakest track)
+THEN fill the day (3 time slots):
+    Early morning = Block 1 + 2 (High) + PCB course first + SOMIK 45 min
+    Before noon = Block 3 (Medium) + VFD 45 min
+    Evening = Block 4 (optional, Low) + invoice + log hours/revenue + tomorrow's slots
+    Previous evening (day before) = plan tomorrow's slots + pick courses
 ```
 
 **The rule: never start a task without knowing what's blocked and what your energy is.**

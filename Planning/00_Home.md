@@ -55,7 +55,7 @@ group by due
 ## Rules (the system in one line)
 0. Wake up → run the [[03_Scripted_Actions|Wake-up script]] (IF/THEN/ELSE) before deciding anything.
 1. Work from the [[02_Task_Bank|Task Bank]], not from memory.
-2. Blocks: 1+2 High · 3 Medium · 4 (optional) Low — order only, no fixed hours.
+2. Time slots: Early morning = Block 1+2 (High) · Before noon = Block 3 (Medium) · Evening = Block 4 (Low) — order only, no fixed hours.
 3. Run the [[03_Scripted_Actions|script]], don't think about what's next.
 4. Log hours + revenue every day — yield target **≥ 1,000 DA/hr**.
 5. Friday is recovery. Yield drops are a signal to rest, not to grind.
