@@ -11,8 +11,12 @@ tags: [scripts, planning]
 Run before opening anything else. The answers decide your day.
 
 ```
+Q0  Yesterday's daily note — was it logged (Log section filled)?
+    IF no                 → fill it now (5 min). A day without a log counts as missed.
+    ELSE                 → continue
+
 Q1  Day?
-    IF Friday            → rest. No blocks. Stop here.
+    IF Friday            → rest. No blocks. Stop here. (If this week's weekly note is empty, fill it first - 10 min.)
     ELSE                 → continue
 
 Q2  Urgent client message?
@@ -41,6 +45,7 @@ THEN fill the day (3 time slots):
 
 ## ☀️ Morning start (15 min, every work day)
 - [ ] Tea/coffee
+- [ ] Q0: check yesterday's note is logged — fill it if missed (5 min)
 - [ ] Run the **Wake-up script** above → answers Q1–Q4
 - [ ] Check WhatsApp for urgent client messages — **5 min max, then close it** (already handled in Q2? skip)
 - [ ] Open today's daily note (Daily Notes plugin)
