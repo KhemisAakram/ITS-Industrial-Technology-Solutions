@@ -14,7 +14,7 @@ tags:
 - [ ] Sprint (by 17 Aug): design + print egg mixer part — High
 - [ ] Sprint (by 17 Aug): design + print meat mixer part — High
 - [ ] Sprint (by 17 Aug): smart water filter build — High
-- [ ] Sprint (by 17 Aug): injection machine build — High
+- [ ] Sprint (by 17 Aug): FLOWAXS injection machine rebuild — High
 - [ ] ITS: manage business (admin+finance, docs, website+social, client follow-up)
 - [ ] SOMIK: teardown + condition assessment
 - [ ] SOMIK: hardware procurement
@@ -29,7 +29,6 @@ tags:
 - [ ] Client: 3D printer 2 repair — Medium
 - [ ] CNC laser: build (frame, motion, electronics, laser, tests)
 - [ ] Course: 30 min every day — Low
-- [ ] FLOWAXS: rebuild + job documentation — Low
 - [ ] Workshop: baseline inventory
 - [ ] Report: outline + skeleton
 - [ ] Report: Ch 1 — Introduction

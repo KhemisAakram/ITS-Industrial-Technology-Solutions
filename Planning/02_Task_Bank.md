@@ -11,7 +11,7 @@ Daily order: **Block 1 + 2 = High · Block 3 = Medium · Block 4 (optional) = Lo
 ### 🔴 High priority
 - [ ] **5-day sprint (due Mon 17 Aug):** PCB-002 repair · order PCB wash machine · Design Print Part 1 (egg mixer) · Design Print Part 2 (meat mixer) → [[Client_Jobs]]
 - [ ] **Smart water filter (own build)** → [[Smart_Water_Filter]]
-- [ ] **Injection machine (own build)** → [[Injection_Machine]]
+- [ ] **FLOWAXS injection machine rebuild (own build)** → [[Flowaxs]]
 - [ ] Manage the ITS (admin+finance, docs/branding, website+social, client follow-up) → [[ITS_Business]]
 - [ ] SOMIK CNC conversion → [[SOMIK_CNC_Conversion]]
 - [ ] VFD job — 3 units → [[Client_Jobs]]
@@ -24,7 +24,6 @@ Daily order: **Block 1 + 2 = High · Block 3 = Medium · Block 4 (optional) = Lo
 
 ### 🟢 Low priority
 - [ ] Courses every day — **PCB 1st thing before tasks** → 45 min SOMIK + 45 min VFD (+ PCB replaces the weakest) → [[10_Courses]] · [[11_Course_Queue]]
-- [ ] Rebuild FLOWAXS + job documentation → [[Flowaxs]]
 
 ## Demand lists (energy each task needs)
 Within each priority, put **high-demand** tasks in Block 1/2 and **low-demand** tasks in Block 4/evenings.
