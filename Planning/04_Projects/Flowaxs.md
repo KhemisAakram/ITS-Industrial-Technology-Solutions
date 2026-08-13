@@ -1,7 +1,7 @@
 ---
 type: project
 status: in-progress
-due: 2026-08-17
+due: 2026-08-18
 progress: 0
 tags: [project, flowaxs, injection]
 ---
@@ -9,7 +9,7 @@ tags: [project, flowaxs, injection]
 # Rebuild FLOWAXS — Injection Machine
 
 ## Definition of done
-FLOWAXS injection machine rebuilt and working — frame, barrel/heater, nozzle, injection mechanism, basic control — assembled + tested, with the job documentation completed (rebuild record, photos, test results) by **Mon 17 Aug** (5-day sprint). `documents/00_reference/FLOWAXS.pdf` is the reference manual.
+FLOWAXS injection machine rebuilt and working — frame, barrel/heater, nozzle, injection mechanism, basic control — assembled + tested, with the job documentation completed (rebuild record, photos, test results) by **Tue 18 Aug** (6-day sprint). `documents/00_reference/FLOWAXS.pdf` is the reference manual.
 
 ## Why it matters
 Own machine — workshop capability + portfolio; opens future client services (repairs, small parts).
@@ -27,10 +27,10 @@ Own machine — workshop capability + portfolio; opens future client services (r
 - [ ] Job documentation: record + photos + results
 
 ## Key dates
-- 📅 2026-08-17 — sprint deadline (working + documented)
+- 📅 2026-08-18 — sprint deadline (working + documented)
 
 ## Notes
-- **High priority — 5-day sprint.**
+- **High priority — 6-day sprint.**
 - Reference: `documents/00_reference/FLOWAXS.pdf` (PDF++ for annotations).
 
 ## Links

@@ -9,7 +9,7 @@ tags: [task-bank, planning]
 Daily order: **Block 1 + 2 = High · Block 3 = Medium · Block 4 (optional) = Low.** Pick tasks from here, then match them to energy via the demand lists below.
 
 ### 🔴 High priority
-- [ ] **5-day sprint (due Mon 17 Aug):** PCB-002 repair · order PCB wash machine · Design Print Part 1 (egg mixer) · Design Print Part 2 (meat mixer) → [[Client_Jobs]]
+- [ ] **6-day sprint (due Tue 18 Aug):** PCB-002 repair · order PCB wash machine · Design Print Part 1 (egg mixer) · Design Print Part 2 (meat mixer) → [[Client_Jobs]]
 - [ ] **FLOWAXS injection machine rebuild (own build)** → [[Flowaxs]]
 - [ ] Manage the ITS (admin+finance, docs/branding, website+social, client follow-up) → [[ITS_Business]]
 - [ ] SOMIK CNC conversion → [[SOMIK_CNC_Conversion]]

@@ -35,7 +35,7 @@ Existing clients served well on schedule — **no new prospecting**. Every job l
 - Track every job here; record details in the tracker spreadsheet.
 
 ## Key dates
-- 📅 2026-08-17 — **sprint**: PCB-002 repair · PCB wash machine order · egg mixer part · meat mixer part
+- 📅 2026-08-18 — **sprint**: PCB-002 repair · PCB wash machine order · egg mixer part · meat mixer part
 - 📅 2026-08-22 — VFD job done (High)
 - 📅 2026-08-27 — coil winding machines ×2 done (High)
 - 📅 2026-09-24 — PCB repairs ×3 + 3D printers ×2 done (Medium)
