@@ -9,6 +9,12 @@ tags:
 
 ## Backlog
 
+- [ ] Sprint (by 17 Aug): PCB-002 repair — High
+- [ ] Sprint (by 17 Aug): order PCB wash machine — High
+- [ ] Sprint (by 17 Aug): design + print egg mixer part — High
+- [ ] Sprint (by 17 Aug): design + print meat mixer part — High
+- [ ] Sprint (by 17 Aug): smart water filter build — High
+- [ ] Sprint (by 17 Aug): injection machine build — High
 - [ ] ITS: manage business (admin+finance, docs, website+social, client follow-up)
 - [ ] SOMIK: teardown + condition assessment
 - [ ] SOMIK: hardware procurement
