@@ -18,4 +18,4 @@ Every reminder you ask me to add gets logged here (date + where it appears) so n
 
 ## Requested reminders log
 - [ ] 2026-08-01 — Reminders system created (this file + `## Reminders - ITS assistant` section injected into all daily notes)
-- [ ] 2026-08-13 — **5-day sprint (due Mon 17 Aug)** — all 6 HIGH: ① PCB-002 repair ② order PCB wash machine ③ Design Print Part 1 (egg mixer) ④ Design Print Part 2 (meat mixer) ⑤ Smart water filter build ⑥ FLOWAXS injection machine rebuild — in daily notes 08-13 → 08-17
+- [ ] 2026-08-13 — **5-day sprint (due Mon 17 Aug)** — all 5 HIGH: ① PCB-002 repair ② order PCB wash machine ③ Design Print Part 1 (egg mixer) ④ Design Print Part 2 (meat mixer) ⑤ FLOWAXS injection machine rebuild — in daily notes 08-13 → 08-17

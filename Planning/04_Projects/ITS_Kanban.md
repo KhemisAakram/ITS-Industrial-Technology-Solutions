@@ -13,7 +13,6 @@ tags:
 - [ ] Sprint (by 17 Aug): order PCB wash machine — High
 - [ ] Sprint (by 17 Aug): design + print egg mixer part — High
 - [ ] Sprint (by 17 Aug): design + print meat mixer part — High
-- [ ] Sprint (by 17 Aug): smart water filter build — High
 - [ ] Sprint (by 17 Aug): FLOWAXS injection machine rebuild — High
 - [ ] ITS: manage business (admin+finance, docs, website+social, client follow-up)
 - [ ] SOMIK: teardown + condition assessment
