@@ -19,7 +19,7 @@ Existing clients served well on schedule — **no new prospecting**. Every job l
 | VFD-001 | —            | 3 VFD units (install/repair)       | High     |           | in progress |       |              |
 | CW-001  | —            | coil winding machine — final touch | High     |           | in progress |       |              |
 | CW-002  | —            | coil winding machine — final touch | High     |           | in progress |       |              |
-| PCB-002 | —            | custom PCB repair                  | High     |           | in progress |       |              |
+| PCB-002 | —            | custom PCB repair                  | High     | 2,000 DA  | in progress |       |              |
 | PCB-003 | —            | custom PCB repair                  | Medium   |           | pending     |       |              |
 | PCB-004 | —            | custom PCB repair                  | Medium   |           | pending     |       |              |
 | 3DP-001 | —            | 3D printer repair                  | Medium   |           | pending     |       |              |
