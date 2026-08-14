@@ -58,6 +58,6 @@ tags:
 
 %% kanban:settings
 ```
-{"kanban-plugin":"board"}
+{"kanban-plugin":"board","list-collapse":[null,null,false,false]}
 ```
 %%
