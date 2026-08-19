@@ -107,10 +107,15 @@
       <div class="sub">ITS — Industrial Technology Solutions &bull; El Harrouch, Skikda</div>
     </div>
     <div class="header-actions no-print">
+      <button class="btn btn-secondary" onclick="syncFromObsidian()">Sync Obsidian</button>
       <button class="btn btn-secondary" onclick="exportData()">Export</button>
       <button class="btn btn-secondary" onclick="importData()">Import</button>
       <button class="btn btn-primary" onclick="window.print()">Print</button>
     </div>
+  </div>
+
+  <!-- Data source indicator -->
+  <div id="dataSource" style="display:none;margin-bottom:12px;padding:6px 10px;border-radius:4px;font-size:10px;font-weight:600">
   </div>
 
   <!-- Row 1: Meta -->
@@ -296,6 +301,7 @@
 <script>
 const STORAGE_KEY = 'its_daily_tracker';
 const ENTRIES_KEY = 'its_daily_entries';
+const OBSIDIAN_KEY = 'its_obsidian_data';
 
 // All form fields
 const FIELDS = [
@@ -312,27 +318,88 @@ const FIELDS = [
   'job3id','job3hrs','job3desc'
 ];
 
+let obsidianData = null;
+
+async function loadObsidianCache() {
+  try {
+    const resp = await fetch('obsidian_data.json');
+    if (resp.ok) {
+      obsidianData = await resp.json();
+      localStorage.setItem(OBSIDIAN_KEY, JSON.stringify(obsidianData));
+    }
+  } catch (e) {
+    const cached = localStorage.getItem(OBSIDIAN_KEY);
+    if (cached) obsidianData = JSON.parse(cached);
+  }
+}
+
+function syncFromObsidian() {
+  loadObsidianCache().then(() => {
+    if (obsidianData) {
+      showToast('Synced: ' + (obsidianData.summary?.daysWithData || 0) + ' days from Obsidian');
+      loadEntry(document.getElementById('date').value);
+    } else {
+      showToast('No Obsidian data found. Run Export-ObsidianData.ps1 first.');
+    }
+  });
+}
+
+function showDataSource(date) {
+  const el = document.getElementById('dataSource');
+  const local = JSON.parse(localStorage.getItem(ENTRIES_KEY) || '{}');
+  const hasLocal = local[date] && Object.values(local[date]).some(v => v && v !== '');
+
+  let hasObsidian = false;
+  let obsidianEntry = null;
+  if (obsidianData && obsidianData.daily) {
+    obsidianEntry = obsidianData.daily.find(d => d.date === date);
+    hasObsidian = obsidianEntry && (obsidianEntry.hoursWorked || obsidianEntry.energy);
+  }
+
+  if (hasObsidian && hasLocal) {
+    el.style.display = 'block';
+    el.style.background = '#E0E7FF';
+    el.style.color = '#4F46E5';
+    el.textContent = 'Merged: Obsidian (hours/revenue) + Tracker (machines/jobs)';
+  } else if (hasObsidian) {
+    el.style.display = 'block';
+    el.style.background = '#D1FAE5';
+    el.style.color = '#059669';
+    el.textContent = 'Source: Obsidian daily note (edit in Obsidian to update)';
+  } else if (hasLocal) {
+    el.style.display = 'block';
+    el.style.background = '#FEF3C7';
+    el.style.color = '#D97706';
+    el.textContent = 'Source: Local tracker (not in Obsidian)';
+  } else {
+    el.style.display = 'none';
+  }
+}
+
 function init() {
-  // Default date to today
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('date').value = today;
+  // Load Obsidian data first
+  loadObsidianCache().then(() => {
+    // Default date to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('date').value = today;
 
-  // Calculate day # and week #
-  const startDate = new Date('2026-08-01');
-  const todayDate = new Date(today);
-  const diffDays = Math.floor((todayDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
-  if (diffDays > 0) {
-    document.getElementById('dayNum').value = diffDays;
-    document.getElementById('weekNum').value = 'W' + Math.ceil(diffDays / 7);
-  }
+    // Calculate day # and week #
+    const startDate = new Date('2026-08-01');
+    const todayDate = new Date(today);
+    const diffDays = Math.floor((todayDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+    if (diffDays > 0) {
+      document.getElementById('dayNum').value = diffDays;
+      document.getElementById('weekNum').value = 'W' + Math.ceil(diffDays / 7);
+    }
 
-  // Check if today is Friday
-  if (todayDate.getDay() === 5) {
-    document.getElementById('isFriday').value = 'yes';
-  }
+    // Check if today is Friday
+    if (todayDate.getDay() === 5) {
+      document.getElementById('isFriday').value = 'yes';
+    }
 
-  // Load saved data for this date
-  loadEntry(today);
+    // Load saved data for this date
+    loadEntry(today);
+  });
 }
 
 function onDateChange() {
@@ -386,7 +453,13 @@ function saveEntry() {
 
 function loadEntry(date) {
   let entries = JSON.parse(localStorage.getItem(ENTRIES_KEY) || '{}');
-  const data = entries[date];
+  const localData = entries[date] || {};
+
+  // Get Obsidian data for this date
+  let obsidianEntry = null;
+  if (obsidianData && obsidianData.daily) {
+    obsidianEntry = obsidianData.daily.find(d => d.date === date);
+  }
 
   // Reset form
   FIELDS.forEach(id => {
@@ -400,26 +473,51 @@ function loadEntry(date) {
   });
   document.querySelectorAll('.machine').forEach(cb => cb.checked = false);
 
-  if (data) {
-    FIELDS.forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      if (el.type === 'checkbox') {
-        el.checked = data[id] || false;
-      } else {
-        el.value = data[id] || '';
-      }
-    });
+  // Merge: Obsidian provides hours/energy/status, local provides machines/jobs
+  const merged = {};
 
-    // Load machines
-    if (data.machines) {
-      data.machines.forEach(val => {
-        const cb = document.querySelector(`.machine[value="${val}"]`);
-        if (cb) cb.checked = true;
-      });
-    }
+  // Obsidian fields (source of truth for time tracking)
+  if (obsidianEntry) {
+    merged.dayNum = obsidianEntry.dayNum || '';
+    merged.weekNum = obsidianEntry.weekNum || '';
+    merged.energy = obsidianEntry.energy || '';
+    merged.hoursWorked = obsidianEntry.hoursWorked || '';
+    merged.hoursBillable = obsidianEntry.hoursBillable || '';
+    merged.revenueDA = obsidianEntry.revenueDA || '';
+    merged.blocker = obsidianEntry.blocker || '';
+    merged.status = obsidianEntry.status || '';
   }
 
+  // Local fields override (machines, jobs, categories, tasks)
+  FIELDS.forEach(id => {
+    if (localData[id] !== undefined && localData[id] !== '') {
+      merged[id] = localData[id];
+    }
+  });
+
+  // Apply merged data to form
+  FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const val = merged[id];
+    if (val === undefined || val === null) return;
+    if (el.type === 'checkbox') {
+      el.checked = !!val;
+    } else {
+      el.value = val;
+    }
+  });
+
+  // Load machines from local
+  if (localData.machines) {
+    localData.machines.forEach(val => {
+      const cb = document.querySelector(`.machine[value="${val}"]`);
+      if (cb) cb.checked = true;
+    });
+  }
+
+  // Show data source
+  showDataSource(date);
   calcYield();
 }
 

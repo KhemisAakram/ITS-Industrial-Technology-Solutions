@@ -98,8 +98,16 @@
       <button class="btn btn-secondary" onclick="setThisWeek()">This Week</button>
       <button class="btn btn-secondary" onclick="setThisMonth()">This Month</button>
       <button class="btn btn-secondary" onclick="setAll()">All Time</button>
+      <button class="btn btn-secondary" onclick="loadObsidianData()">Refresh Obsidian</button>
       <button class="btn btn-primary" onclick="window.print()">Print</button>
     </div>
+  </div>
+
+  <!-- Data source indicator -->
+  <div style="display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap">
+    <div id="srcObsidian" style="display:none;background:#D1FAE5;padding:4px 10px;border-radius:4px;font-size:10px;font-weight:600;color:#059669">Obsidian: <span id="srcObsidianCount">0</span> days</div>
+    <div id="srcLocal" style="display:none;background:#FEF3C7;padding:4px 10px;border-radius:4px;font-size:10px;font-weight:600;color:#D97706">Tracker: <span id="srcLocalCount">0</span> days</div>
+    <div id="srcExported" style="display:none;background:#E0E7FF;padding:4px 10px;border-radius:4px;font-size:10px;font-weight:600;color:#4F46E5">Last sync: <span id="srcExportedTime">—</span></div>
   </div>
 
   <!-- KPI Row -->
@@ -193,13 +201,16 @@
 
   <!-- Footer -->
   <div style="font-size:9px;color:#9CA3AF;text-align:center;padding:12px 0">
-    ITS Workshop Dashboard &bull; Data from localStorage (same source as Daily Tracker) &bull; Export/Import via Daily Tracker
+    ITS Workshop Dashboard &bull; Sources: Obsidian daily notes + localStorage tracker &bull; Run <code>Export-ObsidianData.ps1</code> to sync
   </div>
 
 </div>
 
 <script>
 const ENTRIES_KEY = 'its_daily_entries';
+const OBSIDIAN_KEY = 'its_obsidian_data';
+let obsidianData = null;
+let localOnlyEntries = {};
 
 const CATEGORY_LABELS = {
   'wiring': 'Wiring', 'soldering': 'Soldering/PCB', 'assembly': 'Assembly',
@@ -215,16 +226,102 @@ const MACHINE_LABELS = {
   'power-supply': 'Power Supply', 'soldering-gun': 'Soldering Gun', 'heat-gun': 'Heat Gun'
 };
 
-function getEntries() {
+function getLocalEntries() {
   return JSON.parse(localStorage.getItem(ENTRIES_KEY) || '{}');
 }
 
+function getObsidianEntries() {
+  if (!obsidianData || !obsidianData.daily) return {};
+  const entries = {};
+  for (const d of obsidianData.daily) {
+    if (!d.date) continue;
+    entries[d.date] = {
+      date: d.date,
+      dayNum: d.dayNum || '',
+      weekNum: d.weekNum || '',
+      energy: d.energy || '',
+      hoursWorked: d.hoursWorked || '',
+      hoursBillable: d.hoursBillable || '',
+      revenueDA: d.revenueDA || '',
+      yieldDAHR: d.yieldDAHR || '',
+      status: d.status || '',
+      blocker: d.blocker || '',
+      focus: d.focus || '',
+      tasksChecked: d.tasksChecked || 0,
+      tasksTotal: d.tasksTotal || 0,
+      source: 'obsidian'
+    };
+  }
+  return entries;
+}
+
+function getMergedEntries() {
+  const local = getLocalEntries();
+  const obsidian = getObsidianEntries();
+  const merged = {};
+
+  // Obsidian first (source of truth for hours/revenue/energy)
+  for (const [date, data] of Object.entries(obsidian)) {
+    merged[date] = { ...data };
+  }
+
+  // Local overlays (has machine/job/category data from HTML tracker)
+  for (const [date, data] of Object.entries(local)) {
+    if (merged[date]) {
+      // Merge: keep obsidian core fields, add local-only fields
+      merged[date].machines = data.machines || [];
+      merged[date].taskCategory = data.taskCategory || '';
+      merged[date].job1id = data.job1id || '';
+      merged[date].job1hrs = data.job1hrs || '';
+      merged[date].job1desc = data.job1desc || '';
+      merged[date].job2id = data.job2id || '';
+      merged[date].job2hrs = data.job2hrs || '';
+      merged[date].job2desc = data.job2desc || '';
+      merged[date].job3id = data.job3id || '';
+      merged[date].job3hrs = data.job3hrs || '';
+      merged[date].job3desc = data.job3desc || '';
+      merged[date].notes = data.notes || '';
+    } else {
+      // Local-only entry (not in obsidian)
+      merged[date] = { ...data, source: 'local' };
+    }
+  }
+
+  return merged;
+}
+
+async function loadObsidianData() {
+  try {
+    const resp = await fetch('obsidian_data.json');
+    if (!resp.ok) throw new Error('File not found');
+    obsidianData = await resp.json();
+    localStorage.setItem(OBSIDIAN_KEY, JSON.stringify(obsidianData));
+
+    // Update source indicator
+    document.getElementById('srcObsidian').style.display = 'inline-flex';
+    document.getElementById('srcObsidianCount').textContent = obsidianData.summary?.daysWithData || 0;
+    if (obsidianData.exported) {
+      document.getElementById('srcExported').style.display = 'inline-flex';
+      document.getElementById('srcExportedTime').textContent = obsidianData.exported;
+    }
+  } catch (e) {
+    // Try localStorage cache
+    const cached = localStorage.getItem(OBSIDIAN_KEY);
+    if (cached) {
+      obsidianData = JSON.parse(cached);
+      document.getElementById('srcObsidian').style.display = 'inline-flex';
+      document.getElementById('srcObsidianCount').textContent = obsidianData.summary?.daysWithData || 0;
+    }
+  }
+  refresh();
+}
+
 function getFilteredEntries() {
-  const entries = getEntries();
+  const merged = getMergedEntries();
   const from = document.getElementById('dateFrom').value;
   const to = document.getElementById('dateTo').value;
   const filtered = {};
-  for (const [date, data] of Object.entries(entries)) {
+  for (const [date, data] of Object.entries(merged)) {
     if (from && date < from) continue;
     if (to && date > to) continue;
     filtered[date] = data;
@@ -527,7 +624,16 @@ document.getElementById('dateTo').value = today;
 const weekAgo = new Date();
 weekAgo.setDate(weekAgo.getDate() - 6);
 document.getElementById('dateFrom').value = weekAgo.toISOString().split('T')[0];
-refresh();
+
+// Show local tracker count
+const localCount = Object.keys(getLocalEntries()).length;
+if (localCount > 0) {
+  document.getElementById('srcLocal').style.display = 'inline-flex';
+  document.getElementById('srcLocalCount').textContent = localCount;
+}
+
+// Load Obsidian data
+loadObsidianData();
 </script>
 </body>
 </html>
