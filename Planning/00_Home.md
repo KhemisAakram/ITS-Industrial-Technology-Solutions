@@ -31,6 +31,7 @@ tags: [moc, planning]
 - [[08_Diagrams|Diagrams — Excalidraw canvases (SOMIK wiring, workshop layout)]]
 - **Today:** open the daily note (Daily notes plugin) → created in `05_Daily_Notes` (Templater fills Day/Week automatically)
 - **Weekly review:** create a note in `06_Weekly_Notes` from the weekly template, every Thursday evening or Friday morning
+- **Workshop tracking:** [[13_Workshop_Dashboard|Workshop Dashboard]] (Obsidian) · [[documents/07_Time_Management/Workshop_Dashboard.html|Interactive Dashboard]] · [[documents/07_Time_Management/ITS_Daily_Tracker.html|Daily Tracker]]
 
 ## Vault notes already in this repo (linkable)
 - [[PCB_Diagnosis_Checklist]] — Services/PCB Service/03_Operations

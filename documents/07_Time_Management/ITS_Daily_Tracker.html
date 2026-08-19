@@ -2,112 +2,516 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Daily Work Tracker — ITS</title>
 <link rel="icon" type="image/png" href="../../../website/IMAGES/LOGO%20BGR.png">
 <style>
-  @media print { @page { size: A4; margin: 10mm; } body { -webkit-print-color-adjust: exact; } }
+  @media print {
+    @page { size: A4; margin: 8mm; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 11px !important; padding: 0 !important; }
+    .no-print { display: none !important; }
+    .print-only { display: block !important; }
+    .section { break-inside: avoid; }
+  }
+  @media screen {
+    .print-only { display: none; }
+  }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Segoe UI', Arial, sans-serif; color: #1A1A1A; background: #fff; padding: 24px; font-size: 13px; }
-  h1 { font-size: 22px; font-weight: 800; color: #FF9F00; margin-bottom: 2px; }
-  .sub { font-size: 11px; color: #6B7280; margin-bottom: 20px; }
-  .row { display: flex; gap: 16px; margin-bottom: 12px; }
-  .field { flex: 1; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; color: #1A1A1A; background: #F9FAFB; padding: 20px; font-size: 13px; }
+  .container { max-width: 800px; margin: 0 auto; background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); padding: 24px; }
+
+  /* Header */
+  .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+  .header h1 { font-size: 20px; font-weight: 800; color: #FF9F00; }
+  .header .sub { font-size: 10px; color: #6B7280; margin-top: 2px; }
+  .header-actions { display: flex; gap: 8px; }
+
+  /* Buttons */
+  .btn { padding: 8px 16px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 12px; }
+  .btn-primary { background: #FF9F00; color: #fff; }
+  .btn-primary:hover { background: #E08A00; }
+  .btn-secondary { background: #E5E7EB; color: #374151; }
+  .btn-secondary:hover { background: #D1D5DB; }
+  .btn-danger { background: #FEE2E2; color: #DC2626; }
+  .btn-danger:hover { background: #FECACA; }
+
+  /* Fields */
+  .row { display: flex; gap: 12px; margin-bottom: 10px; flex-wrap: wrap; }
+  .field { flex: 1; min-width: 120px; }
   .field label { display: block; font-size: 10px; font-weight: 700; color: #FF9F00; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
-  .field input, .field textarea, .field select { width: 100%; padding: 7px 10px; border: 1px solid #D1D5DB; border-radius: 4px; font-size: 13px; font-family: inherit; background: #fff; }
-  .field textarea { resize: vertical; min-height: 40px; }
-  hr { border: none; border-top: 1px solid #E5E7EB; margin: 14px 0; }
-  h3 { font-size: 13px; font-weight: 700; margin-bottom: 8px; color: #1A1A1A; }
-  .checklist { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
-  .checklist label { display: flex; align-items: center; gap: 6px; font-size: 12px; cursor: pointer; }
-  .checklist input[type=checkbox] { accent-color: #FF9F00; }
-  .energy { display: grid; grid-template-columns: 1fr 2fr; gap: 8px 12px; }
-  .energy .slot { font-weight: 700; font-size: 12px; color: #FF9F00; padding-top: 6px; }
-  .yield-box { background: #FAF8F5; border: 1px solid #E5E7EB; border-radius: 6px; padding: 12px 16px; display: flex; gap: 20px; flex-wrap: wrap; }
+  .field input, .field textarea, .field select { width: 100%; padding: 6px 8px; border: 1px solid #D1D5DB; border-radius: 4px; font-size: 12px; font-family: inherit; background: #fff; }
+  .field textarea { resize: vertical; min-height: 36px; }
+  .field input:focus, .field textarea:focus, .field select:focus { outline: none; border-color: #FF9F00; box-shadow: 0 0 0 2px rgba(255,159,0,0.15); }
+
+  /* Sections */
+  .section { margin-bottom: 14px; padding-bottom: 14px; border-bottom: 1px solid #E5E7EB; }
+  .section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  h3 { font-size: 12px; font-weight: 700; margin-bottom: 8px; color: #374151; display: flex; align-items: center; gap: 6px; }
+  h3 .icon { font-size: 14px; }
+
+  /* Checklists */
+  .checklist { display: grid; gap: 4px; }
+  .checklist.cols-2 { grid-template-columns: 1fr 1fr; }
+  .checklist.cols-1 { grid-template-columns: 1fr; }
+  .checklist label { display: flex; align-items: center; gap: 6px; font-size: 12px; cursor: pointer; padding: 3px 0; }
+  .checklist input[type=checkbox] { accent-color: #FF9F00; width: 14px; height: 14px; }
+  .checklist input[type=text], .checklist input[type=number] { flex: 1; padding: 4px 6px; border: 1px solid #E5E7EB; border-radius: 3px; font-size: 12px; font-family: inherit; }
+  .checklist input[type=text]:focus, .checklist input[type=number]:focus { outline: none; border-color: #FF9F00; }
+
+  /* Machine grid */
+  .machine-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 4px; }
+  .machine-grid label { display: flex; align-items: center; gap: 5px; font-size: 11px; cursor: pointer; padding: 3px 6px; border-radius: 3px; }
+  .machine-grid label:hover { background: #FEF3C7; }
+  .machine-grid input[type=checkbox] { accent-color: #FF9F00; width: 13px; height: 13px; }
+
+  /* Job rows */
+  .job-row { display: grid; grid-template-columns: 1fr 80px 1fr; gap: 8px; margin-bottom: 4px; }
+  .job-row input, .job-row select { padding: 5px 6px; border: 1px solid #E5E7EB; border-radius: 3px; font-size: 12px; font-family: inherit; }
+  .job-row input:focus, .job-row select:focus { outline: none; border-color: #FF9F00; }
+
+  /* Energy blocks */
+  .energy-grid { display: grid; grid-template-columns: 100px 1fr; gap: 6px 10px; }
+  .energy-slot { font-weight: 700; font-size: 11px; color: #FF9F00; padding-top: 5px; }
+  .energy-slot .tag { display: inline-block; font-size: 9px; font-weight: 600; padding: 1px 5px; border-radius: 3px; margin-left: 4px; }
+  .tag-high { background: #FEE2E2; color: #DC2626; }
+  .tag-med { background: #FEF3C7; color: #D97706; }
+  .tag-low { background: #D1FAE5; color: #059669; }
+
+  /* Yield box */
+  .yield-box { background: #FFFBEB; border: 1px solid #FDE68A; border-radius: 6px; padding: 12px 16px; display: flex; gap: 20px; flex-wrap: wrap; }
   .yield-item { text-align: center; }
   .yield-item .val { font-size: 16px; font-weight: 800; color: #FF9F00; }
-  .yield-item .lbl { font-size: 10px; color: #6B7280; }
-  .footer-note { font-size: 10px; color: #9CA3AF; margin-top: 20px; text-align: center; border-top: 1px solid #E5E7EB; padding-top: 12px; }
-  @media screen { .print-btn { background: #FF9F00; color: #fff; border: none; padding: 10px 24px; border-radius: 6px; font-weight: 600; cursor: pointer; margin-bottom: 16px; font-size: 13px; } .print-btn:hover { background: #E08A00; } }
+  .yield-item .lbl { font-size: 9px; color: #6B7280; text-transform: uppercase; }
+
+  /* Status indicator */
+  .status-bar { display: flex; gap: 8px; align-items: center; margin-top: 8px; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .status-dot.green { background: #10B981; }
+  .status-dot.yellow { background: #F59E0B; }
+  .status-dot.red { background: #EF4444; }
+  .status-text { font-size: 10px; color: #6B7280; }
+
+  /* Toast */
+  .toast { position: fixed; bottom: 20px; right: 20px; background: #059669; color: #fff; padding: 10px 20px; border-radius: 6px; font-size: 12px; font-weight: 600; opacity: 0; transition: opacity 0.3s; z-index: 1000; }
+  .toast.show { opacity: 1; }
 </style>
 </head>
 <body>
 
-<button class="print-btn" onclick="window.print()">Print Tracker</button>
+<div class="container">
 
-<h1>DAILY WORK TRACKER</h1>
-<div class="sub">ITS — Industrial Technology Solutions &bull; El Harrouch, Skikda &bull; System: match demand to energy, run the script, log everything</div>
+  <!-- Header -->
+  <div class="header">
+    <div>
+      <h1>DAILY WORK TRACKER</h1>
+      <div class="sub">ITS — Industrial Technology Solutions &bull; El Harrouch, Skikda</div>
+    </div>
+    <div class="header-actions no-print">
+      <button class="btn btn-secondary" onclick="exportData()">Export</button>
+      <button class="btn btn-secondary" onclick="importData()">Import</button>
+      <button class="btn btn-primary" onclick="window.print()">Print</button>
+    </div>
+  </div>
 
-<div class="row">
-  <div class="field"><label>Date</label><input type="date"></div>
-  <div class="field"><label>Day</label><input placeholder="e.g. 14 / 137"></div>
-  <div class="field"><label>Week</label><input placeholder="e.g. W10"></div>
-  <div class="field"><label>Energy</label><select><option>High</option><option>Medium</option><option>Low</option></select></div>
-  <div class="field"><label>Friday (recovery)?</label><select><option>No</option><option>Yes — no work</option></select></div>
+  <!-- Row 1: Meta -->
+  <div class="section">
+    <div class="row">
+      <div class="field"><label>Date</label><input type="date" id="date" onchange="onDateChange()"></div>
+      <div class="field"><label>Day #</label><input type="number" id="dayNum" placeholder="e.g. 15"></div>
+      <div class="field"><label>Week</label><input type="text" id="weekNum" placeholder="e.g. W3"></div>
+      <div class="field"><label>Energy</label>
+        <select id="energy">
+          <option value="">—</option>
+          <option value="fresh">Fresh</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+      <div class="field"><label>Friday?</label>
+        <select id="isFriday">
+          <option value="no">No</option>
+          <option value="yes">Recovery day</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 2: 3 Focus Tasks -->
+  <div class="section">
+    <h3><span class="icon">&#9733;</span> 3 Focus Tasks (highest demand first)</h3>
+    <div class="checklist cols-1">
+      <label><input type="checkbox" id="task1done"><input type="text" id="task1" placeholder="High-demand task 1 (morning)" style="flex:1"></label>
+      <label><input type="checkbox" id="task2done"><input type="text" id="task2" placeholder="High/Medium task 2" style="flex:1"></label>
+      <label><input type="checkbox" id="task3done"><input type="text" id="task3" placeholder="Medium/Low task 3 (afternoon/evening)" style="flex:1"></label>
+    </div>
+  </div>
+
+  <!-- Row 3: Workshop Task Category -->
+  <div class="section">
+    <h3><span class="icon">&#9881;</span> Primary Task Category</h3>
+    <div class="row">
+      <div class="field">
+        <select id="taskCategory">
+          <option value="">— select —</option>
+          <option value="wiring">Wiring</option>
+          <option value="soldering">Soldering / PCB</option>
+          <option value="assembly">Assembly</option>
+          <option value="testing">Testing / Commissioning</option>
+          <option value="programming">Programming / Mach3</option>
+          <option value="design">Design (CAD/3D)</option>
+          <option value="diagnosis">Fault Diagnosis</option>
+          <option value="fabrication">Fabrication</option>
+          <option value="documentation">Documentation / Report</option>
+          <option value="admin">Admin / Business</option>
+          <option value="course">Course / Learning</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Row 4: Machine / Equipment Log -->
+  <div class="section">
+    <h3><span class="icon">&#128295;</span> Machines / Equipment Used</h3>
+    <div class="machine-grid">
+      <label><input type="checkbox" class="machine" value="soldering-station"> Soldering Station</label>
+      <label><input type="checkbox" class="machine" value="oscilloscope"> Oscilloscope</label>
+      <label><input type="checkbox" class="machine" value="multimeter"> Multimeter</label>
+      <label><input type="checkbox" class="machine" value="3d-printer"> 3D Printer</label>
+      <label><input type="checkbox" class="machine" value="cnc-mill"> CNC Mill</label>
+      <label><input type="checkbox" class="machine" value="lathe"> Lathe</label>
+      <label><input type="checkbox" class="machine" value="drill-press"> Drill Press</label>
+      <label><input type="checkbox" class="machine" value="wire-stripper"> Wire Stripper</label>
+      <label><input type="checkbox" class="machine" value="crimping-tool"> Crimping Tool</label>
+      <label><input type="checkbox" class="machine" value="power-supply"> Power Supply</label>
+      <label><input type="checkbox" class="machine" value="soldering-gun"> Soldering Gun</label>
+      <label><input type="checkbox" class="machine" value="heat-gun"> Heat Gun</label>
+    </div>
+  </div>
+
+  <!-- Row 5: Per-Job Time Blocks -->
+  <div class="section">
+    <h3><span class="icon">&#128197;</span> Job Time Log</h3>
+    <div class="job-row" style="margin-bottom:6px">
+      <div style="font-size:10px;font-weight:700;color:#6B7280;text-transform:uppercase">Job ID</div>
+      <div style="font-size:10px;font-weight:700;color:#6B7280;text-transform:uppercase">Hours</div>
+      <div style="font-size:10px;font-weight:700;color:#6B7280;text-transform:uppercase">Task Description</div>
+    </div>
+    <div class="job-row">
+      <input type="text" id="job1id" placeholder="e.g. SOMIK, PCB-002">
+      <input type="number" id="job1hrs" placeholder="h" step="0.25" min="0">
+      <input type="text" id="job1desc" placeholder="What was done">
+    </div>
+    <div class="job-row">
+      <input type="text" id="job2id" placeholder="e.g. VFD_001, CW-001">
+      <input type="number" id="job2hrs" placeholder="h" step="0.25" min="0">
+      <input type="text" id="job2desc" placeholder="What was done">
+    </div>
+    <div class="job-row">
+      <input type="text" id="job3id" placeholder="e.g. FLOWAXS, ITS-Admin">
+      <input type="number" id="job3hrs" placeholder="h" step="0.25" min="0">
+      <input type="text" id="job3desc" placeholder="What was done">
+    </div>
+  </div>
+
+  <!-- Row 6: Energy Blocks -->
+  <div class="section">
+    <h3><span class="icon">&#9889;</span> Energy Blocks</h3>
+    <div class="energy-grid">
+      <div class="energy-slot">Morning <span class="tag tag-high">HIGH</span></div>
+      <div class="field"><input id="block1task" placeholder="Deep work / design / complex diagnosis / Mach3 config"></div>
+      <div class="energy-slot">Midday <span class="tag tag-med">MEDIUM</span></div>
+      <div class="field"><input id="block2task" placeholder="Wiring / assembly / client jobs / testing"></div>
+      <div class="energy-slot">Afternoon <span class="tag tag-med">MEDIUM</span></div>
+      <div class="field"><input id="block3task" placeholder="Steady work / soldering / fabrication"></div>
+      <div class="energy-slot">Evening <span class="tag tag-low">LOW</span></div>
+      <div class="field"><input id="block4task" placeholder="WhatsApp / logging / bookkeeping / cleanup"></div>
+    </div>
+  </div>
+
+  <!-- Row 7: Scripted Actions -->
+  <div class="section">
+    <h3><span class="icon">&#9745;</span> Scripted Actions</h3>
+    <div class="checklist cols-2">
+      <label><input type="checkbox" id="sa_wake_check"> Wake-up script run (Q0-Q4)</label>
+      <label><input type="checkbox" id="sa_whatsapp"> WhatsApp checked (5 min max)</label>
+      <label><input type="checkbox" id="sa_deepwork"> Deep-work block started, phone silent</label>
+      <label><input type="checkbox" id="sa_blocks"> 3 focus tasks written</label>
+      <label><input type="checkbox" id="sa_shutdown_bench"> Shutdown: bench cleaned, tools returned</label>
+      <label><input type="checkbox" id="sa_shutdown_log"> Shutdown: hours + revenue logged</label>
+      <label><input type="checkbox" id="sa_shutdown_tomorrow"> Shutdown: tomorrow's tasks written</label>
+      <label><input type="checkbox" id="sa_thursday"> Thursday: weekly note filled</label>
+    </div>
+  </div>
+
+  <!-- Row 8: Hours & Yield -->
+  <div class="section">
+    <h3><span class="icon">&#128200;</span> Hours &amp; Yield</h3>
+    <div class="yield-box" style="margin-bottom:10px">
+      <div class="yield-item"><div class="val">1,000</div><div class="lbl">Target DA/hr</div></div>
+      <div class="yield-item"><div class="val">137</div><div class="lbl">Total Days</div></div>
+      <div class="yield-item"><div class="val">15 Dec</div><div class="lbl">Deadline</div></div>
+      <div class="yield-item" id="yieldCalc"><div class="val">—</div><div class="lbl">Today's Yield</div></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Hours Worked</label><input type="number" id="hoursWorked" placeholder="e.g. 8.5" step="0.25" min="0" oninput="calcYield()"></div>
+      <div class="field"><label>Billable Hours</label><input type="number" id="hoursBillable" placeholder="e.g. 6.0" step="0.25" min="0" oninput="calcYield()"></div>
+      <div class="field"><label>Revenue (DA)</label><input type="number" id="revenueDA" placeholder="e.g. 9000" min="0" oninput="calcYield()"></div>
+    </div>
+    <div class="status-bar">
+      <div class="status-dot" id="yieldDot"></div>
+      <span class="status-text" id="yieldStatus"></span>
+    </div>
+  </div>
+
+  <!-- Row 9: Blocker -->
+  <div class="section">
+    <h3><span class="icon">&#128683;</span> Blocker / One Line</h3>
+    <div class="row">
+      <div class="field"><textarea id="blocker" rows="2" placeholder="What blocked me, and the one thing that matters most..."></textarea></div>
+    </div>
+  </div>
+
+  <!-- Row 10: Notes -->
+  <div class="section">
+    <h3><span class="icon">&#128221;</span> Notes</h3>
+    <div class="row">
+      <div class="field"><textarea id="notes" rows="3" placeholder="Milestones hit, photos taken, decisions made..."></textarea></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="font-size:9px;color:#9CA3AF;text-align:center;border-top:1px solid #E5E7EB;padding-top:10px;margin-top:8px">
+    Flow-match &rarr; run the script &rarr; log everything &rarr; rest on schedule &bull; ITS &mdash; Power, Control &amp; Machinery
+  </div>
+
 </div>
 
-<hr>
+<!-- Toast -->
+<div class="toast" id="toast"></div>
 
-<h3>3 Focus Tasks (from the Task Bank — highest demand first)</h3>
-<div class="checklist" style="grid-template-columns: 1fr;">
-  <label><input type="checkbox"> <input type="text" placeholder="High-demand task 1 (morning)"></label>
-  <label><input type="checkbox"> <input type="text" placeholder="High/Medium task 2"></label>
-  <label><input type="checkbox"> <input type="text" placeholder="Medium/Low task 3 (afternoon/evening)"></label>
-</div>
+<!-- Hidden file input for import -->
+<input type="file" id="fileInput" accept=".json" style="display:none" onchange="handleImport(event)">
 
-<hr>
+<script>
+const STORAGE_KEY = 'its_daily_tracker';
+const ENTRIES_KEY = 'its_daily_entries';
 
-<h3>Energy Blocks</h3>
-<div class="energy">
-  <div class="slot">Morning (peak) — High</div>
-  <div class="field"><input placeholder="Design / Mach3 config / report writing / complex diagnosis"></div>
-  <div class="slot">Afternoon — Medium</div>
-  <div class="field"><input placeholder="Wiring / assembly / client jobs"></div>
-  <div class="slot">Evening (low) — Low</div>
-  <div class="field"><input placeholder="WhatsApp / logging / bookkeeping / cleanup"></div>
-</div>
+// All form fields
+const FIELDS = [
+  'date','dayNum','weekNum','energy','isFriday',
+  'task1','task2','task3','task1done','task2done','task3done',
+  'taskCategory',
+  'block1task','block2task','block3task','block4task',
+  'sa_wake_check','sa_whatsapp','sa_deepwork','sa_blocks',
+  'sa_shutdown_bench','sa_shutdown_log','sa_shutdown_tomorrow','sa_thursday',
+  'hoursWorked','hoursBillable','revenueDA',
+  'blocker','notes',
+  'job1id','job1hrs','job1desc',
+  'job2id','job2hrs','job2desc',
+  'job3id','job3hrs','job3desc'
+];
 
-<hr>
+function init() {
+  // Default date to today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('date').value = today;
 
-<h3>Scripted Actions</h3>
-<div class="checklist">
-  <label><input type="checkbox"> ☀ Morning: urgent WhatsApp checked (5 min max)</label>
-  <label><input type="checkbox"> ☀ Morning: 3 focus tasks written</label>
-  <label><input type="checkbox"> ☀ Morning: deep-work block started, phone silent</label>
-  <label><input type="checkbox"> 🌙 Shutdown: bench cleaned, tools returned</label>
-  <label><input type="checkbox"> 🌙 Shutdown: hours + revenue logged (Yield Tracker)</label>
-  <label><input type="checkbox"> 🌙 Shutdown: tomorrow's 3 tasks written</label>
-</div>
+  // Calculate day # and week #
+  const startDate = new Date('2026-08-01');
+  const todayDate = new Date(today);
+  const diffDays = Math.floor((todayDate - startDate) / (1000 * 60 * 60 * 24)) + 1;
+  if (diffDays > 0) {
+    document.getElementById('dayNum').value = diffDays;
+    document.getElementById('weekNum').value = 'W' + Math.ceil(diffDays / 7);
+  }
 
-<hr>
+  // Check if today is Friday
+  if (todayDate.getDay() === 5) {
+    document.getElementById('isFriday').value = 'yes';
+  }
 
-<h3>Hours &amp; Yield (target ≥ 1,000 DA/hr)</h3>
-<div class="yield-box">
-  <div class="yield-item"><div class="val">1,000 DA/hr</div><div class="lbl">Target yield</div></div>
-  <div class="yield-item"><div class="val">137</div><div class="lbl">Total days</div></div>
-  <div class="yield-item"><div class="val">15 Dec</div><div class="lbl">Deadline</div></div>
-</div>
-<div class="row" style="margin-top:10px">
-  <div class="field"><label>Hours worked</label><input placeholder="e.g. 8.5"></div>
-  <div class="field"><label>Billable hours</label><input placeholder="e.g. 6.0"></div>
-  <div class="field"><label>Revenue today (DA)</label><input placeholder="e.g. 9,000"></div>
-  <div class="field"><label>Yield (DA/hr)</label><input placeholder="rev ÷ billable hrs"></div>
-</div>
+  // Load saved data for this date
+  loadEntry(today);
+}
 
-<hr>
+function onDateChange() {
+  const date = document.getElementById('date').value;
+  if (!date) return;
+  loadEntry(date);
 
-<h3>Blocker / One line</h3>
-<div class="row">
-  <div class="field"><textarea rows="2" placeholder="What blocked me, and the one thing that matters most..."></textarea></div>
-</div>
+  // Update day # and week #
+  const startDate = new Date('2026-08-01');
+  const selected = new Date(date);
+  const diffDays = Math.floor((selected - startDate) / (1000 * 60 * 60 * 24)) + 1;
+  if (diffDays > 0) {
+    document.getElementById('dayNum').value = diffDays;
+    document.getElementById('weekNum').value = 'W' + Math.ceil(diffDays / 7);
+  }
+  if (selected.getDay() === 5) {
+    document.getElementById('isFriday').value = 'yes';
+  } else {
+    document.getElementById('isFriday').value = 'no';
+  }
+}
 
-<hr>
+function saveEntry() {
+  const date = document.getElementById('date').value;
+  if (!date) return;
 
-<h3>Notes</h3>
-<div class="row">
-  <div class="field"><textarea rows="3" placeholder="Milestones hit, photos taken, decisions made..."></textarea></div>
-</div>
+  const data = {};
+  FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.type === 'checkbox') {
+      data[id] = el.checked;
+    } else {
+      data[id] = el.value;
+    }
+  });
 
-<div class="footer-note">Flow-match → run the script → log everything → rest on schedule &bull; ITS &mdash; Power, Control &amp; Machinery</div>
+  // Save machines
+  data.machines = [];
+  document.querySelectorAll('.machine:checked').forEach(cb => {
+    data.machines.push(cb.value);
+  });
 
+  // Save to entries
+  let entries = JSON.parse(localStorage.getItem(ENTRIES_KEY) || '{}');
+  entries[date] = data;
+  localStorage.setItem(ENTRIES_KEY, JSON.stringify(entries));
+
+  showToast('Saved');
+}
+
+function loadEntry(date) {
+  let entries = JSON.parse(localStorage.getItem(ENTRIES_KEY) || '{}');
+  const data = entries[date];
+
+  // Reset form
+  FIELDS.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    if (el.type === 'checkbox') {
+      el.checked = false;
+    } else {
+      el.value = '';
+    }
+  });
+  document.querySelectorAll('.machine').forEach(cb => cb.checked = false);
+
+  if (data) {
+    FIELDS.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (el.type === 'checkbox') {
+        el.checked = data[id] || false;
+      } else {
+        el.value = data[id] || '';
+      }
+    });
+
+    // Load machines
+    if (data.machines) {
+      data.machines.forEach(val => {
+        const cb = document.querySelector(`.machine[value="${val}"]`);
+        if (cb) cb.checked = true;
+      });
+    }
+  }
+
+  calcYield();
+}
+
+function calcYield() {
+  const hrs = parseFloat(document.getElementById('hoursWorked').value) || 0;
+  const billable = parseFloat(document.getElementById('hoursBillable').value) || 0;
+  const rev = parseFloat(document.getElementById('revenueDA').value) || 0;
+
+  const yieldEl = document.getElementById('yieldCalc');
+  const dotEl = document.getElementById('yieldDot');
+  const statusEl = document.getElementById('yieldStatus');
+
+  if (billable > 0 && rev > 0) {
+    const yieldVal = Math.round(rev / billable);
+    yieldEl.querySelector('.val').textContent = yieldVal.toLocaleString();
+
+    if (yieldVal >= 1000) {
+      dotEl.className = 'status-dot green';
+      statusEl.textContent = `On target (${yieldVal} DA/hr)`;
+    } else if (yieldVal >= 700) {
+      dotEl.className = 'status-dot yellow';
+      statusEl.textContent = `Below target (${yieldVal} DA/hr — aim for 1,000+)`;
+    } else {
+      dotEl.className = 'status-dot red';
+      statusEl.textContent = `Low yield (${yieldVal} DA/hr — review what happened)`;
+    }
+  } else {
+    yieldEl.querySelector('.val').textContent = '—';
+    dotEl.className = 'status-dot';
+    statusEl.textContent = billable > 0 ? 'Add revenue to calculate yield' : 'Add hours to start tracking';
+  }
+}
+
+function exportData() {
+  const entries = JSON.parse(localStorage.getItem(ENTRIES_KEY) || '{}');
+  const blob = new Blob([JSON.stringify(entries, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `its_tracker_export_${new Date().toISOString().split('T')[0]}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Exported');
+}
+
+function importData() {
+  document.getElementById('fileInput').click();
+}
+
+function handleImport(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      let entries = JSON.parse(localStorage.getItem(ENTRIES_KEY) || '{}');
+      Object.assign(entries, data);
+      localStorage.setItem(ENTRIES_KEY, JSON.stringify(entries));
+      showToast('Imported ' + Object.keys(data).length + ' entries');
+      loadEntry(document.getElementById('date').value);
+    } catch (err) {
+      showToast('Import failed: invalid JSON');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2000);
+}
+
+// Auto-save on any change
+document.addEventListener('input', function(e) {
+  if (e.target.closest('.container')) {
+    clearTimeout(window._saveTimer);
+    window._saveTimer = setTimeout(saveEntry, 500);
+  }
+});
+document.addEventListener('change', function(e) {
+  if (e.target.closest('.container')) {
+    clearTimeout(window._saveTimer);
+    window._saveTimer = setTimeout(saveEntry, 200);
+  }
+});
+
+// Init
+init();
+</script>
 </body>
 </html>

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workshop Dashboard — ITS</title>
+<link rel="icon" type="image/png" href="../../../website/IMAGES/LOGO%20BGR.png">
+<style>
+  @media print {
+    @page { size: A4 landscape; margin: 8mm; }
+    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; font-size: 11px !important; padding: 0 !important; }
+    .no-print { display: none !important; }
+    .card { break-inside: avoid; }
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Segoe UI', Arial, sans-serif; color: #1A1A1A; background: #F3F4F6; padding: 16px; font-size: 13px; }
+  .dashboard { max-width: 1100px; margin: 0 auto; }
+
+  /* Header */
+  .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 8px; }
+  .dash-header h1 { font-size: 20px; font-weight: 800; color: #FF9F00; }
+  .dash-header .sub { font-size: 10px; color: #6B7280; }
+  .controls { display: flex; gap: 8px; align-items: center; }
+  .controls label { font-size: 11px; font-weight: 600; color: #6B7280; }
+  .controls input, .controls select { padding: 5px 8px; border: 1px solid #D1D5DB; border-radius: 4px; font-size: 12px; font-family: inherit; }
+  .btn { padding: 6px 14px; border: none; border-radius: 5px; font-weight: 600; cursor: pointer; font-size: 11px; }
+  .btn-primary { background: #FF9F00; color: #fff; }
+  .btn-primary:hover { background: #E08A00; }
+  .btn-secondary { background: #E5E7EB; color: #374151; }
+
+  /* Cards */
+  .card { background: #fff; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); padding: 16px; margin-bottom: 12px; }
+  .card h3 { font-size: 12px; font-weight: 700; color: #6B7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+
+  /* KPI row */
+  .kpi-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 12px; }
+  .kpi { background: #fff; border-radius: 8px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); padding: 14px; text-align: center; }
+  .kpi .value { font-size: 24px; font-weight: 800; color: #FF9F00; }
+  .kpi .label { font-size: 10px; color: #6B7280; text-transform: uppercase; margin-top: 2px; }
+  .kpi .sublabel { font-size: 9px; color: #9CA3AF; }
+  .kpi.good .value { color: #059669; }
+  .kpi.warn .value { color: #D97706; }
+  .kpi.bad .value { color: #DC2626; }
+
+  /* Grid layout */
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  @media (max-width: 768px) {
+    .grid-2, .grid-3 { grid-template-columns: 1fr; }
+  }
+
+  /* Chart container */
+  .chart-container { position: relative; width: 100%; height: 180px; }
+  canvas { width: 100% !important; height: 100% !important; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 12px; }
+  th { text-align: left; font-size: 10px; font-weight: 700; color: #6B7280; text-transform: uppercase; padding: 6px 8px; border-bottom: 2px solid #E5E7EB; }
+  td { padding: 6px 8px; border-bottom: 1px solid #F3F4F6; }
+  tr:hover td { background: #FFFBEB; }
+
+  /* Bar chart (CSS only) */
+  .bar-chart { display: flex; flex-direction: column; gap: 6px; }
+  .bar-row { display: flex; align-items: center; gap: 8px; }
+  .bar-label { width: 100px; font-size: 11px; color: #374151; text-align: right; flex-shrink: 0; }
+  .bar-track { flex: 1; height: 18px; background: #F3F4F6; border-radius: 3px; overflow: hidden; }
+  .bar-fill { height: 100%; background: #FF9F00; border-radius: 3px; transition: width 0.3s; display: flex; align-items: center; padding-left: 6px; }
+  .bar-fill span { font-size: 9px; font-weight: 700; color: #fff; }
+
+  /* Legend */
+  .legend { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+  .legend-item { display: flex; align-items: center; gap: 4px; font-size: 10px; color: #6B7280; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 2px; }
+
+  /* Yield line */
+  .yield-line { stroke: #FF9F00; stroke-width: 2; fill: none; }
+  .yield-dot { fill: #FF9F00; }
+  .target-line { stroke: #DC2626; stroke-width: 1; stroke-dasharray: 4,3; }
+  .grid-line { stroke: #E5E7EB; stroke-width: 0.5; }
+  .axis-label { font-size: 9px; fill: #9CA3AF; }
+</style>
+</head>
+<body>
+
+<div class="dashboard">
+
+  <!-- Header -->
+  <div class="dash-header">
+    <div>
+      <h1>WORKSHOP DASHBOARD</h1>
+      <div class="sub">ITS — Industrial Technology Solutions &bull; Yield target: &ge; 1,000 DA/hr</div>
+    </div>
+    <div class="controls no-print">
+      <label>From</label>
+      <input type="date" id="dateFrom" onchange="refresh()">
+      <label>To</label>
+      <input type="date" id="dateTo" onchange="refresh()">
+      <button class="btn btn-secondary" onclick="setThisWeek()">This Week</button>
+      <button class="btn btn-secondary" onclick="setThisMonth()">This Month</button>
+      <button class="btn btn-secondary" onclick="setAll()">All Time</button>
+      <button class="btn btn-primary" onclick="window.print()">Print</button>
+    </div>
+  </div>
+
+  <!-- KPI Row -->
+  <div class="kpi-row" id="kpiRow">
+    <div class="kpi"><div class="value" id="kpiDays">0</div><div class="label">Days Logged</div><div class="sublabel" id="kpiDaysSub">of 137 total</div></div>
+    <div class="kpi"><div class="value" id="kpiHours">0</div><div class="label">Hours Worked</div><div class="sublabel" id="kpiHoursSub">avg 0h/day</div></div>
+    <div class="kpi"><div class="value" id="kpiBillable">0</div><div class="label">Billable Hours</div><div class="sublabel" id="kpiBillableSub">0% ratio</div></div>
+    <div class="kpi"><div class="value" id="kpiRevenue">0</div><div class="label">Revenue (DA)</div><div class="sublabel" id="kpiRevenueSub"></div></div>
+    <div class="kpi" id="kpiYieldCard"><div class="value" id="kpiYield">—</div><div class="label">Avg Yield (DA/hr)</div><div class="sublabel" id="kpiYieldSub">target: 1,000</div></div>
+    <div class="kpi"><div class="value" id="kpiJobs">0</div><div class="label">Jobs Tracked</div><div class="sublabel">unique job IDs</div></div>
+  </div>
+
+  <!-- Charts row -->
+  <div class="grid-2">
+    <!-- Yield Trend -->
+    <div class="card">
+      <h3>Yield Trend (last 14 days)</h3>
+      <div class="chart-container">
+        <svg id="yieldChart" viewBox="0 0 500 160" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+    </div>
+
+    <!-- Task Category Breakdown -->
+    <div class="card">
+      <h3>Task Category Breakdown</h3>
+      <div class="bar-chart" id="categoryChart"></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- Machine Usage -->
+    <div class="card">
+      <h3>Machine / Equipment Usage</h3>
+      <div class="bar-chart" id="machineChart"></div>
+    </div>
+
+    <!-- Energy Distribution -->
+    <div class="card">
+      <h3>Energy Distribution</h3>
+      <div class="bar-chart" id="energyChart"></div>
+    </div>
+  </div>
+
+  <!-- Jobs Table -->
+  <div class="card">
+    <h3>Job Log</h3>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Job ID</th>
+            <th>Hours</th>
+            <th>Task</th>
+            <th>Category</th>
+          </tr>
+        </thead>
+        <tbody id="jobsTable"></tbody>
+      </table>
+    </div>
+    <div id="jobsEmpty" style="text-align:center;padding:20px;color:#9CA3AF;font-size:12px;display:none">
+      No jobs logged yet. Fill in the Job Time Log section in the <a href="ITS_Daily_Tracker.html" style="color:#FF9F00">Daily Tracker</a>.
+    </div>
+  </div>
+
+  <!-- Daily Log -->
+  <div class="card">
+    <h3>Daily Log</h3>
+    <div style="overflow-x:auto">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Day</th>
+            <th>Energy</th>
+            <th>Hours</th>
+            <th>Billable</th>
+            <th>Revenue</th>
+            <th>Yield</th>
+            <th>Category</th>
+            <th>Blocker</th>
+          </tr>
+        </thead>
+        <tbody id="dailyTable"></tbody>
+      </table>
+    </div>
+    <div id="dailyEmpty" style="text-align:center;padding:20px;color:#9CA3AF;font-size:12px;display:none">
+      No daily entries found. Start tracking in the <a href="ITS_Daily_Tracker.html" style="color:#FF9F00">Daily Tracker</a>.
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div style="font-size:9px;color:#9CA3AF;text-align:center;padding:12px 0">
+    ITS Workshop Dashboard &bull; Data from localStorage (same source as Daily Tracker) &bull; Export/Import via Daily Tracker
+  </div>
+
+</div>
+
+<script>
+const ENTRIES_KEY = 'its_daily_entries';
+
+const CATEGORY_LABELS = {
+  'wiring': 'Wiring', 'soldering': 'Soldering/PCB', 'assembly': 'Assembly',
+  'testing': 'Testing', 'programming': 'Programming', 'design': 'Design',
+  'diagnosis': 'Diagnosis', 'fabrication': 'Fabrication', 'documentation': 'Documentation',
+  'admin': 'Admin', 'course': 'Course', 'other': 'Other'
+};
+
+const MACHINE_LABELS = {
+  'soldering-station': 'Soldering Stn', 'oscilloscope': 'Oscilloscope', 'multimeter': 'Multimeter',
+  '3d-printer': '3D Printer', 'cnc-mill': 'CNC Mill', 'lathe': 'Lathe',
+  'drill-press': 'Drill Press', 'wire-stripper': 'Wire Stripper', 'crimping-tool': 'Crimping Tool',
+  'power-supply': 'Power Supply', 'soldering-gun': 'Soldering Gun', 'heat-gun': 'Heat Gun'
+};
+
+function getEntries() {
+  return JSON.parse(localStorage.getItem(ENTRIES_KEY) || '{}');
+}
+
+function getFilteredEntries() {
+  const entries = getEntries();
+  const from = document.getElementById('dateFrom').value;
+  const to = document.getElementById('dateTo').value;
+  const filtered = {};
+  for (const [date, data] of Object.entries(entries)) {
+    if (from && date < from) continue;
+    if (to && date > to) continue;
+    filtered[date] = data;
+  }
+  return filtered;
+}
+
+function setThisWeek() {
+  const now = new Date();
+  const day = now.getDay();
+  const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+  const monday = new Date(now.setDate(diff));
+  const sunday = new Date(monday);
+  sunday.setDate(monday.getDate() + 6);
+  document.getElementById('dateFrom').value = monday.toISOString().split('T')[0];
+  document.getElementById('dateTo').value = sunday.toISOString().split('T')[0];
+  refresh();
+}
+
+function setThisMonth() {
+  const now = new Date();
+  const first = new Date(now.getFullYear(), now.getMonth(), 1);
+  const last = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+  document.getElementById('dateFrom').value = first.toISOString().split('T')[0];
+  document.getElementById('dateTo').value = last.toISOString().split('T')[0];
+  refresh();
+}
+
+function setAll() {
+  document.getElementById('dateFrom').value = '';
+  document.getElementById('dateTo').value = '';
+  refresh();
+}
+
+function refresh() {
+  const entries = getFilteredEntries();
+  const sorted = Object.entries(entries).sort(([a],[b]) => a.localeCompare(b));
+
+  let totalHours = 0, totalBillable = 0, totalRevenue = 0;
+  let daysLogged = 0;
+  const jobs = {};
+  const categories = {};
+  const machines = {};
+  const energies = {};
+  const dailyRows = [];
+
+  for (const [date, d] of sorted) {
+    const hrs = parseFloat(d.hoursWorked) || 0;
+    const bill = parseFloat(d.hoursBillable) || 0;
+    const rev = parseFloat(d.revenueDA) || 0;
+
+    if (hrs > 0 || bill > 0 || rev > 0) {
+      daysLogged++;
+      totalHours += hrs;
+      totalBillable += bill;
+      totalRevenue += rev;
+    }
+
+    // Energy
+    if (d.energy) {
+      energies[d.energy] = (energies[d.energy] || 0) + 1;
+    }
+
+    // Category
+    if (d.taskCategory) {
+      categories[d.taskCategory] = (categories[d.taskCategory] || 0) + 1;
+    }
+
+    // Machines
+    if (d.machines) {
+      d.machines.forEach(m => { machines[m] = (machines[m] || 0) + 1; });
+    }
+
+    // Jobs
+    for (let i = 1; i <= 3; i++) {
+      const jid = d[`job${i}id`];
+      const jhrs = parseFloat(d[`job${i}hrs`]) || 0;
+      const jdesc = d[`job${i}desc`] || '';
+      if (jid && jhrs > 0) {
+        if (!jobs[jid]) jobs[jid] = { hours: 0, tasks: [] };
+        jobs[jid].hours += jhrs;
+        if (jdesc) jobs[jid].tasks.push(jdesc);
+      }
+    }
+
+    // Daily row
+    const yieldVal = bill > 0 && rev > 0 ? Math.round(rev / bill) : null;
+    dailyRows.push({
+      date, day: d.dayNum || '', energy: d.energy || '',
+      hours: hrs, billable: bill, revenue: rev,
+      yield: yieldVal, category: d.taskCategory || '', blocker: d.blocker || ''
+    });
+  }
+
+  // KPIs
+  document.getElementById('kpiDays').textContent = daysLogged;
+  document.getElementById('kpiDaysSub').textContent = `of 137 total (${Math.round(daysLogged/137*100)}%)`;
+  document.getElementById('kpiHours').textContent = totalHours.toFixed(1);
+  document.getElementById('kpiHoursSub').textContent = daysLogged > 0 ? `avg ${(totalHours/daysLogged).toFixed(1)}h/day` : '';
+  document.getElementById('kpiBillable').textContent = totalBillable.toFixed(1);
+  document.getElementById('kpiBillableSub').textContent = totalHours > 0 ? `${Math.round(totalBillable/totalHours*100)}% ratio` : '';
+  document.getElementById('kpiRevenue').textContent = totalRevenue.toLocaleString();
+  document.getElementById('kpiJobs').textContent = Object.keys(jobs).length;
+
+  const yieldCard = document.getElementById('kpiYieldCard');
+  if (totalBillable > 0 && totalRevenue > 0) {
+    const avgYield = Math.round(totalRevenue / totalBillable);
+    document.getElementById('kpiYield').textContent = avgYield.toLocaleString();
+    yieldCard.className = avgYield >= 1000 ? 'kpi good' : avgYield >= 700 ? 'kpi warn' : 'kpi bad';
+  } else {
+    document.getElementById('kpiYield').textContent = '—';
+    yieldCard.className = 'kpi';
+  }
+
+  // Yield chart (last 14 days)
+  drawYieldChart(sorted);
+
+  // Category chart
+  drawBarChart('categoryChart', categories, CATEGORY_LABELS, '#FF9F00');
+
+  // Machine chart
+  drawBarChart('machineChart', machines, MACHINE_LABELS, '#6366F1');
+
+  // Energy chart
+  const energyLabels = { 'fresh': 'Fresh', 'medium': 'Medium', 'low': 'Low' };
+  const energyColors = { 'fresh': '#10B981', 'medium': '#F59E0B', 'low': '#EF4444' };
+  drawBarChart('energyChart', energies, energyLabels, null, energyColors);
+
+  // Jobs table
+  const jobsTbody = document.getElementById('jobsTable');
+  const jobsEmpty = document.getElementById('jobsEmpty');
+  jobsTbody.innerHTML = '';
+  if (Object.keys(jobs).length === 0) {
+    jobsEmpty.style.display = 'block';
+  } else {
+    jobsEmpty.style.display = 'none';
+    // Find dates for each job
+    const jobDates = {};
+    for (const [date, d] of sorted) {
+      for (let i = 1; i <= 3; i++) {
+        const jid = d[`job${i}id`];
+        const jhrs = parseFloat(d[`job${i}hrs`]) || 0;
+        const jdesc = d[`job${i}desc`] || '';
+        if (jid && jhrs > 0) {
+          if (!jobDates[jid]) jobDates[jid] = [];
+          jobDates[jid].push({ date, hrs: jhrs, desc: jdesc });
+        }
+      }
+    }
+    for (const [jid, info] of Object.entries(jobs).sort(([a],[b]) => a.localeCompare(b))) {
+      const dates = jobDates[jid] || [];
+      dates.forEach((entry, idx) => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${entry.date}</td><td><strong>${jid}</strong></td><td>${entry.hrs}h</td><td>${entry.desc}</td><td>${idx === 0 ? info.tasks.length + ' tasks' : ''}</td>`;
+        jobsTbody.appendChild(tr);
+      });
+    }
+  }
+
+  // Daily table
+  const dailyTbody = document.getElementById('dailyTable');
+  const dailyEmpty = document.getElementById('dailyEmpty');
+  dailyTbody.innerHTML = '';
+  const visibleRows = dailyRows.filter(r => r.hours > 0 || r.billable > 0 || r.revenue > 0);
+  if (visibleRows.length === 0) {
+    dailyEmpty.style.display = 'block';
+  } else {
+    dailyEmpty.style.display = 'none';
+    visibleRows.reverse().forEach(r => {
+      const yieldStr = r.yield !== null ? r.yield.toLocaleString() : '—';
+      const yieldClass = r.yield !== null ? (r.yield >= 1000 ? 'color:#059669' : r.yield >= 700 ? 'color:#D97706' : 'color:#DC2626') : '';
+      const tr = document.createElement('tr');
+      tr.innerHTML = `<td>${r.date}</td><td>${r.day}</td><td>${r.energy}</td><td>${r.hours}h</td><td>${r.billable}h</td><td>${r.revenue.toLocaleString()}</td><td style="${yieldClass};font-weight:700">${yieldStr}</td><td>${CATEGORY_LABELS[r.category] || r.category || '—'}</td><td style="font-size:11px;color:#6B7280;max-width:150px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${r.blocker}</td>`;
+      dailyTbody.appendChild(tr);
+    });
+  }
+}
+
+function drawYieldChart(sorted) {
+  const svg = document.getElementById('yieldChart');
+  svg.innerHTML = '';
+
+  // Get last 14 days with data
+  const yieldData = [];
+  for (const [date, d] of sorted) {
+    const bill = parseFloat(d.hoursBillable) || 0;
+    const rev = parseFloat(d.revenueDA) || 0;
+    if (bill > 0 && rev > 0) {
+      yieldData.push({ date, yield: Math.round(rev / bill) });
+    }
+  }
+  const last14 = yieldData.slice(-14);
+
+  if (last14.length < 2) {
+    svg.innerHTML = '<text x="250" y="80" text-anchor="middle" fill="#9CA3AF" font-size="12">Need 2+ days with yield data</text>';
+    return;
+  }
+
+  const W = 500, H = 160, pad = { top: 10, right: 10, bottom: 25, left: 40 };
+  const chartW = W - pad.left - pad.right;
+  const chartH = H - pad.top - pad.bottom;
+
+  const yields = last14.map(d => d.yield);
+  const maxY = Math.max(Math.max(...yields), 1000) * 1.1;
+  const minY = 0;
+
+  // Grid lines
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.top + chartH - (i / 4) * chartH;
+    const val = Math.round(minY + (i / 4) * (maxY - minY));
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', pad.left); line.setAttribute('x2', W - pad.right);
+    line.setAttribute('y1', y); line.setAttribute('y2', y);
+    line.setAttribute('class', 'grid-line');
+    svg.appendChild(line);
+    const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    label.setAttribute('x', pad.left - 4); label.setAttribute('y', y + 3);
+    label.setAttribute('text-anchor', 'end'); label.setAttribute('class', 'axis-label');
+    label.textContent = val.toLocaleString();
+    svg.appendChild(label);
+  }
+
+  // Target line (1000)
+  const targetY = pad.top + chartH - ((1000 - minY) / (maxY - minY)) * chartH;
+  const targetLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+  targetLine.setAttribute('x1', pad.left); targetLine.setAttribute('x2', W - pad.right);
+  targetLine.setAttribute('y1', targetY); targetLine.setAttribute('y2', targetY);
+  targetLine.setAttribute('class', 'target-line');
+  svg.appendChild(targetLine);
+  const targetLabel = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  targetLabel.setAttribute('x', W - pad.right - 2); targetLabel.setAttribute('y', targetY - 3);
+  targetLabel.setAttribute('text-anchor', 'end'); targetLabel.setAttribute('class', 'axis-label');
+  targetLabel.setAttribute('fill', '#DC2626');
+  targetLabel.textContent = 'target: 1,000';
+  svg.appendChild(targetLabel);
+
+  // Line path
+  const points = last14.map((d, i) => {
+    const x = pad.left + (i / (last14.length - 1)) * chartW;
+    const y = pad.top + chartH - ((d.yield - minY) / (maxY - minY)) * chartH;
+    return { x, y, date: d.date, yield: d.yield };
+  });
+
+  const path = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+  path.setAttribute('points', points.map(p => `${p.x},${p.y}`).join(' '));
+  path.setAttribute('class', 'yield-line');
+  svg.appendChild(path);
+
+  // Dots
+  points.forEach(p => {
+    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    circle.setAttribute('cx', p.x); circle.setAttribute('cy', p.y);
+    circle.setAttribute('r', 3); circle.setAttribute('class', 'yield-dot');
+    svg.appendChild(circle);
+  });
+
+  // X axis labels (every 3rd)
+  points.forEach((p, i) => {
+    if (i % 3 === 0 || i === points.length - 1) {
+      const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      label.setAttribute('x', p.x); label.setAttribute('y', H - 4);
+      label.setAttribute('text-anchor', 'middle'); label.setAttribute('class', 'axis-label');
+      label.textContent = p.date.slice(5); // MM-DD
+      svg.appendChild(label);
+    }
+  });
+}
+
+function drawBarChart(containerId, data, labels, defaultColor, colorMap) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = '';
+
+  const entries = Object.entries(data).sort(([,a],[,b]) => b - a);
+  if (entries.length === 0) {
+    container.innerHTML = '<div style="text-align:center;padding:16px;color:#9CA3AF;font-size:11px">No data</div>';
+    return;
+  }
+
+  const max = Math.max(...entries.map(([,v]) => v));
+
+  entries.forEach(([key, val]) => {
+    const pct = max > 0 ? (val / max) * 100 : 0;
+    const color = colorMap ? (colorMap[key] || defaultColor) : defaultColor;
+    const row = document.createElement('div');
+    row.className = 'bar-row';
+    row.innerHTML = `
+      <div class="bar-label">${labels[key] || key}</div>
+      <div class="bar-track">
+        <div class="bar-fill" style="width:${pct}%;background:${color}">
+          <span>${val}</span>
+        </div>
+      </div>`;
+    container.appendChild(row);
+  });
+}
+
+// Init
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('dateTo').value = today;
+const weekAgo = new Date();
+weekAgo.setDate(weekAgo.getDate() - 6);
+document.getElementById('dateFrom').value = weekAgo.toISOString().split('T')[0];
+refresh();
+</script>
+</body>
+</html>
