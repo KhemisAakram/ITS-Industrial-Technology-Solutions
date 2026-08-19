@@ -44,8 +44,4 @@ status:
 ## Reminders - ITS assistant (requested list)
 - [ ] Your requested reminders:
 
-## Log
-
-- Blocker / one line:
-
 ## Notes
