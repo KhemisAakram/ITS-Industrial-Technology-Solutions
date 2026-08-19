@@ -22,9 +22,9 @@ status:
 - [ ] Tomorrow's courses picked -> [[11_Course_Queue]]
 
 ## Early morning (deep work)
-- [ ] **PCB course FIRST** -> [[11_Course_Queue|next PCB class]]
-- [ ] Wake-up script Q1-Q4 -> energy + blockers
 - [ ] Urgent client check (5 min max)
+- [ ] Wake-up script Q1-Q4 -> energy + blockers
+- [ ] **PCB course FIRST** -> [[11_Course_Queue|next PCB class]]
 - [ ] **Block 1 [HIGH]:** 
 - [ ] **Block 2 [HIGH]:** 
 - [ ] SOMIK course 45 min -> [[10_Courses]]
@@ -46,12 +46,6 @@ status:
 
 ## Log
 
-> Rule: fill the Log ONLY - it is the source of truth. Leave the frontmatter numbers (energy/hours/revenue/yield) alone.
-
-- Hours worked:
-- Billable hours:
-- Revenue (DA):
-- Yield (DA/hr) - target >= 1,000:
 - Blocker / one line:
 
 ## Notes
