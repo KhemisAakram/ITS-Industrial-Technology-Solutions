@@ -8,24 +8,28 @@ tags:
 
 # Week ___ - ____ .. ____
 
-> Focus:
-> [[01_Milestones|Milestones]] - [[02_Task_Bank|Task Bank]] - [[03_Scripted_Actions|Weekly review script]]
+> [[01_Milestones|Milestones]] · [[02_Task_Bank|Tasks]] · [[03_Scripted_Actions|Scripts]]
 
 ## Won this week
 - 
 
 ## Numbers
-- Billable hours total:
-- Revenue total (DA):
-- Avg yield (DA/hr):
-- Projects moved: SOMIK / Workshop / Clients / Report
+| Day | Hours | Billable | Revenue | Yield |
+|-----|-------|----------|---------|-------|
+| Sat |       |          |         |       |
+| Sun |       |          |         |       |
+| Mon |       |          |         |       |
+| Tue |       |          |         |       |
+| Wed |       |          |         |       |
+| Thu |       |          |         |       |
+| **Total** | | | | |
 
 ## Slippage & fixes
 - What fell behind:
 - Why:
 - Next-week fix:
 
-## Next week's bank (pull from [[02_Task_Bank]])
+## Next week's bank
 - [ ] High:
 - [ ] High:
 - [ ] Medium:

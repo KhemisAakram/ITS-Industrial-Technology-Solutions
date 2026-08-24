@@ -1,20 +1,25 @@
----
-date: 2026-11-03
-week: 14
-day: 95
-tags:
-  - daily
-energy:
-hours_worked:
-hours_billable:
-revenue_da:
-yield_da_hr:
-status:
----
+$dir = "C:\khemis akram\OpenCode\ITS Profile\Planning\05_Daily_Notes"
+$files = Get-ChildItem -Path $dir -Filter "*.md" | Where-Object { $_.Name -ne ".gitkeep" }
+$count = 0
+foreach ($f in $files) {
+    $content = Get-Content $f.FullName -Raw
 
-# Tuesday, 3 November 2026 - Day 95 of 137 (Week 14)
+    # Extract frontmatter
+    if ($content -match '(?s)(---.*?---)') {
+        $frontmatter = $Matches[1]
+    } else { continue }
 
-> Focus: Gate: SOMIK handed over - invoice follow-up
+    # Extract title
+    $titleMatch = [regex]::Match($content, '(?m)^(#\s+.+)$')
+    $title = if ($titleMatch.Success) { $titleMatch.Groups[1].Value } else { "" }
+
+    # Extract focus line
+    $focusMatch = [regex]::Match($content, '(?m)^>\s*Focus:\s*(.+)$')
+    $focus = if ($focusMatch.Success) { $focusMatch.Groups[1].Value.Trim() } else { "" }
+    $focusLine = if ($focus) { "`n> Focus: $focus" } else { "`n> Focus:" }
+
+    # Build new body matching the template exactly
+    $newBody = @"
 > [[02_Task_Bank|Tasks]] · [[03_Scripted_Actions|Scripts]] · [[01_Milestones|Milestones]]
 
 ## Previous evening (fill the day before)
@@ -46,3 +51,10 @@ status:
 - [ ] Your requested reminders:
 
 ## Notes
+"@
+
+    $newContent = "$frontmatter`n`n$title`n$focusLine`n$newBody"
+    Set-Content $f.FullName -Value $newContent -NoNewline
+    $count++
+}
+Write-Host "Updated $count files"

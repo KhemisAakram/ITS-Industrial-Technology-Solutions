@@ -14,21 +14,35 @@ status:
 
 # {{date:dddd, D MMMM YYYY}} - Day ___ of 137 (Week ___)
 
+> Focus:
 > [[02_Task_Bank|Tasks]] · [[03_Scripted_Actions|Scripts]] · [[01_Milestones|Milestones]]
 
-## Energy check
-- Energy: fresh / medium / tired
+## Previous evening (fill the day before)
+- [ ] Tomorrow's 3 tasks planned
+- [ ] Tomorrow's courses picked -> [[11_Course_Queue]]
+
+## Early morning (deep work)
+- [ ] Urgent client check (5 min max)
+- [ ] Wake-up script Q1-Q4 -> energy + blockers
+- [ ] **PCB course FIRST** -> [[11_Course_Queue|next PCB class]]
 
 ## Today's 3 tasks (estimate hours)
 
-| # | Task | Project | Est | Actual | Done |
-|---|------|---------|-----|--------|------|
-| 1 | | | | | |
-| 2 | | | | | |
-| 3 | | | | | |
+| #   | Task | Project | Est | Actual | Done |
+| --- | ---- | ------- | --- | ------ | ---- |
+| 1   |      |         |     |        |      |
+| 2   |      |         |     |        |      |
+| 3   |      |         |     |        |      |
 
-## End of day
-- [ ] Log hours + revenue (target ≥ 1,000 DA/hr)
-- [ ] Move unfinished tasks → tomorrow or [[ITS_Kanban|Kanban]]
+## Before noon
+- [ ] SOMIK/VFD course 45 min -> [[10_Courses]] (only if working on those projects today)
+
+## Evening (admin + close)
+- [ ] Service or client work today? -> create + send the invoice -> [[ITS_Business]]
+- [ ] Log hours + revenue + yield (target >= 1,000 DA/hr)
+- [ ] Move unfinished tasks -> tomorrow or [[ITS_Kanban|Kanban]]
+
+## Reminders - ITS assistant (requested list)
+- [ ] Your requested reminders:
 
 ## Notes
