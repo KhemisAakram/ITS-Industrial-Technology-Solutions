@@ -9,7 +9,7 @@ tags: [moc, planning]
 **Start:** Sat 1 Aug 2026 — **Deadline:** Tue 15 Dec 2026 (137 days / ~19.5 weeks)
 **Work week:** Sat–Thu · **Friday = recovery, no exceptions**
 
-> System: flow-match tasks → run scripted actions → work the weekly bank → log everything → rest on schedule.
+> System: wake up → 3 questions → pick 3 tasks → work → log → sleep. Repeat.
 
 ## Setup (mostly done automatically)
 - [x] Core plugins **Templates** + **Daily notes** enabled
@@ -29,7 +29,7 @@ tags: [moc, planning]
 - [[ITS_Kanban|Kanban board]]
 - [[09_Plugin_Setup|Plugin setup — Git, Templater, QuickAdd, diagrams]]
 - [[08_Diagrams|Diagrams — Excalidraw canvases (SOMIK wiring, workshop layout)]]
-- **Today:** open the daily note (Daily notes plugin) → created in `05_Daily_Notes` (Templater fills Day/Week automatically)
+- **Today:** open the daily note → fill 3 tasks + estimate hours → work → log actual at end of day
 - **Weekly review:** create a note in `06_Weekly_Notes` from the weekly template, every Thursday evening or Friday morning
 - **Workshop tracking:** [[13_Workshop_Dashboard|Workshop Dashboard]] (Obsidian) · [[documents/07_Time_Management/Workshop_Dashboard.html|Interactive Dashboard]] · [[documents/07_Time_Management/ITS_Daily_Tracker.html|Daily Tracker]]
 
@@ -53,10 +53,7 @@ sort by due
 group by due
 ```
 
-## Rules (the system in one line)
-0. Wake up → run the [[03_Scripted_Actions|Wake-up script]] (IF/THEN/ELSE) before deciding anything.
-1. Work from the [[02_Task_Bank|Task Bank]], not from memory.
-2. Time slots: Early morning = Block 1+2 (High) · Before noon = Block 3 (Medium) · Evening = Block 4 (Low) — order only, no fixed hours.
-3. Run the [[03_Scripted_Actions|script]], don't think about what's next.
-4. Log hours + revenue every day — yield target **≥ 1,000 DA/hr**.
-5. Friday is recovery. Yield drops are a signal to rest, not to grind.
+## Rules (the system in 3 lines)
+1. Morning: 3 questions → energy, biggest task, blockers → fill daily note (2 min).
+2. Work from the [[02_Task_Bank|Task Bank]], estimate hours before starting.
+3. End of day: log actual hours + revenue → yield target **≥ 1,000 DA/hr**.

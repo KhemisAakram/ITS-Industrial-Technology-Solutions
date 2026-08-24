@@ -14,34 +14,21 @@ status:
 
 # {{date:dddd, D MMMM YYYY}} - Day ___ of 137 (Week ___)
 
-> Focus:
-> [[02_Task_Bank|Task Bank]] - [[03_Scripted_Actions|Scripts]] - [[01_Milestones|Milestones]]
+> [[02_Task_Bank|Tasks]] · [[03_Scripted_Actions|Scripts]] · [[01_Milestones|Milestones]]
 
-## Previous evening (fill the day before)
-- [ ] Tomorrow's 3 slots planned (Block 1+2 early / Block 3 before noon / Block 4 evening)
-- [ ] Tomorrow's courses picked -> [[11_Course_Queue]]
+## Energy check
+- Energy: fresh / medium / tired
 
-## Early morning (deep work)
-- [ ] Urgent client check (5 min max)
-- [ ] Wake-up script Q1-Q4 -> energy + blockers
-- [ ] **PCB course FIRST** -> [[11_Course_Queue|next PCB class]]
-- [ ] **Block 1 [HIGH]:** 
-- [ ] **Block 2 [HIGH]:** 
-- [ ] SOMIK course 45 min -> [[10_Courses]]
+## Today's 3 tasks (estimate hours)
 
-## Before noon (steady work)
-- [ ] **Block 3 [MEDIUM]:** 
-- [ ] VFD course 45 min -> [[10_Courses]]
+| # | Task | Project | Est | Actual | Done |
+|---|------|---------|-----|--------|------|
+| 1 | | | | | |
+| 2 | | | | | |
+| 3 | | | | | |
 
-## Evening (admin + close)
-- [ ] **Block 4 [LOW] - optional:** 
-- [ ] Service or client work today? -> create + send the invoice -> [[ITS_Business]]
-- [ ] Tick off what you finished today -> [[ITS_Kanban|Kanban]] - [[10_Courses|Courses]]
-- [ ] **Thursday:** fill the weekly note + refresh the task bank -> [[06_Weekly_Notes|Weekly]] - [[02_Task_Bank|Bank]]
-- [ ] Log hours + revenue + yield (target >= 1,000 DA/hr)
-- [ ] Fill tomorrow's slots (previous-evening prep)
-
-## Reminders - ITS assistant (requested list)
-- [ ] Your requested reminders:
+## End of day
+- [ ] Log hours + revenue (target ≥ 1,000 DA/hr)
+- [ ] Move unfinished tasks → tomorrow or [[ITS_Kanban|Kanban]]
 
 ## Notes
