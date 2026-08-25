@@ -27,6 +27,7 @@ tags: [moc, planning]
 - [[10_Courses|Courses — ranked watch list (SOMIK + VFD)]]
 - **Projects:** [[ITS_Business]] · [[SOMIK_CNC_Conversion]] · [[Workshop_Setup]] · [[Client_Jobs]] · [[Flowaxs]] · [[CNC_Laser]] · [[Final_Report_Defense]]
 - [[ITS_Kanban|Kanban board]]
+- [[15_Daily_Prompts|Daily Prompts — copy & paste each day]]
 - [[09_Plugin_Setup|Plugin setup — Git, Templater, QuickAdd, diagrams]]
 - [[08_Diagrams|Diagrams — Excalidraw canvases (SOMIK wiring, workshop layout)]]
 - **Today:** open the daily note → fill 3 tasks + estimate hours → work → log actual at end of day
