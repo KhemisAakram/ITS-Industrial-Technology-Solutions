@@ -32,6 +32,7 @@ tags: [moc, planning]
 - **Today:** open the daily note → fill 3 tasks + estimate hours → work → log actual at end of day
 - **Weekly review:** create a note in `06_Weekly_Notes` from the weekly template, every Thursday evening or Friday morning
 - **Workshop tracking:** [[13_Workshop_Dashboard|Workshop Dashboard]] (Obsidian) · [[documents/07_Time_Management/Workshop_Dashboard.html|Interactive Dashboard]] · [[documents/07_Time_Management/ITS_Daily_Tracker.html|Daily Tracker]]
+- **Finance:** [[14_Finance_Dashboard|Finance Dashboard]] (Obsidian) · [[documents/05_Financial/ITS_Finance_Tracker.html|Interactive Finance Tracker]] · [[documents/05_Financial/ITS_Finance_Tracker.csv|CSV Export]]
 
 ## Vault notes already in this repo (linkable)
 - [[PCB_Diagnosis_Checklist]] — Services/PCB Service/03_Operations
@@ -56,4 +57,4 @@ group by due
 ## Rules (the system in 3 lines)
 1. Morning: 3 questions → energy, biggest task, blockers → fill daily note (2 min).
 2. Work from the [[02_Task_Bank|Task Bank]], estimate hours before starting.
-3. End of day: log actual hours + revenue → yield target **≥ 1,000 DA/hr**.
+3. End of day: log actual hours + revenue + expenses → check [[14_Finance_Dashboard|balance]].

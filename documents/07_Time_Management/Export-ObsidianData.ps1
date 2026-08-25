@@ -39,6 +39,11 @@ foreach ($file in $dailyFiles) {
                     'revenue_da'    { $entry.revenueDA = $val }
                     'yield_da_hr'   { $entry.yieldDAHR = $val }
                     'status'        { $entry.status = $val }
+                    'income_da'     { $entry.incomeDA = $val }
+                    'expense_parts' { $entry.expenseParts = $val }
+                    'expense_tools' { $entry.expenseTools = $val }
+                    'expense_transport' { $entry.expenseTransport = $val }
+                    'expense_overhead' { $entry.expenseOverhead = $val }
                 }
             }
         }

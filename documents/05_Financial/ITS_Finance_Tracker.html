@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ITS Finance Tracker</title>
-    <script src="../obsidian_data.js"></script>
+    <script src="../07_Time_Management/obsidian_data.js"></script>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0d1117; color: #c9d1d9; padding: 20px; }
@@ -23,17 +23,19 @@
         .overhead { color: #8b949e; }
         .section { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
         .section h2 { color: #58a6ff; margin-bottom: 15px; font-size: 1.2em; }
-        form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        .full { grid-column: 1 / -1; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+        .form-full { grid-column: 1 / -1; }
         label { color: #8b949e; font-size: 0.85em; display: block; margin-bottom: 4px; }
         input, select { width: 100%; padding: 8px 12px; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #c9d1d9; font-size: 0.95em; }
         input:focus, select:focus { border-color: #58a6ff; outline: none; }
         button { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.95em; font-weight: 600; }
         .btn-income { background: #238636; color: white; }
+        .btn-income:hover { background: #2ea043; }
         .btn-expense { background: #da3633; color: white; }
+        .btn-expense:hover { background: #f85149; }
         .btn-export { background: #1f6feb; color: white; }
-        .btn-clear { background: #30363d; color: #c9d1d9; }
         .btn-load { background: #8957e5; color: white; }
+        .btn-clear { background: #30363d; color: #c9d1d9; }
         .btn-group { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #21262d; }
@@ -47,17 +49,18 @@
         .cat-income { background: #3fb95022; color: #3fb950; }
         .delete-btn { background: none; border: none; color: #f85149; cursor: pointer; font-size: 1.1em; padding: 2px 6px; }
         .delete-btn:hover { background: #f8514922; border-radius: 4px; }
-        .chart-container { position: relative; height: 300px; margin-top: 15px; }
-        canvas { width: 100% !important; height: 100% !important; }
         .tabs { display: flex; gap: 5px; margin-bottom: 15px; }
         .tab { padding: 8px 16px; background: #21262d; border: 1px solid #30363d; border-radius: 6px; color: #8b949e; cursor: pointer; }
         .tab.active { background: #1f6feb; color: white; border-color: #1f6feb; }
         .hidden { display: none; }
+        .status { margin-top: 10px; padding: 8px 12px; border-radius: 6px; font-size: 0.9em; }
+        .status-ok { background: #23863622; color: #3fb950; border: 1px solid #238636; }
+        .status-err { background: #da363322; color: #f85149; border: 1px solid #da3633; }
     </style>
 </head>
 <body>
     <h1>ITS Finance Tracker</h1>
-    <p class="subtitle">Income & expenses from 24 Aug 2026 · Target yield >= 1,000 DA/hr</p>
+    <p class="subtitle">Income & expenses from 24 Aug 2026</p>
 
     <div class="grid">
         <div class="card">
@@ -98,14 +101,14 @@
     </div>
 
     <div class="tabs">
-        <div class="tab active" onclick="showTab('log')">Log Transaction</div>
-        <div class="tab" onclick="showTab('history')">History</div>
-        <div class="tab" onclick="showTab('chart')">Chart</div>
+        <div class="tab active" id="tabBtn-log" onclick="showTab('log')">Log Transaction</div>
+        <div class="tab" id="tabBtn-history" onclick="showTab('history')">History</div>
+        <div class="tab" id="tabBtn-chart" onclick="showTab('chart')">Chart</div>
     </div>
 
     <div id="tab-log" class="section">
         <h2>Log Income</h2>
-        <form id="incomeForm">
+        <div class="form-row">
             <div>
                 <label>Date</label>
                 <input type="date" id="incDate" required>
@@ -114,6 +117,8 @@
                 <label>Amount (DA)</label>
                 <input type="number" id="incAmount" placeholder="3000" min="0" required>
             </div>
+        </div>
+        <div class="form-row">
             <div>
                 <label>From (client/job)</label>
                 <input type="text" id="incFrom" placeholder="PCB-001 repair">
@@ -122,13 +127,12 @@
                 <label>Notes</label>
                 <input type="text" id="incNotes" placeholder="Optional">
             </div>
-            <div class="full">
-                <button type="submit" class="btn-income">+ Add Income</button>
-            </div>
-        </form>
+        </div>
+        <button class="btn-income" id="addIncomeBtn">+ Add Income</button>
+        <div id="incomeStatus"></div>
 
         <h2 style="margin-top:25px;">Log Expense</h2>
-        <form id="expenseForm">
+        <div class="form-row">
             <div>
                 <label>Date</label>
                 <input type="date" id="expDate" required>
@@ -137,6 +141,8 @@
                 <label>Amount (DA)</label>
                 <input type="number" id="expAmount" placeholder="500" min="0" required>
             </div>
+        </div>
+        <div class="form-row">
             <div>
                 <label>Category</label>
                 <select id="expCategory" required>
@@ -150,10 +156,9 @@
                 <label>Description</label>
                 <input type="text" id="expDesc" placeholder="What was bought">
             </div>
-            <div class="full">
-                <button type="submit" class="btn-expense">+ Add Expense</button>
-            </div>
-        </form>
+        </div>
+        <button class="btn-expense" id="addExpenseBtn">+ Add Expense</button>
+        <div id="expenseStatus"></div>
     </div>
 
     <div id="tab-history" class="section hidden">
@@ -164,11 +169,12 @@
             </thead>
             <tbody id="txBody"></tbody>
         </table>
+        <p id="emptyMsg" style="color:#8b949e; padding:20px; text-align:center;">No transactions yet. Go to "Log Transaction" to add one.</p>
     </div>
 
     <div id="tab-chart" class="section hidden">
         <h2>Income vs Expenses Over Time</h2>
-        <div class="chart-container">
+        <div style="position:relative; height:300px;">
             <canvas id="chart"></canvas>
         </div>
     </div>
@@ -180,59 +186,90 @@
     </div>
 
     <script>
-        const STORAGE_KEY = 'its_finance_data';
-        let transactions = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        var STORAGE_KEY = 'its_finance_data';
+        var transactions = [];
+        try { transactions = JSON.parse(localStorage.getItem(STORAGE_KEY)) || []; } catch(e) { transactions = []; }
 
         document.getElementById('incDate').valueAsDate = new Date();
         document.getElementById('expDate').valueAsDate = new Date();
 
-        document.getElementById('incomeForm').addEventListener('submit', e => {
-            e.preventDefault();
+        document.getElementById('addIncomeBtn').onclick = function() {
+            var date = document.getElementById('incDate').value;
+            var amount = parseInt(document.getElementById('incAmount').value);
+            var from = document.getElementById('incFrom').value;
+            var notes = document.getElementById('incNotes').value;
+
+            if (!date) { showStatus('incomeStatus', 'Pick a date', false); return; }
+            if (!amount || amount <= 0) { showStatus('incomeStatus', 'Enter an amount', false); return; }
+
             transactions.push({
                 id: Date.now(),
                 type: 'income',
-                date: document.getElementById('incDate').value,
-                amount: parseInt(document.getElementById('incAmount').value),
-                from: document.getElementById('incFrom').value,
-                notes: document.getElementById('incNotes').value
+                date: date,
+                amount: amount,
+                from: from,
+                notes: notes
             });
-            save(); update();
+            save();
+            update();
             document.getElementById('incAmount').value = '';
             document.getElementById('incFrom').value = '';
             document.getElementById('incNotes').value = '';
-        });
+            showStatus('incomeStatus', '+' + amount.toLocaleString() + ' DA added!', true);
+        };
 
-        document.getElementById('expenseForm').addEventListener('submit', e => {
-            e.preventDefault();
+        document.getElementById('addExpenseBtn').onclick = function() {
+            var date = document.getElementById('expDate').value;
+            var amount = parseInt(document.getElementById('expAmount').value);
+            var category = document.getElementById('expCategory').value;
+            var desc = document.getElementById('expDesc').value;
+
+            if (!date) { showStatus('expenseStatus', 'Pick a date', false); return; }
+            if (!amount || amount <= 0) { showStatus('expenseStatus', 'Enter an amount', false); return; }
+
             transactions.push({
                 id: Date.now(),
                 type: 'expense',
-                date: document.getElementById('expDate').value,
-                amount: parseInt(document.getElementById('expAmount').value),
-                category: document.getElementById('expCategory').value,
-                desc: document.getElementById('expDesc').value
+                date: date,
+                amount: amount,
+                category: category,
+                desc: desc
             });
-            save(); update();
+            save();
+            update();
             document.getElementById('expAmount').value = '';
             document.getElementById('expDesc').value = '';
-        });
+            showStatus('expenseStatus', '-' + amount.toLocaleString() + ' DA (' + category + ') added!', true);
+        };
+
+        function showStatus(id, msg, ok) {
+            var el = document.getElementById(id);
+            el.className = 'status ' + (ok ? 'status-ok' : 'status-err');
+            el.textContent = msg;
+            setTimeout(function() { el.textContent = ''; el.className = ''; }, 3000);
+        }
 
         function save() {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
+            try { localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions)); } catch(e) {}
         }
 
         function deleteTx(id) {
-            transactions = transactions.filter(t => t.id !== id);
-            save(); update();
+            transactions = transactions.filter(function(t) { return t.id !== id; });
+            save();
+            update();
         }
 
         function update() {
-            const income = transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
-            const parts = transactions.filter(t => t.type === 'expense' && t.category === 'parts').reduce((s, t) => s + t.amount, 0);
-            const tools = transactions.filter(t => t.type === 'expense' && t.category === 'tools').reduce((s, t) => s + t.amount, 0);
-            const transport = transactions.filter(t => t.type === 'expense' && t.category === 'transport').reduce((s, t) => s + t.amount, 0);
-            const overhead = transactions.filter(t => t.type === 'expense' && t.category === 'overhead').reduce((s, t) => s + t.amount, 0);
-            const expenses = parts + tools + transport + overhead;
+            var income = 0, parts = 0, tools = 0, transport = 0, overhead = 0;
+            for (var i = 0; i < transactions.length; i++) {
+                var t = transactions[i];
+                if (t.type === 'income') income += t.amount;
+                else if (t.category === 'parts') parts += t.amount;
+                else if (t.category === 'tools') tools += t.amount;
+                else if (t.category === 'transport') transport += t.amount;
+                else if (t.category === 'overhead') overhead += t.amount;
+            }
+            var expenses = parts + tools + transport + overhead;
 
             document.getElementById('totalIncome').textContent = income.toLocaleString() + ' DA';
             document.getElementById('totalExpenses').textContent = expenses.toLocaleString() + ' DA';
@@ -243,31 +280,28 @@
             document.getElementById('totalTransport').textContent = transport.toLocaleString() + ' DA';
             document.getElementById('totalOverhead').textContent = overhead.toLocaleString() + ' DA';
 
-            const body = document.getElementById('txBody');
+            var body = document.getElementById('txBody');
             body.innerHTML = '';
-            const sorted = [...transactions].sort((a, b) => b.date.localeCompare(a.date));
-            for (const t of sorted) {
-                const catBadge = t.type === 'income'
-                    ? '<span class="cat-badge cat-income">Income</span>'
-                    : `<span class="cat-badge cat-${t.category}">${t.category}</span>`;
-                const desc = t.type === 'income' ? (t.from || '') : (t.desc || '');
-                body.innerHTML += `<tr>
-                    <td>${t.date}</td>
-                    <td>${t.type === 'income' ? 'Income' : 'Expense'}</td>
-                    <td>${catBadge}</td>
-                    <td>${desc}</td>
-                    <td style="color:${t.type === 'income' ? '#3fb950' : '#f85149'}">${t.type === 'income' ? '+' : '-'}${t.amount.toLocaleString()} DA</td>
-                    <td><button class="delete-btn" onclick="deleteTx(${t.id})">&times;</button></td>
-                </tr>`;
+            var sorted = transactions.slice().sort(function(a, b) { return b.date.localeCompare(a.date); });
+            for (var i = 0; i < sorted.length; i++) {
+                var t = sorted[i];
+                var catLabel = t.type === 'income' ? '<span class="cat-badge cat-income">income</span>' : '<span class="cat-badge cat-' + t.category + '">' + t.category + '</span>';
+                var desc = t.type === 'income' ? (t.from || '') : (t.desc || '');
+                var color = t.type === 'income' ? '#3fb950' : '#f85149';
+                var sign = t.type === 'income' ? '+' : '-';
+                body.innerHTML += '<tr><td>' + t.date + '</td><td>' + (t.type === 'income' ? 'Income' : 'Expense') + '</td><td>' + catLabel + '</td><td>' + desc + '</td><td style="color:' + color + '">' + sign + t.amount.toLocaleString() + ' DA</td><td><button class="delete-btn" onclick="deleteTx(' + t.id + ')">&times;</button></td></tr>';
             }
+
+            var emptyMsg = document.getElementById('emptyMsg');
+            if (emptyMsg) emptyMsg.style.display = transactions.length === 0 ? 'block' : 'none';
             drawChart();
         }
 
         function drawChart() {
-            const canvas = document.getElementById('chart');
+            var canvas = document.getElementById('chart');
             if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            const rect = canvas.parentElement.getBoundingClientRect();
+            var ctx = canvas.getContext('2d');
+            var rect = canvas.parentElement.getBoundingClientRect();
             canvas.width = rect.width;
             canvas.height = rect.height;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -280,51 +314,57 @@
                 return;
             }
 
-            const days = {};
-            for (const t of transactions) {
+            var days = {};
+            for (var i = 0; i < transactions.length; i++) {
+                var t = transactions[i];
                 if (!days[t.date]) days[t.date] = { income: 0, expense: 0 };
                 if (t.type === 'income') days[t.date].income += t.amount;
                 else days[t.date].expense += t.amount;
             }
 
-            const dates = Object.keys(days).sort();
-            const maxVal = Math.max(...dates.map(d => Math.max(days[d].income, days[d].expense)), 1);
-            const padding = { top: 20, right: 20, bottom: 40, left: 60 };
-            const w = canvas.width - padding.left - padding.right;
-            const h = canvas.height - padding.top - padding.bottom;
-            const barW = Math.min(w / dates.length * 0.4, 30);
-            const gap = w / dates.length;
+            var dates = Object.keys(days).sort();
+            var maxVal = 1;
+            for (var i = 0; i < dates.length; i++) {
+                var v = Math.max(days[dates[i]].income, days[dates[i]].expense);
+                if (v > maxVal) maxVal = v;
+            }
+
+            var pad = { top: 20, right: 20, bottom: 40, left: 60 };
+            var w = canvas.width - pad.left - pad.right;
+            var h = canvas.height - pad.top - pad.bottom;
+            var barW = Math.min(w / dates.length * 0.4, 30);
+            var gap = w / dates.length;
 
             ctx.strokeStyle = '#21262d';
             ctx.lineWidth = 1;
-            for (let i = 0; i <= 4; i++) {
-                const y = padding.top + (h / 4) * i;
+            for (var i = 0; i <= 4; i++) {
+                var y = pad.top + (h / 4) * i;
                 ctx.beginPath();
-                ctx.moveTo(padding.left, y);
-                ctx.lineTo(canvas.width - padding.right, y);
+                ctx.moveTo(pad.left, y);
+                ctx.lineTo(canvas.width - pad.right, y);
                 ctx.stroke();
                 ctx.fillStyle = '#8b949e';
                 ctx.font = '11px Segoe UI';
                 ctx.textAlign = 'right';
-                ctx.fillText(Math.round(maxVal * (1 - i / 4)).toLocaleString(), padding.left - 8, y + 4);
+                ctx.fillText(Math.round(maxVal * (1 - i / 4)).toLocaleString(), pad.left - 8, y + 4);
             }
 
-            dates.forEach((d, i) => {
-                const x = padding.left + i * gap + gap / 2;
-                const incH = (days[d].income / maxVal) * h;
-                const expH = (days[d].expense / maxVal) * h;
+            for (var i = 0; i < dates.length; i++) {
+                var d = dates[i];
+                var x = pad.left + i * gap + gap / 2;
+                var incH = (days[d].income / maxVal) * h;
+                var expH = (days[d].expense / maxVal) * h;
 
                 ctx.fillStyle = '#3fb950';
-                ctx.fillRect(x - barW - 2, padding.top + h - incH, barW, incH);
+                ctx.fillRect(x - barW - 2, pad.top + h - incH, barW, incH);
                 ctx.fillStyle = '#f85149';
-                ctx.fillRect(x + 2, padding.top + h - expH, barW, expH);
+                ctx.fillRect(x + 2, pad.top + h - expH, barW, expH);
 
                 ctx.fillStyle = '#8b949e';
                 ctx.font = '10px Segoe UI';
                 ctx.textAlign = 'center';
-                const label = d.slice(5);
-                ctx.fillText(label, x, canvas.height - padding.bottom + 15);
-            });
+                ctx.fillText(d.slice(5), x, canvas.height - pad.bottom + 15);
+            }
 
             ctx.fillStyle = '#3fb950';
             ctx.fillRect(canvas.width - 180, 10, 12, 12);
@@ -339,66 +379,77 @@
         }
 
         function showTab(tab) {
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
-            document.getElementById('tab-' + tab).classList.remove('hidden');
-            event.target.classList.add('active');
+            var tabs = ['log', 'history', 'chart'];
+            for (var i = 0; i < tabs.length; i++) {
+                var el = document.getElementById('tab-' + tabs[i]);
+                var btn = document.getElementById('tabBtn-' + tabs[i]);
+                if (tabs[i] === tab) {
+                    el.classList.remove('hidden');
+                    btn.classList.add('active');
+                } else {
+                    el.classList.add('hidden');
+                    btn.classList.remove('active');
+                }
+            }
             if (tab === 'chart') setTimeout(drawChart, 50);
         }
 
         function loadFromObsidian() {
             if (typeof window.obsidianData === 'undefined') {
-                alert('obsidian_data.js not found. Run the Export-ObsidianData.ps1 script first.');
+                alert('obsidian_data.js not loaded. Make sure the file exists at documents/07_Time_Management/obsidian_data.js');
                 return;
             }
-            let loaded = 0;
-            for (const note of window.obsidianData.dailyNotes || []) {
-                if (note.income_da && parseInt(note.income_da) > 0) {
-                    const exists = transactions.some(t => t.type === 'income' && t.date === note.date);
+            var loaded = 0;
+            var notes = window.obsidianData.daily || [];
+            for (var i = 0; i < notes.length; i++) {
+                var note = notes[i];
+                if (note.incomeDA && parseInt(note.incomeDA) > 0) {
+                    var exists = false;
+                    for (var j = 0; j < transactions.length; j++) {
+                        if (transactions[j].type === 'income' && transactions[j].date === note.date) { exists = true; break; }
+                    }
                     if (!exists) {
-                        transactions.push({
-                            id: Date.now() + loaded,
-                            type: 'income',
-                            date: note.date,
-                            amount: parseInt(note.income_da),
-                            from: 'Obsidian daily note',
-                            notes: ''
-                        });
+                        transactions.push({ id: Date.now() + loaded, type: 'income', date: note.date, amount: parseInt(note.incomeDA), from: 'Obsidian daily note', notes: '' });
                         loaded++;
                     }
                 }
-                const cats = ['expense_parts', 'expense_tools', 'expense_transport', 'expense_overhead'];
-                const catMap = { expense_parts: 'parts', expense_tools: 'tools', expense_transport: 'transport', expense_overhead: 'overhead' };
-                for (const cat of cats) {
-                    if (note[cat] && parseInt(note[cat]) > 0) {
-                        const exists = transactions.some(t => t.type === 'expense' && t.date === note.date && t.category === catMap[cat]);
+                var cats = [
+                    { key: 'expenseParts', cat: 'parts' },
+                    { key: 'expenseTools', cat: 'tools' },
+                    { key: 'expenseTransport', cat: 'transport' },
+                    { key: 'expenseOverhead', cat: 'overhead' }
+                ];
+                for (var c = 0; c < cats.length; c++) {
+                    if (note[cats[c].key] && parseInt(note[cats[c].key]) > 0) {
+                        var exists = false;
+                        for (var j = 0; j < transactions.length; j++) {
+                            if (transactions[j].type === 'expense' && transactions[j].date === note.date && transactions[j].category === cats[c].cat) { exists = true; break; }
+                        }
                         if (!exists) {
-                            transactions.push({
-                                id: Date.now() + loaded,
-                                type: 'expense',
-                                date: note.date,
-                                amount: parseInt(note[cat]),
-                                category: catMap[cat],
-                                desc: 'Obsidian daily note'
-                            });
+                            transactions.push({ id: Date.now() + loaded, type: 'expense', date: note.date, amount: parseInt(note[cats[c].key]), category: cats[c].cat, desc: 'Obsidian daily note' });
                             loaded++;
                         }
                     }
                 }
             }
-            save(); update();
-            alert(`Loaded ${loaded} transactions from Obsidian notes.`);
+            save();
+            update();
+            alert('Loaded ' + loaded + ' transactions from Obsidian notes.');
         }
 
         function exportCSV() {
-            let csv = 'Date,Type,Category,Description,Amount (DA)\n';
-            for (const t of transactions.sort((a, b) => a.date.localeCompare(b.date))) {
-                const cat = t.type === 'income' ? 'income' : t.category;
-                const desc = t.type === 'income' ? (t.from || '') : (t.desc || '');
-                csv += `${t.date},${t.type},"${cat}","${desc.replace(/"/g, '""')}",${t.type === 'income' ? t.amount : -t.amount}\n`;
+            if (transactions.length === 0) { alert('No transactions to export.'); return; }
+            var csv = 'Date,Type,Category,Description,Amount (DA)\n';
+            var sorted = transactions.slice().sort(function(a, b) { return a.date.localeCompare(b.date); });
+            for (var i = 0; i < sorted.length; i++) {
+                var t = sorted[i];
+                var cat = t.type === 'income' ? 'income' : t.category;
+                var desc = t.type === 'income' ? (t.from || '') : (t.desc || '');
+                var amt = t.type === 'income' ? t.amount : -t.amount;
+                csv += t.date + ',' + t.type + ',"' + cat + '","' + desc.replace(/"/g, '""') + '",' + amt + '\n';
             }
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const a = document.createElement('a');
+            var blob = new Blob([csv], { type: 'text/csv' });
+            var a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
             a.download = 'ITS_Finance_' + new Date().toISOString().slice(0, 10) + '.csv';
             a.click();
@@ -407,7 +458,8 @@
         function clearAll() {
             if (confirm('Delete ALL finance data? This cannot be undone.')) {
                 transactions = [];
-                save(); update();
+                save();
+                update();
             }
         }
 
