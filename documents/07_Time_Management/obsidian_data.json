@@ -433,41 +433,41 @@
                       "revenueDA":  ""
                   },
                   {
-                      "expenseTransport":  "0",
-                      "expenseParts":  "0",
+                      "expenseTransport":  "1000",
+                      "expenseParts":  "300",
                       "hoursWorked":  "9",
                       "focus":  "3 PCB repairs (9h billable)",
-                      "yieldDAHR":  "",
-                      "incomeDA":  "0",
+                      "yieldDAHR":  "1000",
+                      "incomeDA":  "1000",
                       "energy":  "fresh",
                       "tasksTotal":  9,
-                      "expenseOverhead":  "0",
+                      "expenseOverhead":  "100",
                       "tasksChecked":  5,
                       "date":  "2026-08-24",
-                      "expenseTools":  "0",
+                      "expenseTools":  "200",
                       "hoursBillable":  "9",
                       "dayNum":  "24",
                       "weekNum":  "4",
-                      "revenueDA":  "",
+                      "revenueDA":  "4000",
                       "status":  "in-progress"
                   },
                   {
-                      "expenseTransport":  "0",
-                      "expenseParts":  "0",
-                      "hoursWorked":  "",
+                      "expenseTransport":  "5000",
+                      "expenseParts":  "2000",
+                      "hoursWorked":  "10",
                       "focus":  "3D Design + PCB Repair 2 + PCB Repair 3 + Build Prototype (12h billable)",
-                      "yieldDAHR":  "",
-                      "incomeDA":  "0",
+                      "yieldDAHR":  "1000",
+                      "incomeDA":  "1000",
                       "energy":  "fresh",
                       "tasksTotal":  9,
-                      "expenseOverhead":  "0",
+                      "expenseOverhead":  "100",
                       "tasksChecked":  2,
                       "date":  "2026-08-25",
-                      "expenseTools":  "0",
-                      "hoursBillable":  "",
+                      "expenseTools":  "1000",
+                      "hoursBillable":  "10",
                       "dayNum":  "25",
                       "weekNum":  "4",
-                      "revenueDA":  ""
+                      "revenueDA":  "500"
                   },
                   {
                       "expenseTransport":  "0",
@@ -2720,11 +2720,11 @@
                        "week":  "20"
                    }
                ],
-    "exported":  "2026-08-25 09:21:23",
+    "exported":  "2026-08-25 09:46:37",
     "source":  "Obsidian 05_Daily_Notes + 06_Weekly_Notes",
     "summary":  {
                     "totalWeeks":  20,
                     "totalDays":  137,
-                    "daysWithData":  15
+                    "daysWithData":  16
                 }
 }
