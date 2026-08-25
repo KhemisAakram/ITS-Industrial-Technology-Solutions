@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ITS Finance Tracker</title>
+    <script src="../obsidian_data.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: #0d1117; color: #c9d1d9; padding: 20px; }
+        h1 { color: #58a6ff; margin-bottom: 5px; font-size: 1.8em; }
+        .subtitle { color: #8b949e; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-bottom: 25px; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 18px; }
+        .card h3 { color: #8b949e; font-size: 0.85em; text-transform: uppercase; margin-bottom: 8px; }
+        .card .value { font-size: 1.8em; font-weight: bold; }
+        .income { color: #3fb950; }
+        .expense { color: #f85149; }
+        .balance { color: #58a6ff; }
+        .parts { color: #d29922; }
+        .tools { color: #bc8cff; }
+        .transport { color: #f0883e; }
+        .overhead { color: #8b949e; }
+        .section { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 20px; margin-bottom: 20px; }
+        .section h2 { color: #58a6ff; margin-bottom: 15px; font-size: 1.2em; }
+        form { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .full { grid-column: 1 / -1; }
+        label { color: #8b949e; font-size: 0.85em; display: block; margin-bottom: 4px; }
+        input, select { width: 100%; padding: 8px 12px; background: #0d1117; border: 1px solid #30363d; border-radius: 6px; color: #c9d1d9; font-size: 0.95em; }
+        input:focus, select:focus { border-color: #58a6ff; outline: none; }
+        button { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 0.95em; font-weight: 600; }
+        .btn-income { background: #238636; color: white; }
+        .btn-expense { background: #da3633; color: white; }
+        .btn-export { background: #1f6feb; color: white; }
+        .btn-clear { background: #30363d; color: #c9d1d9; }
+        .btn-load { background: #8957e5; color: white; }
+        .btn-group { display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid #21262d; }
+        th { color: #8b949e; font-size: 0.85em; text-transform: uppercase; }
+        td { font-size: 0.9em; }
+        .cat-badge { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.8em; font-weight: 600; }
+        .cat-parts { background: #d2992222; color: #d29922; }
+        .cat-tools { background: #bc8cff22; color: #bc8cff; }
+        .cat-transport { background: #f0883e22; color: #f0883e; }
+        .cat-overhead { background: #8b949e22; color: #8b949e; }
+        .cat-income { background: #3fb95022; color: #3fb950; }
+        .delete-btn { background: none; border: none; color: #f85149; cursor: pointer; font-size: 1.1em; padding: 2px 6px; }
+        .delete-btn:hover { background: #f8514922; border-radius: 4px; }
+        .chart-container { position: relative; height: 300px; margin-top: 15px; }
+        canvas { width: 100% !important; height: 100% !important; }
+        .tabs { display: flex; gap: 5px; margin-bottom: 15px; }
+        .tab { padding: 8px 16px; background: #21262d; border: 1px solid #30363d; border-radius: 6px; color: #8b949e; cursor: pointer; }
+        .tab.active { background: #1f6feb; color: white; border-color: #1f6feb; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+    <h1>ITS Finance Tracker</h1>
+    <p class="subtitle">Income & expenses from 24 Aug 2026 · Target yield >= 1,000 DA/hr</p>
+
+    <div class="grid">
+        <div class="card">
+            <h3>Total Income</h3>
+            <div class="value income" id="totalIncome">0 DA</div>
+        </div>
+        <div class="card">
+            <h3>Total Expenses</h3>
+            <div class="value expense" id="totalExpenses">0 DA</div>
+        </div>
+        <div class="card">
+            <h3>Net Balance</h3>
+            <div class="value balance" id="netBalance">0 DA</div>
+        </div>
+        <div class="card">
+            <h3>Transactions</h3>
+            <div class="value" id="txCount">0</div>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <h3>Parts & Components</h3>
+            <div class="value parts" id="totalParts">0 DA</div>
+        </div>
+        <div class="card">
+            <h3>Tools & Equipment</h3>
+            <div class="value tools" id="totalTools">0 DA</div>
+        </div>
+        <div class="card">
+            <h3>Transport</h3>
+            <div class="value transport" id="totalTransport">0 DA</div>
+        </div>
+        <div class="card">
+            <h3>Overhead</h3>
+            <div class="value overhead" id="totalOverhead">0 DA</div>
+        </div>
+    </div>
+
+    <div class="tabs">
+        <div class="tab active" onclick="showTab('log')">Log Transaction</div>
+        <div class="tab" onclick="showTab('history')">History</div>
+        <div class="tab" onclick="showTab('chart')">Chart</div>
+    </div>
+
+    <div id="tab-log" class="section">
+        <h2>Log Income</h2>
+        <form id="incomeForm">
+            <div>
+                <label>Date</label>
+                <input type="date" id="incDate" required>
+            </div>
+            <div>
+                <label>Amount (DA)</label>
+                <input type="number" id="incAmount" placeholder="3000" min="0" required>
+            </div>
+            <div>
+                <label>From (client/job)</label>
+                <input type="text" id="incFrom" placeholder="PCB-001 repair">
+            </div>
+            <div>
+                <label>Notes</label>
+                <input type="text" id="incNotes" placeholder="Optional">
+            </div>
+            <div class="full">
+                <button type="submit" class="btn-income">+ Add Income</button>
+            </div>
+        </form>
+
+        <h2 style="margin-top:25px;">Log Expense</h2>
+        <form id="expenseForm">
+            <div>
+                <label>Date</label>
+                <input type="date" id="expDate" required>
+            </div>
+            <div>
+                <label>Amount (DA)</label>
+                <input type="number" id="expAmount" placeholder="500" min="0" required>
+            </div>
+            <div>
+                <label>Category</label>
+                <select id="expCategory" required>
+                    <option value="parts">Parts & components</option>
+                    <option value="tools">Tools & equipment</option>
+                    <option value="transport">Transport</option>
+                    <option value="overhead">Overhead / fixed costs</option>
+                </select>
+            </div>
+            <div>
+                <label>Description</label>
+                <input type="text" id="expDesc" placeholder="What was bought">
+            </div>
+            <div class="full">
+                <button type="submit" class="btn-expense">+ Add Expense</button>
+            </div>
+        </form>
+    </div>
+
+    <div id="tab-history" class="section hidden">
+        <h2>Transaction History</h2>
+        <table>
+            <thead>
+                <tr><th>Date</th><th>Type</th><th>Category</th><th>Description</th><th>Amount</th><th></th></tr>
+            </thead>
+            <tbody id="txBody"></tbody>
+        </table>
+    </div>
+
+    <div id="tab-chart" class="section hidden">
+        <h2>Income vs Expenses Over Time</h2>
+        <div class="chart-container">
+            <canvas id="chart"></canvas>
+        </div>
+    </div>
+
+    <div class="btn-group">
+        <button class="btn-load" onclick="loadFromObsidian()">Load from Obsidian Notes</button>
+        <button class="btn-export" onclick="exportCSV()">Export CSV</button>
+        <button class="btn-clear" onclick="clearAll()">Clear All Data</button>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'its_finance_data';
+        let transactions = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+
+        document.getElementById('incDate').valueAsDate = new Date();
+        document.getElementById('expDate').valueAsDate = new Date();
+
+        document.getElementById('incomeForm').addEventListener('submit', e => {
+            e.preventDefault();
+            transactions.push({
+                id: Date.now(),
+                type: 'income',
+                date: document.getElementById('incDate').value,
+                amount: parseInt(document.getElementById('incAmount').value),
+                from: document.getElementById('incFrom').value,
+                notes: document.getElementById('incNotes').value
+            });
+            save(); update();
+            document.getElementById('incAmount').value = '';
+            document.getElementById('incFrom').value = '';
+            document.getElementById('incNotes').value = '';
+        });
+
+        document.getElementById('expenseForm').addEventListener('submit', e => {
+            e.preventDefault();
+            transactions.push({
+                id: Date.now(),
+                type: 'expense',
+                date: document.getElementById('expDate').value,
+                amount: parseInt(document.getElementById('expAmount').value),
+                category: document.getElementById('expCategory').value,
+                desc: document.getElementById('expDesc').value
+            });
+            save(); update();
+            document.getElementById('expAmount').value = '';
+            document.getElementById('expDesc').value = '';
+        });
+
+        function save() {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(transactions));
+        }
+
+        function deleteTx(id) {
+            transactions = transactions.filter(t => t.id !== id);
+            save(); update();
+        }
+
+        function update() {
+            const income = transactions.filter(t => t.type === 'income').reduce((s, t) => s + t.amount, 0);
+            const parts = transactions.filter(t => t.type === 'expense' && t.category === 'parts').reduce((s, t) => s + t.amount, 0);
+            const tools = transactions.filter(t => t.type === 'expense' && t.category === 'tools').reduce((s, t) => s + t.amount, 0);
+            const transport = transactions.filter(t => t.type === 'expense' && t.category === 'transport').reduce((s, t) => s + t.amount, 0);
+            const overhead = transactions.filter(t => t.type === 'expense' && t.category === 'overhead').reduce((s, t) => s + t.amount, 0);
+            const expenses = parts + tools + transport + overhead;
+
+            document.getElementById('totalIncome').textContent = income.toLocaleString() + ' DA';
+            document.getElementById('totalExpenses').textContent = expenses.toLocaleString() + ' DA';
+            document.getElementById('netBalance').textContent = (income - expenses).toLocaleString() + ' DA';
+            document.getElementById('txCount').textContent = transactions.length;
+            document.getElementById('totalParts').textContent = parts.toLocaleString() + ' DA';
+            document.getElementById('totalTools').textContent = tools.toLocaleString() + ' DA';
+            document.getElementById('totalTransport').textContent = transport.toLocaleString() + ' DA';
+            document.getElementById('totalOverhead').textContent = overhead.toLocaleString() + ' DA';
+
+            const body = document.getElementById('txBody');
+            body.innerHTML = '';
+            const sorted = [...transactions].sort((a, b) => b.date.localeCompare(a.date));
+            for (const t of sorted) {
+                const catBadge = t.type === 'income'
+                    ? '<span class="cat-badge cat-income">Income</span>'
+                    : `<span class="cat-badge cat-${t.category}">${t.category}</span>`;
+                const desc = t.type === 'income' ? (t.from || '') : (t.desc || '');
+                body.innerHTML += `<tr>
+                    <td>${t.date}</td>
+                    <td>${t.type === 'income' ? 'Income' : 'Expense'}</td>
+                    <td>${catBadge}</td>
+                    <td>${desc}</td>
+                    <td style="color:${t.type === 'income' ? '#3fb950' : '#f85149'}">${t.type === 'income' ? '+' : '-'}${t.amount.toLocaleString()} DA</td>
+                    <td><button class="delete-btn" onclick="deleteTx(${t.id})">&times;</button></td>
+                </tr>`;
+            }
+            drawChart();
+        }
+
+        function drawChart() {
+            const canvas = document.getElementById('chart');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            const rect = canvas.parentElement.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (transactions.length === 0) {
+                ctx.fillStyle = '#8b949e';
+                ctx.font = '14px Segoe UI';
+                ctx.textAlign = 'center';
+                ctx.fillText('No data yet', canvas.width / 2, canvas.height / 2);
+                return;
+            }
+
+            const days = {};
+            for (const t of transactions) {
+                if (!days[t.date]) days[t.date] = { income: 0, expense: 0 };
+                if (t.type === 'income') days[t.date].income += t.amount;
+                else days[t.date].expense += t.amount;
+            }
+
+            const dates = Object.keys(days).sort();
+            const maxVal = Math.max(...dates.map(d => Math.max(days[d].income, days[d].expense)), 1);
+            const padding = { top: 20, right: 20, bottom: 40, left: 60 };
+            const w = canvas.width - padding.left - padding.right;
+            const h = canvas.height - padding.top - padding.bottom;
+            const barW = Math.min(w / dates.length * 0.4, 30);
+            const gap = w / dates.length;
+
+            ctx.strokeStyle = '#21262d';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= 4; i++) {
+                const y = padding.top + (h / 4) * i;
+                ctx.beginPath();
+                ctx.moveTo(padding.left, y);
+                ctx.lineTo(canvas.width - padding.right, y);
+                ctx.stroke();
+                ctx.fillStyle = '#8b949e';
+                ctx.font = '11px Segoe UI';
+                ctx.textAlign = 'right';
+                ctx.fillText(Math.round(maxVal * (1 - i / 4)).toLocaleString(), padding.left - 8, y + 4);
+            }
+
+            dates.forEach((d, i) => {
+                const x = padding.left + i * gap + gap / 2;
+                const incH = (days[d].income / maxVal) * h;
+                const expH = (days[d].expense / maxVal) * h;
+
+                ctx.fillStyle = '#3fb950';
+                ctx.fillRect(x - barW - 2, padding.top + h - incH, barW, incH);
+                ctx.fillStyle = '#f85149';
+                ctx.fillRect(x + 2, padding.top + h - expH, barW, expH);
+
+                ctx.fillStyle = '#8b949e';
+                ctx.font = '10px Segoe UI';
+                ctx.textAlign = 'center';
+                const label = d.slice(5);
+                ctx.fillText(label, x, canvas.height - padding.bottom + 15);
+            });
+
+            ctx.fillStyle = '#3fb950';
+            ctx.fillRect(canvas.width - 180, 10, 12, 12);
+            ctx.fillStyle = '#c9d1d9';
+            ctx.font = '12px Segoe UI';
+            ctx.textAlign = 'left';
+            ctx.fillText('Income', canvas.width - 164, 20);
+            ctx.fillStyle = '#f85149';
+            ctx.fillRect(canvas.width - 100, 10, 12, 12);
+            ctx.fillStyle = '#c9d1d9';
+            ctx.fillText('Expenses', canvas.width - 84, 20);
+        }
+
+        function showTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.section').forEach(s => s.classList.add('hidden'));
+            document.getElementById('tab-' + tab).classList.remove('hidden');
+            event.target.classList.add('active');
+            if (tab === 'chart') setTimeout(drawChart, 50);
+        }
+
+        function loadFromObsidian() {
+            if (typeof window.obsidianData === 'undefined') {
+                alert('obsidian_data.js not found. Run the Export-ObsidianData.ps1 script first.');
+                return;
+            }
+            let loaded = 0;
+            for (const note of window.obsidianData.dailyNotes || []) {
+                if (note.income_da && parseInt(note.income_da) > 0) {
+                    const exists = transactions.some(t => t.type === 'income' && t.date === note.date);
+                    if (!exists) {
+                        transactions.push({
+                            id: Date.now() + loaded,
+                            type: 'income',
+                            date: note.date,
+                            amount: parseInt(note.income_da),
+                            from: 'Obsidian daily note',
+                            notes: ''
+                        });
+                        loaded++;
+                    }
+                }
+                const cats = ['expense_parts', 'expense_tools', 'expense_transport', 'expense_overhead'];
+                const catMap = { expense_parts: 'parts', expense_tools: 'tools', expense_transport: 'transport', expense_overhead: 'overhead' };
+                for (const cat of cats) {
+                    if (note[cat] && parseInt(note[cat]) > 0) {
+                        const exists = transactions.some(t => t.type === 'expense' && t.date === note.date && t.category === catMap[cat]);
+                        if (!exists) {
+                            transactions.push({
+                                id: Date.now() + loaded,
+                                type: 'expense',
+                                date: note.date,
+                                amount: parseInt(note[cat]),
+                                category: catMap[cat],
+                                desc: 'Obsidian daily note'
+                            });
+                            loaded++;
+                        }
+                    }
+                }
+            }
+            save(); update();
+            alert(`Loaded ${loaded} transactions from Obsidian notes.`);
+        }
+
+        function exportCSV() {
+            let csv = 'Date,Type,Category,Description,Amount (DA)\n';
+            for (const t of transactions.sort((a, b) => a.date.localeCompare(b.date))) {
+                const cat = t.type === 'income' ? 'income' : t.category;
+                const desc = t.type === 'income' ? (t.from || '') : (t.desc || '');
+                csv += `${t.date},${t.type},"${cat}","${desc.replace(/"/g, '""')}",${t.type === 'income' ? t.amount : -t.amount}\n`;
+            }
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'ITS_Finance_' + new Date().toISOString().slice(0, 10) + '.csv';
+            a.click();
+        }
+
+        function clearAll() {
+            if (confirm('Delete ALL finance data? This cannot be undone.')) {
+                transactions = [];
+                save(); update();
+            }
+        }
+
+        window.addEventListener('resize', drawChart);
+        update();
+    </script>
+</body>
+</html>
