@@ -17,9 +17,9 @@ tags:
 
 ## In Progress
 
-- [ ] PCB Repair 2 → [[Client_Jobs]]
-- [ ] PCB Repair 3 → [[Client_Jobs]]
-- [ ] PCB Repair 4 → own project
+- [ ] PCB Repair 4 → [[Client_Jobs]]
+- [ ] PCB Repair 5 → [[Client_Jobs]]
+- [ ] 3D Design and Print PM → own project
 
 
 ## Done
