@@ -27,6 +27,7 @@ Existing clients served well on schedule — **no new prospecting**. Every job l
 | MXR_001 | —            | design + print part — egg mixer    | High     | 1,200 DA  | in progress |       |              |
 | MXR_002 | —            | design + print part — meat mixer   | High     |           | pending     |       |              |
 | SUP_001 | —            | PCB wash machine — supply order    | High     |           | pending     |       |              |
+| 3DP_003 | —            | 3D print job — 6 parts (design+print) | High  | 15,400 DA | in progress | 3     | 15,400       |
 
 ## Rules
 - New jobs from existing/referred clients only (you're not hunting).
