@@ -475,8 +475,8 @@ window.obsidianData = {
                       "expenseParts":  "4000",
                       "hoursWorked":  "12",
                       "focus":  "PCB Repair 4 + PCB Repair 5 + 3D Design and Print PM (9h billable)",
-                      "yieldDAHR":  "5133",
-                      "incomeDA":  "15400",
+                      "yieldDAHR":  "3593",
+                      "incomeDA":  "10780",
                       "energy":  "fresh",
                       "tasksTotal":  9,
                       "expenseOverhead":  "0",
@@ -486,7 +486,7 @@ window.obsidianData = {
                       "hoursBillable":  "12",
                       "dayNum":  "26",
                       "weekNum":  "4",
-                      "revenueDA":  "15400"
+                      "revenueDA":  "10780"
                   },
                   {
                       "expenseTransport":  "0",
@@ -2721,7 +2721,7 @@ window.obsidianData = {
                        "week":  "20"
                    }
                ],
-    "exported":  "2026-08-26 06:40:02",
+    "exported":  "2026-08-26 07:04:32",
     "source":  "Obsidian 05_Daily_Notes + 06_Weekly_Notes",
     "summary":  {
                     "totalWeeks":  20,
