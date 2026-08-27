@@ -18,8 +18,8 @@ tags:
 ## In Progress
 
 - [ ] 3D Design and Print PM → own project
-- [ ] PCB Repair 6 → [[Client_Jobs]]
 - [ ] PCB Repair 7 → [[Client_Jobs]]
+- [ ] Build Prototype → [[Client_Jobs]]
 
 
 ## Done
@@ -28,6 +28,7 @@ tags:
 - [x] PCB Repair 3 → [[Client_Jobs]] (3h, 2026-08-26)
 - [x] PCB Repair 4 → [[Client_Jobs]] (4h, 2026-08-26)
 - [x] PCB Repair 5 → [[Client_Jobs]] (3h, 2026-08-26)
+- [x] PCB Repair 6 → [[Client_Jobs]] (30 min, 2026-08-27)
 
 
 

@@ -477,9 +477,9 @@
                       "yieldDAHR":  "1091",
                       "incomeDA":  "14180",
                       "energy":  "fresh",
-                      "tasksTotal":  12,
+                      "tasksTotal":  10,
                       "expenseOverhead":  "0",
-                      "tasksChecked":  10,
+                      "tasksChecked":  8,
                       "date":  "2026-08-26",
                       "expenseTools":  "0",
                       "hoursBillable":  "13",
@@ -490,32 +490,32 @@
                   {
                       "expenseTransport":  "0",
                       "expenseParts":  "0",
+                      "hoursWorked":  "1",
+                      "focus":  "PCB Repair 6 + PCB Repair 7 + Build Prototype + 3D Design and Print PM (12h billable)",
+                      "yieldDAHR":  "0",
+                      "incomeDA":  "0",
+                      "energy":  "fresh",
+                      "tasksTotal":  9,
+                      "expenseOverhead":  "300",
+                      "tasksChecked":  8,
+                      "date":  "2026-08-27",
+                      "expenseTools":  "0",
+                      "hoursBillable":  "0.5",
+                      "dayNum":  "27",
+                      "weekNum":  "4",
+                      "revenueDA":  "0"
+                  },
+                  {
+                      "expenseTransport":  "0",
+                      "expenseParts":  "0",
                       "hoursWorked":  "",
-                      "focus":  "PCB Repair 6 + PCB Repair 7 + Build Prototype (9h billable)",
+                      "focus":  "PCB Repair 7 + Build Prototype + 3D Design and Print PM (9h billable)",
                       "yieldDAHR":  "",
                       "incomeDA":  "0",
                       "energy":  "",
                       "tasksTotal":  9,
                       "expenseOverhead":  "0",
                       "tasksChecked":  1,
-                      "date":  "2026-08-27",
-                      "expenseTools":  "0",
-                      "hoursBillable":  "",
-                      "dayNum":  "27",
-                      "weekNum":  "4",
-                      "revenueDA":  ""
-                  },
-                  {
-                      "expenseTransport":  "0",
-                      "expenseParts":  "0",
-                      "hoursWorked":  "",
-                      "focus":  "Mach3 bench test - workshop electrical baseline",
-                      "yieldDAHR":  "",
-                      "incomeDA":  "0",
-                      "energy":  "",
-                      "tasksTotal":  9,
-                      "expenseOverhead":  "0",
-                      "tasksChecked":  0,
                       "date":  "2026-08-28",
                       "expenseTools":  "0",
                       "hoursBillable":  "",
@@ -2720,11 +2720,11 @@
                        "week":  "20"
                    }
                ],
-    "exported":  "2026-08-26 19:41:22",
+    "exported":  "2026-08-27 21:40:37",
     "source":  "Obsidian 05_Daily_Notes + 06_Weekly_Notes",
     "summary":  {
                     "totalWeeks":  20,
                     "totalDays":  137,
-                    "daysWithData":  18
+                    "daysWithData":  19
                 }
 }
