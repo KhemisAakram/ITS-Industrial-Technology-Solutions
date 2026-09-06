@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Submit Your Project — ITS</title>
+<link rel="icon" type="image/png" href="IMAGES/LOGO%20BGR.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0C0E;--bg-2:#121316;--card:#16181C;--card-2:#1C1F24;
+  --border:#262A31;--border-hi:#333947;
+  --orange:#FF9F00;--orange-glow:rgba(255,159,0,0.25);
+  --text:#F5F6F7;--muted:#9AA3AF;--dim:#6B7480;
+  --green:#22C55E;--red:#EF4444;--blue:#3B82F6;
+  --radius:18px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',-apple-system,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+[dir=rtl] body{font-family:'Tajawal','Inter',sans-serif}
+body::before{content:'';position:fixed;inset:0;z-index:-2;background:radial-gradient(600px 420px at 12% -5%,rgba(255,159,0,0.10),transparent 60%),radial-gradient(700px 500px at 98% 12%,rgba(255,159,0,0.06),transparent 60%),radial-gradient(800px 600px at 50% 115%,rgba(255,159,0,0.08),transparent 60%)}
+body::after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none;background-image:linear-gradient(rgba(255,255,255,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.025) 1px,transparent 1px);background-size:56px 56px;mask-image:radial-gradient(ellipse 90% 70% at 50% 0%,#000 20%,transparent 80%)}
+
+.wrap{max-width:720px;margin:0 auto;padding:28px 18px 56px}
+
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:28px}
+.brand{display:flex;align-items:center;gap:13px}
+.logo-mark{width:46px;height:46px;border-radius:13px;background:linear-gradient(145deg,var(--orange),#D97E00);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:17px;color:#fff;box-shadow:0 6px 20px var(--orange-glow);letter-spacing:-0.5px}
+.brand .name{font-size:15px;font-weight:800;letter-spacing:-0.2px}
+.brand .name span{color:var(--orange)}
+.brand .sub{font-size:11px;color:var(--dim);margin-top:1px}
+.lang-toggle{background:var(--card);border:1px solid var(--border);border-radius:10px;cursor:pointer;padding:8px 16px;font-size:12px;font-weight:600;color:var(--muted);font-family:inherit;transition:.2s;display:flex;align-items:center;gap:8px}
+.lang-toggle:hover{border-color:var(--orange);color:var(--orange);box-shadow:0 0 0 4px rgba(255,159,0,0.08)}
+.lang-toggle .globe{font-size:15px}
+
+.card{background:linear-gradient(180deg,var(--card),var(--bg-2));border:1px solid var(--border);border-radius:24px;padding:36px 34px 34px;box-shadow:0 30px 80px rgba(0,0,0,0.55),0 0 0 1px rgba(255,255,255,0.02) inset;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--orange-glow),transparent)}
+.card h1{font-size:26px;font-weight:900;letter-spacing:-0.6px;line-height:1.15}
+.card h1 span{color:var(--orange)}
+.card .lead{font-size:13.5px;color:var(--muted);margin-top:8px;line-height:1.65;max-width:540px}
+
+.trust{display:inline-flex;align-items:center;gap:8px;margin-top:16px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.22);color:#7EE2A8;font-size:11.5px;font-weight:600;padding:7px 14px;border-radius:999px}
+.trust svg{width:13px;height:13px}
+
+.stepper{display:flex;margin:26px 0 30px}
+.step{flex:1;display:flex;align-items:center;gap:10px;position:relative}
+.step .dot{width:30px;height:30px;border-radius:50%;border:2px solid var(--border-hi);background:var(--card-2);display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700;color:var(--dim);transition:.3s;flex-shrink:0;position:relative;z-index:1}
+.step.active .dot{border-color:var(--orange);color:var(--orange);box-shadow:0 0 0 5px var(--orange-glow);animation:pulse 2s infinite}
+.step.done .dot{border-color:var(--green);background:var(--green);color:#fff}
+.step .lbl{font-size:11.5px;font-weight:600;color:var(--dim);white-space:nowrap;transition:.3s}
+.step.active .lbl,.step.done .lbl{color:var(--text)}
+.step:not(:last-child)::after{content:'';flex:1;height:2px;background:var(--border);margin:0 14px;border-radius:2px;transition:.3s}
+.step.done:not(:last-child)::after{background:var(--green)}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 4px var(--orange-glow)}50%{box-shadow:0 0 0 7px rgba(255,159,0,0.12)}}
+
+.panel{display:none;animation:slideUp .45s cubic-bezier(.2,.7,.2,1)}
+.panel.active{display:block}
+@keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+.panel-head{display:flex;align-items:baseline;gap:8px;margin-bottom:20px}
+.panel-head .idx{font-size:11px;font-weight:800;color:var(--orange);letter-spacing:1px;text-transform:uppercase}
+.panel-head h2{font-size:18px;font-weight:800;letter-spacing:-0.3px}
+.panel-head p{font-size:12px;color:var(--dim);margin-top:2px}
+
+.svc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.svc{position:relative;cursor:pointer;outline:none}
+.svc input{position:absolute;opacity:0;pointer-events:none}
+.svc .box{position:relative;border:1.5px solid var(--border);border-radius:var(--radius);padding:22px 16px 18px;text-align:center;transition:all .25s;background:var(--card-2);height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;overflow:hidden}
+.svc .box::before{content:'';position:absolute;inset:0;background:radial-gradient(120px 80px at 50% 0%,var(--orange-glow),transparent 70%);opacity:0;transition:.3s}
+.svc input:checked+.box,.svc:hover .box{border-color:var(--orange);background:var(--card);transform:translateY(-3px);box-shadow:0 14px 32px rgba(0,0,0,0.4),0 0 0 1px rgba(255,159,0,0.15) inset}
+.svc input:checked+.box::before,.svc:hover .box::before{opacity:1}
+.svc:focus-visible .box{outline:2px solid var(--orange);outline-offset:2px}
+.svc .ico{position:relative;width:52px;height:52px;border-radius:15px;background:var(--card);border:1px solid var(--border-hi);display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:4px;transition:.3s}
+.svc input:checked+.box .ico,.svc:hover .box .ico{background:linear-gradient(145deg,var(--orange),#D97E00);border-color:transparent;box-shadow:0 8px 22px var(--orange-glow)}
+.svc .t{position:relative;font-size:14px;font-weight:800}
+.svc .d{position:relative;font-size:10.5px;color:var(--dim);line-height:1.45;max-width:150px}
+.svc .check{position:absolute;top:10px;right:10px;width:22px;height:22px;border-radius:50%;background:var(--orange);color:#fff;font-size:12px;font-weight:800;display:none;align-items:center;justify-content:center;z-index:2;box-shadow:0 4px 14px var(--orange-glow)}
+.svc input:checked~.check{display:flex;animation:pop .3s}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+
+/* active service chip */
+.svc-chipbar{display:flex;align-items:center;gap:12px;background:var(--card-2);border:1px solid var(--border);border-radius:14px;padding:12px 16px;margin-bottom:22px;animation:slideUp .3s}
+.svc-chipbar .ico{width:38px;height:38px;border-radius:11px;background:linear-gradient(145deg,var(--orange),#D97E00);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.svc-chipbar .who{flex:1}
+.svc-chipbar .who .lbl{font-size:10px;color:var(--dim);text-transform:uppercase;letter-spacing:1px}
+.svc-chipbar .who .val{font-size:14px;font-weight:800}
+.svc-chipbar .chg{background:none;border:1.5px solid var(--border-hi);color:var(--muted);font-family:inherit;font-size:11.5px;font-weight:600;padding:6px 12px;border-radius:9px;cursor:pointer;transition:.2s}
+.svc-chipbar .chg:hover{border-color:var(--orange);color:var(--orange)}
+
+.field{margin-bottom:18px}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:7px}
+.field label .req{color:var(--orange)}
+.field .input-wrap{position:relative;display:flex;align-items:center}
+.field .icon{position:absolute;left:14px;width:16px;height:16px;color:var(--dim);pointer-events:none;z-index:1}
+[dir=rtl] .field .icon{left:auto;right:14px}
+.field input,.field textarea,.field select{width:100%;padding:13px 14px;background:var(--card-2);border:1.5px solid var(--border);border-radius:12px;color:var(--text);font-family:inherit;font-size:13.5px;transition:.2s;outline:none;appearance:none;-webkit-appearance:none}
+.field input.withp{padding-left:42px}
+[dir=rtl] .field input.withp{padding-left:14px;padding-right:42px}
+.field input::placeholder,.field textarea::placeholder{color:var(--dim)}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--orange);box-shadow:0 0 0 4px var(--orange-glow)}
+.field textarea{min-height:96px;resize:vertical}
+.field select{background-image:linear-gradient(45deg,transparent 50%,var(--dim) 50%),linear-gradient(135deg,var(--dim) 50%,transparent 50%);background-position:calc(100% - 20px) 50%,calc(100% - 15px) 50%;background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:38px;cursor:pointer}
+[dir=rtl] .field select{background-position:15px 50%,20px 50%;padding-right:14px;padding-left:38px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.hint{font-size:11px;color:var(--dim);margin-top:6px;display:flex;align-items:center;gap:5px}
+
+/* block divider */
+.block-title{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:800;color:var(--text);margin:28px 0 16px}
+.block-title::before{content:'';width:22px;height:2px;background:var(--orange);border-radius:2px}
+.block-title .n{font-size:10px;color:var(--dim);font-weight:600;margin-left:auto}
+
+/* symptom chips */
+.chips{display:flex;flex-wrap:wrap;gap:9px}
+.chip{position:relative;cursor:pointer}
+.chip input{position:absolute;opacity:0;pointer-events:none}
+.chip span{display:block;padding:10px 16px;border:1.5px solid var(--border);border-radius:999px;background:var(--card-2);font-size:12px;font-weight:600;color:var(--muted);transition:.2s}
+.chip:hover span{border-color:var(--orange);color:var(--orange)}
+.chip input:checked+span{background:rgba(255,159,0,0.12);border-color:var(--orange);color:var(--orange);box-shadow:0 0 0 4px var(--orange-glow)}
+
+/* radio pills */
+.pills{display:flex;gap:9px;flex-wrap:wrap}
+.pill{position:relative;cursor:pointer}
+.pill input{position:absolute;opacity:0;pointer-events:none}
+.pill span{display:block;padding:10px 18px;border:1.5px solid var(--border);border-radius:11px;background:var(--card-2);font-size:12.5px;font-weight:600;color:var(--muted);transition:.2s}
+.pill:hover span{border-color:var(--orange);color:var(--orange)}
+.pill input:checked+span{background:linear-gradient(145deg,var(--orange),#D97E00);border-color:transparent;color:#fff;box-shadow:0 6px 18px var(--orange-glow)}
+
+/* service-specific blocks */
+.svc-block{display:none;animation:slideUp .35s}
+.svc-block.active{display:block}
+
+/* dropzone */
+.drop{border:2px dashed var(--border-hi);border-radius:var(--radius);padding:34px 20px;text-align:center;cursor:pointer;transition:.25s;background:var(--card-2);position:relative}
+.drop:hover,.drop.drag{border-color:var(--orange);background:#1A1C21}
+.drop.drag{transform:scale(1.01)}
+.drop .big{font-size:34px;display:block;margin-bottom:8px;filter:drop-shadow(0 4px 12px var(--orange-glow))}
+.drop p{font-size:13.5px;color:var(--muted)}
+.drop p strong{color:var(--orange)}
+.drop small{font-size:11px;color:var(--dim);margin-top:6px;display:block;line-height:1.5}
+.accepted{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin-top:14px}
+.accepted span{font-size:10px;color:var(--dim);background:var(--card);border:1px solid var(--border);padding:3px 9px;border-radius:999px}
+.files{margin-top:14px;display:flex;flex-direction:column;gap:9px}
+.filechip{display:flex;align-items:center;gap:12px;background:var(--card-2);border:1px solid var(--border);border-radius:12px;padding:11px 14px;font-size:12.5px;animation:slideUp .3s}
+.filechip .thumb{width:34px;height:34px;border-radius:9px;background:linear-gradient(145deg,var(--orange),#D97E00);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;flex-shrink:0}
+.filechip .thumb.other{background:var(--blue)}
+.filechip .nm{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.filechip .sz{color:var(--dim);font-size:11px;flex-shrink:0}
+.filechip .rm{background:none;border:none;color:var(--dim);cursor:pointer;font-size:17px;transition:.2s;padding:4px;flex-shrink:0;line-height:1}
+.filechip .rm:hover{color:var(--red);transform:rotate(90deg)}
+
+/* review card */
+.review{background:var(--card-2);border:1px solid var(--border);border-radius:16px;padding:6px;margin-bottom:22px}
+.rev-head{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border)}
+.rev-head .ico{width:34px;height:34px;border-radius:10px;background:linear-gradient(145deg,var(--orange),#D97E00);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.rev-head .t{font-size:14px;font-weight:800;flex:1}
+.rev-row{display:flex;gap:10px;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,0.04);font-size:12.5px}
+.rev-row:last-child{border-bottom:none}
+.rev-row .k{color:var(--dim);font-weight:600;min-width:130px;max-width:130px;flex-shrink:0}
+.rev-row .v{color:var(--text);flex:1;word-break:break-word}
+[dir=rtl] .rev-row .k{min-width:150px;max-width:150px}
+
+.actions{display:flex;gap:12px;margin-top:8px}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;flex:1;padding:14px 18px;border-radius:13px;font-family:inherit;font-size:14px;font-weight:700;cursor:pointer;transition:.2s;border:1.5px solid transparent}
+.btn-primary{background:linear-gradient(145deg,var(--orange),#E18700);color:#fff;box-shadow:0 10px 30px var(--orange-glow)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 38px var(--orange-glow)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.btn-ghost{background:var(--card-2);border-color:var(--border);color:var(--muted)}
+.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+
+.status{margin-top:16px;display:none;text-align:center;font-size:13px;color:var(--muted)}
+.status.show{display:block}
+.status .spin{display:inline-block;width:16px;height:16px;border:2px solid var(--border-hi);border-top-color:var(--orange);border-radius:50%;animation:rot .7s linear infinite;vertical-align:middle;margin-right:8px}
+[dir=rtl] .status .spin{margin-right:0;margin-left:8px}
+@keyframes rot{to{transform:rotate(360deg)}}
+
+.msg{margin-top:18px;padding:16px 18px;border-radius:14px;font-size:13px;display:none;align-items:flex-start;gap:10px;line-height:1.55}
+.msg.show{display:flex;animation:slideUp .35s}
+.msg .mi{font-size:17px;flex-shrink:0}
+.msg.ok{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.28);color:#7EE2A8}
+.msg.err{background:rgba(239,68,68,0.07);border:1px solid rgba(239,68,68,0.28);color:#F8A7A7}
+
+.success{display:none;text-align:center;padding:36px 10px}
+.success.show{display:block;animation:slideUp .5s}
+.success .ring{width:76px;height:76px;margin:0 auto 22px;border-radius:50%;background:linear-gradient(145deg,rgba(34,197,94,0.15),rgba(34,197,94,0.04));border:2px solid rgba(34,197,94,0.4);display:flex;align-items:center;justify-content:center;font-size:34px;animation:pop .5s cubic-bezier(.2,1.4,.4,1)}
+.success h2{font-size:21px;font-weight:900;letter-spacing:-0.4px}
+.success h2 span{color:var(--green)}
+.success p{font-size:13px;color:var(--muted);margin-top:10px;line-height:1.7;max-width:380px;margin-left:auto;margin-right:auto}
+.success .whats{display:inline-flex;align-items:center;gap:8px;margin-top:22px;padding:12px 22px;border-radius:999px;background:rgba(37,211,102,0.1);border:1px solid rgba(37,211,102,0.3);color:#6EE7A0;font-size:13px;font-weight:600;text-decoration:none;transition:.2s}
+.success .whats:hover{background:rgba(37,211,102,0.18);transform:translateY(-2px)}
+
+.secbar{display:flex;align-items:center;gap:10px;margin-top:22px;padding:11px 15px;background:var(--card-2);border:1px solid var(--border);border-radius:12px;font-size:11.5px;color:var(--muted)}
+.secbar svg{width:15px;height:15px;color:var(--green);flex-shrink:0}
+
+.footer{text-align:center;padding:26px 0 4px;font-size:10.5px;color:var(--dim);letter-spacing:0.3px}
+[dir=rtl] .footer{letter-spacing:0}
+
+@media(max-width:640px){
+  .card{padding:26px 18px 24px;border-radius:20px}
+  .svc-grid{grid-template-columns:1fr}
+  .row2,.row3{grid-template-columns:1fr;gap:0}
+  .stepper{display:none}
+  .card h1{font-size:21px}
+  .rev-row .k{min-width:100px;max-width:100px}
+}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo-mark">ITS</div>
+      <div>
+        <div class="name" data-i18n="brand">Industrial Technology <span>Solutions</span></div>
+        <div class="sub" data-i18n="tag">El Harrouch, Skikda • Power, Control &amp; Machinery</div>
+      </div>
+    </div>
+    <button class="lang-toggle" id="langToggle" onclick="toggleLang()"><span class="globe">🌐</span><span data-i18n="toggle">العربية</span></button>
+  </div>
+
+  <div class="card">
+
+    <!-- FORM VIEW -->
+    <div id="formView">
+      <h1 data-i18n="title">Submit Your <span>Project</span></h1>
+      <p class="lead" data-i18n="lead">Tell us about your electronics project — repair, design, or fabrication — and attach your schematics, drawings, or ideas. We'll review and send you a quote.</p>
+      <div class="trust">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        <span data-i18n="trust">No Fix No Pay • 30-day warranty • Private &amp; confidential</span>
+      </div>
+
+      <!-- STEPPER -->
+      <div class="stepper">
+        <div class="step active" id="st1"><div class="dot">1</div><div class="lbl" data-i18n="st1lbl">Service</div></div>
+        <div class="step" id="st2"><div class="dot">2</div><div class="lbl" data-i18n="st2lbl">Details</div></div>
+        <div class="step" id="st3"><div class="dot">3</div><div class="lbl" data-i18n="st3lbl">Files &amp; Send</div></div>
+      </div>
+
+      <!-- STEP 1: SERVICE -->
+      <div class="panel active" id="panel1">
+        <div class="panel-head">
+          <div class="idx" data-i18n="p1idx">Step 1</div>
+          <div><h2 data-i18n="p1title">What do you need?</h2><p data-i18n="p1sub">Pick the service that fits your project</p></div>
+        </div>
+        <div class="svc-grid">
+          <label class="svc">
+            <input type="radio" name="service" value="Repair" checked>
+            <div class="box"><div class="ico">🔧</div><div class="t" data-en="Repair" data-ar="إصلاح">Repair</div><div class="d" data-en="Fix a faulty board, device or machine" data-ar="إصلاح لوحة أو جهاز أو آلة تالفة">Fix a faulty board, device or machine</div></div>
+            <span class="check">✓</span>
+          </label>
+          <label class="svc">
+            <input type="radio" name="service" value="Design">
+            <div class="box"><div class="ico">📐</div><div class="t" data-en="Design" data-ar="تصميم">Design</div><div class="d" data-en="Custom PCB or circuit design from your idea" data-ar="تصميم لوحة أو دائرة مخصصة من فكرتك">Custom PCB or circuit design from your idea</div></div>
+            <span class="check">✓</span>
+          </label>
+          <label class="svc">
+            <input type="radio" name="service" value="Fabrication (PCB)">
+            <div class="box"><div class="ico">🏭</div><div class="t" data-en="Fabrication" data-ar="تصنيع">Fabrication</div><div class="d" data-en="Produce PCBs &amp; hardware — China + local DZ" data-ar="إنتاج اللوحات والأجهزة — الصين + الجزائر">Produce PCBs &amp; hardware — China + local DZ</div></div>
+            <span class="check">✓</span>
+          </label>
+        </div>
+        <div class="actions" style="margin-top:26px">
+          <button class="btn btn-primary" onclick="goStep(2)" data-i18n="next1">Continue ➜</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: DETAILS -->
+      <div class="panel" id="panel2">
+
+        <div class="svc-chipbar" id="svcChipbar">
+          <div class="ico" id="svcChipIco">🔧</div>
+          <div class="who"><div class="lbl" data-i18n="chosen">Selected service</div><div class="val" id="svcChipVal">Repair</div></div>
+          <button class="chg" onclick="goStep(1)" data-i18n="chg">Change</button>
+        </div>
+
+        <!-- ===== REPAIR BLOCK ===== -->
+        <div class="svc-block active" id="block-repair">
+          <div class="panel-head">
+            <div class="idx" data-i18n="p2idx">Step 2</div>
+            <div><h2 data-i18n="rTitle">Repair details</h2><p data-i18n="rSub">Tell us about the fault so we can quote it fast</p></div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label data-i18n="rDevice">Device / machine type <span class="req">*</span></label>
+              <input id="rDevice" data-i18n-ph="rDevicePh" placeholder="e.g. VFD, power supply, CNC board, PLC...">
+            </div>
+            <div class="field">
+              <label data-i18n="rBrand">Brand &amp; model <span class="req">*</span></label>
+              <input id="rBrand" data-i18n-ph="rBrandPh" placeholder="e.g. Siemens V20, Schneider ATV">
+            </div>
+          </div>
+          <div class="field">
+            <label data-i18n="rSymptom">What's the symptom? <span class="req">*</span></label>
+            <div class="chips" id="rSymptomsChips">
+              <label class="chip"><input type="checkbox" value="Doesn't power on"><span class="s" data-en="Doesn't power on" data-ar="لا يعمل">Doesn't power on</span></label>
+              <label class="chip"><input type="checkbox" value="No output"><span class="s" data-en="No output" data-ar="لا يوجد ناتج">No output</span></label>
+              <label class="chip"><input type="checkbox" value="Error code"><span class="s" data-en="Error code" data-ar="رمز خطأ">Error code</span></label>
+              <label class="chip"><input type="checkbox" value="Burnt component"><span class="s" data-en="Burnt component" data-ar="مكوّن محروق">Burnt component</span></label>
+              <label class="chip"><input type="checkbox" value="Physical damage"><span class="s" data-en="Physical damage" data-ar="ضرر فيزيائي">Physical damage</span></label>
+              <label class="chip"><input type="checkbox" value="Intermittent fault"><span class="s" data-en="Intermittent fault" data-ar="عطل متقطع">Intermittent fault</span></label>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label data-i18n="rCondition">Board condition</label>
+              <select id="rCondition">
+                <option value="Undamaged" data-en="Undamaged" data-ar="سليمة">Undamaged</option>
+                <option value="Corrosion" data-en="Corrosion" data-ar="تآكل">Corrosion</option>
+                <option value="Burnt / scorched" data-en="Burnt / scorched" data-ar="محروقة">Burnt / scorched</option>
+                <option value="Broken traces" data-en="Broken traces" data-ar="مسارات مقطوعة">Broken traces</option>
+              </select>
+            </div>
+            <div class="field">
+              <label data-i18n="rSchematic">Do you have a schematic?</label>
+              <div class="pills">
+                <label class="pill"><input type="radio" name="rSchematic" value="Yes"><span class="s" data-en="Yes" data-ar="نعم">Yes</span></label>
+                <label class="pill"><input type="radio" name="rSchematic" value="Partial"><span class="s" data-en="Partial" data-ar="جزئي">Partial</span></label>
+                <label class="pill"><input type="radio" name="rSchematic" value="No" checked><span class="s" data-en="No" data-ar="لا">No</span></label>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label data-i18n="rDesc">What's happening with it? <span class="req">*</span></label>
+            <textarea id="rDesc" data-i18n-ph="rDescPh" placeholder="Describe the fault, when it started, what you already tried..."></textarea>
+            <div class="hint"><span class="rc" id="rDescC">0</span>/600</div>
+          </div>
+        </div>
+
+        <!-- ===== DESIGN BLOCK ===== -->
+        <div class="svc-block" id="block-design">
+          <div class="panel-head">
+            <div class="idx" data-i18n="p2idx">Step 2</div>
+            <div><h2 data-i18n="dTitle">Design details</h2><p data-i18n="dSub">Tell us about your idea so we can engineer it</p></div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label data-i18n="dType">Design type <span class="req">*</span></label>
+              <select id="dType">
+                <option value="PCB" data-en="PCB" data-ar="لوحة PCB">PCB</option>
+                <option value="Control circuit" data-en="Control circuit" data-ar="دائرة تحكم">Control circuit</option>
+                <option value="Automation system" data-en="Automation system" data-ar="نظام أتمتة">Automation system</option>
+                <option value="Product board" data-en="Product board" data-ar="لوحة منتج">Product board</option>
+                <option value="Other" data-en="Other" data-ar="أخرى">Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label data-i18n="dLayers">PCB layers</label>
+              <select id="dLayers">
+                <option value="1" data-en="1 layer" data-ar="طبقة واحدة">1 layer</option>
+                <option value="2" selected data-en="2 layers" data-ar="طبقتان">2 layers</option>
+                <option value="4" data-en="4 layers" data-ar="٤ طبقات">4 layers</option>
+                <option value="6+" data-en="6+ layers" data-ar="+٦ طبقات">6+ layers</option>
+                <option value="Not sure" data-en="Not sure" data-ar="غير متأكد">Not sure</option>
+              </select>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label data-i18n="dApp">Application / environment</label>
+              <select id="dApp">
+                <option value="Industrial" data-en="Industrial" data-ar="صناعي">Industrial</option>
+                <option value="Home" data-en="Home / Domestic" data-ar="منزلي">Home / Domestic</option>
+                <option value="Medical" data-en="Medical" data-ar="طبي">Medical</option>
+                <option value="Marine" data-en="Marine" data-ar="بحري">Marine</option>
+                <option value="Automotive" data-en="Automotive" data-ar="سيارات">Automotive</option>
+                <option value="Other" data-en="Other" data-ar="أخرى">Other</option>
+              </select>
+            </div>
+            <div class="field">
+              <label data-i18n="dPower">Power requirements</label>
+              <input id="dPower" data-i18n-ph="dPowerPh" placeholder="e.g. 24V DC / 5A, 220V AC">
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label data-i18n="dProto">Prototype needed?</label>
+              <div class="pills">
+                <label class="pill"><input type="radio" name="dProto" value="Yes"><span class="s" data-en="Yes" data-ar="نعم">Yes</span></label>
+                <label class="pill"><input type="radio" name="dProto" value="No"><span class="s" data-en="No" data-ar="لا">No</span></label>
+              </div>
+            </div>
+            <div class="field">
+              <label data-i18n="dTimeline">Target timeline</label>
+              <input id="dTimeline" data-i18n-ph="dTimelinePh" placeholder="e.g. 2 weeks, next month">
+            </div>
+          </div>
+          <div class="field">
+            <label data-i18n="dDesc">Describe your idea <span class="req">*</span></label>
+            <textarea id="dDesc" data-i18n-ph="dDescPh" placeholder="What should it do? What functions, inputs/outputs, size..."></textarea>
+            <div class="hint"><span class="rc" id="dDescC">0</span>/600</div>
+          </div>
+        </div>
+
+        <!-- ===== FABRICATION BLOCK ===== -->
+        <div class="svc-block" id="block-fab">
+          <div class="panel-head">
+            <div class="idx" data-i18n="p2idx">Step 2</div>
+            <div><h2 data-i18n="fTitle">Fabrication details</h2><p data-i18n="fSub">So we can get you an accurate production quote</p></div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label data-i18n="fBoard">Board type / layers <span class="req">*</span></label>
+              <input id="fBoard" data-i18n-ph="fBoardPh" placeholder="e.g. 2-layer FR-4, flex, aluminium...">
+            </div>
+            <div class="field">
+              <label data-i18n="fQty">Quantity <span class="req">*</span></label>
+              <input id="fQty" data-i18n-ph="fQtyPh" placeholder="e.g. 100 units">
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label data-i18n="fAssembly">Assembly needed?</label>
+              <select id="fAssembly">
+                <option value="SMT" data-en="SMT" data-ar="SMT">SMT</option>
+                <option value="THT" data-en="THT" data-ar="THT">THT</option>
+                <option value="Both" data-en="Both" data-ar="الاثنان">Both</option>
+                <option value="Boards only" selected data-en="Boards only (no assembly)" data-ar="لوحات فقط">Boards only (no assembly)</option>
+              </select>
+            </div>
+            <div class="field">
+              <label data-i18n="fComponents">Components</label>
+              <select id="fComponents">
+                <option value="Client provides" data-en="Client provides" data-ar="العميل يوفرها">Client provides</option>
+                <option value="ITS sources" selected data-en="ITS sources" data-ar="ITS تؤمنها">ITS sources</option>
+                <option value="Mixed" data-en="Mixed" data-ar="مختلط">Mixed</option>
+              </select>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label data-i18n="fVenue">Where to fabricate?</label>
+              <select id="fVenue">
+                <option value="Recommended" selected data-en="Best option" data-ar="أفضل خيار">Best option</option>
+                <option value="China" data-en="China" data-ar="الصين">China</option>
+                <option value="Local DZ" data-en="Local DZ" data-ar="محلي (الجزائر)">Local DZ</option>
+              </select>
+            </div>
+            <div class="field">
+              <label data-i18n="fTest">Testing required?</label>
+              <select id="fTest">
+                <option value="None" data-en="None" data-ar="بدون">None</option>
+                <option value="Functional" selected data-en="Functional test" data-ar="اختبار وظيفي">Functional test</option>
+                <option value="Burn-in" data-en="Burn-in test" data-ar="اختبار تحميل">Burn-in test</option>
+                <option value="Certification" data-en="Certification needed" data-ar="شهادة مطلوبة">Certification needed</option>
+              </select>
+            </div>
+          </div>
+          <div class="row2">
+            <div class="field">
+              <label data-i18n="fLead">Desired lead time</label>
+              <input id="fLead" data-i18n-ph="fLeadPh" placeholder="e.g. 3 weeks, ASAP">
+            </div>
+            <div class="field">
+              <label data-i18n="fBudget">Target budget <span style="opacity:.45">(DA/USD)</span></label>
+              <input id="fBudget" data-i18n-ph="fBudgetPh" placeholder="e.g. 200000 DA">
+            </div>
+          </div>
+          <div class="field">
+            <label data-i18n="fDesc">What to fabricate? <span class="req">*</span></label>
+            <textarea id="fDesc" data-i18n-ph="fDescPh" placeholder="Product, purpose, finish specs, files you will attach..."></textarea>
+            <div class="hint"><span class="rc" id="fDescC">0</span>/600</div>
+          </div>
+        </div>
+
+        <div class="block-title"><span data-i18n="contactT">Contact information</span><span class="n" data-i18n="contactN">We reply within 24h</span></div>
+
+        <div class="row2">
+          <div class="field">
+            <label data-i18n="lblName">Your name <span class="req">*</span></label>
+            <div class="input-wrap">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <input id="name" class="withp" data-i18n-ph="plName" placeholder="Full name">
+            </div>
+          </div>
+          <div class="field">
+            <label data-i18n="lblPhone">Phone / WhatsApp <span class="req">*</span></label>
+            <div class="input-wrap">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              <input id="phone" class="withp" type="tel" placeholder="05xx xx xx xx">
+            </div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label data-i18n="lblEmail">Email</label>
+            <div class="input-wrap">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+              <input id="email" class="withp" type="email" data-i18n-ph="plEmail" placeholder="you@email.com">
+            </div>
+          </div>
+          <div class="field">
+            <label data-i18n="lblCompany">Company <span style="opacity:.45">(opt.)</span></label>
+            <div class="input-wrap">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 21h18M5 21V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16M9 7h1m4 0h1M9 11h1m4 0h1M9 15h1m4 0h1"/></svg>
+              <input id="company" class="withp" data-i18n-ph="plCompany" placeholder="Company name">
+            </div>
+          </div>
+        </div>
+        <div class="row2">
+          <div class="field">
+            <label data-i18n="lblCity">Delivery city</label>
+            <div class="input-wrap">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+              <input id="city" class="withp" data-i18n-ph="plCity" placeholder="e.g. Skikda">
+            </div>
+          </div>
+          <div class="field">
+            <label data-i18n="lblShip">Ship abroad / export?</label>
+            <div class="pills" style="margin-top:6px">
+              <label class="pill"><input type="radio" name="ship" value="Local"><span class="s" data-en="Local DZ" data-ar="محلي">Local DZ</span></label>
+              <label class="pill"><input type="radio" name="ship" value="International"><span class="s" data-en="International" data-ar="دولي">International</span></label>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-ghost" onclick="goStep(1)"><span data-i18n="back1t">← Back</span></button>
+          <button class="btn btn-primary" onclick="goStep(3)" data-i18n="next2">Continue ➜</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: REVIEW + FILES + SEND -->
+      <div class="panel" id="panel3">
+        <div class="panel-head">
+          <div class="idx" data-i18n="p3idx">Step 3</div>
+          <div><h2 data-i18n="p3title">Review &amp; attach files</h2><p data-i18n="p3sub">Check the summary, add schematics/photos, then send</p></div>
+        </div>
+
+        <div class="review" id="reviewCard"></div>
+
+        <div class="drop" id="drop">
+          <span class="big">📂</span>
+          <p data-i18n="dropTxt">Drag &amp; drop files here, or <strong>browse</strong></p>
+          <small data-i18n="dropHint">Max ~48MB per file • 6 files max</small>
+          <div class="accepted">
+            <span>PDF</span><span>PNG / JPG</span><span>Gerber</span><span>ZIP</span><span>DXF/DWG</span><span>KiCad</span>
+          </div>
+          <input type="file" id="fileInput" multiple style="display:none" accept=".pdf,.png,.jpg,.jpeg,.gif,.bmp,.svg,.zip,.rar,.dxf,.dwg,.step,.stp,.kicad_pcb,.sch,.brd,.csv,.txt,.doc,.docx,.xls,.xlsx">
+        </div>
+        <div class="files" id="files"></div>
+
+        <div class="actions" style="margin-top:22px">
+          <button class="btn btn-ghost" onclick="goStep(2)"><span data-i18n="back2t">← Back</span></button>
+          <button class="btn btn-primary" id="submit" onclick="submitForm()">
+            <span data-i18n="submitTxt">Send My Project</span> ➜
+          </button>
+        </div>
+
+        <div class="status"><span class="spin"></span><span data-i18n="sending" id="statusTxt">Uploading &amp; securely sending...</span></div>
+        <div class="msg" id="msg"></div>
+        <div class="secbar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span data-i18n="sec">Your files go directly to ITS — used only to prepare your quote. Never shared publicly.</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUCCESS VIEW -->
+    <div class="success" id="successView">
+      <div class="ring">✓</div>
+      <h2 data-i18n="okTitle">Project <span>Received!</span></h2>
+      <p data-i18n="okDesc">Thank you — your project and files are with us. We'll review everything and get back to you with a quote, usually within 24h on business days.</p>
+      <div class="ref" data-i18n="okRef">Request logged • reference sent to your inbox</div>
+      <a class="whats" href="https://wa.me/213699324076" target="_blank" rel="noopener"><span data-i18n="okWhats">💬 Or message us on WhatsApp</span></a>
+    </div>
+
+  </div>
+
+  <div class="footer" data-i18n="footer">ITS — Industrial Technology Solutions • Power, Control &amp; Machinery</div>
+</div>
+
+<script>
+// ============================================================
+// ⚠️ CONFIGURATION — paste your deployed Apps Script /exec URL
+// ============================================================
+var WEB_APP_URL = "PASTE_YOUR_DEPLOYED_SCRIPT_URL_HERE";
+
+// ============================================================
+// LANGUAGE
+// ============================================================
+var lang='en';
+var STR={
+en:{
+  toggle:'العربية',brand:'Industrial Technology <span>Solutions</span>',tag:'El Harrouch, Skikda • Power, Control & Machinery',
+  title:'Submit Your <span>Project</span>',lead:'Tell us about your electronics project — repair, design, or fabrication — and attach your schematics, drawings, or ideas. We\'ll review and send you a quote.',
+  trust:'No Fix No Pay • 30-day warranty • Private & confidential',
+  st1lbl:'Service',st2lbl:'Details',st3lbl:'Files & Send',
+  p1idx:'Step 1',p1title:'What do you need?',p1sub:'Pick the service that fits your project',next1:'Continue ➜',
+  p2idx:'Step 2',next2:'Continue ➜',
+  chosen:'Selected service',chg:'Change',
+  rTitle:'Repair details',rSub:'Tell us about the fault so we can quote it fast',
+  rDevice:'Device / machine type',rBrand:'Brand & model',rSymptom:'What\'s the symptom?',rCondition:'Board condition',rSchematic:'Do you have a schematic?',rDesc:'What\'s happening with it?',
+  rDevicePh:'e.g. VFD, power supply, CNC board, PLC...',rBrandPh:'e.g. Siemens V20, Schneider ATV',rDescPh:'Describe the fault, when it started, what you already tried...',
+  dTitle:'Design details',dSub:'Tell us about your idea so we can engineer it',
+  dType:'Design type',dLayers:'PCB layers',dApp:'Application / environment',dPower:'Power requirements',dProto:'Prototype needed?',dTimeline:'Target timeline',dDesc:'Describe your idea',
+  dPowerPh:'e.g. 24V DC / 5A, 220V AC',dTimelinePh:'e.g. 2 weeks, next month',dDescPh:'What should it do? What functions, inputs/outputs, size...',
+  fTitle:'Fabrication details',fSub:'So we can get you an accurate production quote',
+  fBoard:'Board type / layers',fQty:'Quantity',fAssembly:'Assembly needed?',fComponents:'Components',fVenue:'Where to fabricate?',fTest:'Testing required?',fLead:'Desired lead time',fBudget:'Target budget',fDesc:'What to fabricate?',
+  fBoardPh:'e.g. 2-layer FR-4, flex, aluminium...',fQtyPh:'e.g. 100 units',fLeadPh:'e.g. 3 weeks, ASAP',fBudgetPh:'e.g. 200000 DA',fDescPh:'Product, purpose, finish specs, files you will attach...',
+  contactT:'Contact information',contactN:'We reply within 24h',
+  lblName:'Your name',lblPhone:'Phone / WhatsApp',lblEmail:'Email',lblCompany:'Company (opt.)',lblCity:'Delivery city',lblShip:'Ship abroad / export?',
+  plName:'Full name',plEmail:'you@email.com',plCompany:'Company name',plCity:'e.g. Skikda',
+  p3idx:'Step 3',p3title:'Review & attach files',p3sub:'Check the summary, add schematics/photos, then send',
+  dropTxt:'Drag & drop files here, or <strong>browse</strong>',dropHint:'Max ~48MB per file • 6 files max',
+  back1t:'← Back',back2t:'← Back',submitTxt:'Send My Project',sending:'Uploading & securely sending...',
+  revService:'Service',revContact:'Contact',revFiles:'Attachments',
+  okTitle:'Project <span>Received!</span>',okDesc:'Thank you — your project and files are with us. We\'ll review everything and get back to you with a quote, usually within 24h on business days.',
+  okRef:'Request logged • reference sent to your inbox',okWhats:'💬 Or message us on WhatsApp',
+  sec:'Your files go directly to ITS — used only to prepare your quote. Never shared publicly.',
+  need:'Please fill in all required fields marked with *.',
+  needDesc:'Please describe your project in the description field.',
+  err:'Something went wrong on our end. Please try again, or contact us directly on WhatsApp 0699 32 40 76.',
+  tooBig:'is over 48MB. Please compress or split the file.',max6:'Maximum 6 files.',
+  footer:'ITS — Industrial Technology Solutions • Power, Control & Machinery'
+},
+ar:{
+  toggle:'English',brand:'الحلول الصناعية <span>التكنولوجية</span>',tag:'الحروش، سكيكدة • طاقة، تحكم وآلات',
+  title:'أرسل <span>مشروعك</span>',lead:'أخبرنا عن مشروعك الإلكتروني — إصلاح، تصميم، أو تصنيع — وأرفق مخططاتك أو رسوماتك أو أفكارك. سنراجع ونرسل لك عرض سعر.',
+  trust:'لا إصلاح لا دفع • ضمان 30 يوماً • خاص وسري',
+  st1lbl:'الخدمة',st2lbl:'التفاصيل',st3lbl:'الملفات والإرسال',
+  p1idx:'الخطوة ١',p1title:'ماذا تحتاج؟',p1sub:'اختر الخدمة المناسبة لمشروعك',next1:'متابعة ➜',
+  p2idx:'الخطوة ٢',next2:'متابعة ➜',
+  chosen:'الخدمة المختارة',chg:'تغيير',
+  rTitle:'تفاصيل الإصلاح',rSub:'أخبرنا عن العطل لنقدّم لك سعراً سريعاً',
+  rDevice:'نوع الجهاز / الآلة',rBrand:'العلامة والموديل',rSymptom:'ما هي أعراض العطل؟',rCondition:'حالة اللوحة',rSchematic:'هل لديك مخطط؟',rDesc:'ما المشكلة؟',
+  rDevicePh:'مثال: محول سرعة، مصدر طاقة، لوحة CNC...',rBrandPh:'مثال: Siemens V20',rDescPh:'صف العطل، متى بدأ، ماذا جربت...',
+  dTitle:'تفاصيل التصميم',dSub:'أخبرنا عن فكرتك لنصممها',
+  dType:'نوع التصميم',dLayers:'طبقات اللوحة',dApp:'الاستخدام / البيئة',dPower:'متطلبات الطاقة',dProto:'هل تحتاج نموذجاً تجريبياً؟',dTimeline:'المدة المستهدفة',dDesc:'صف فكرتك',
+  dPowerPh:'مثال: 24V DC / 5A',dTimelinePh:'مثال: أسبوعان، الشهر القادم',dDescPh:'ماذا يجب أن يفعل؟ الوظائف، المدخلات/المخرجات، الحجم...',
+  fTitle:'تفاصيل التصنيع',fSub:'لنحصل على عرض سعر دقيق للإنتاج',
+  fBoard:'نوع اللوحة / الطبقات',fQty:'الكمية',fAssembly:'التجميع مطلوب؟',fComponents:'المكونات',fVenue:'أين تصنّع؟',fTest:'الاختبارات المطلوبة؟',fLead:'المدة المطلوبة',fBudget:'الميزانية المستهدفة',fDesc:'ماذا تريد تصنيعه؟',
+  fBoardPh:'مثال: FR-4 طبقتان، مرنة...',fQtyPh:'مثال: 100 وحدة',fLeadPh:'مثال: ٣ أسابيع',fBudgetPh:'مثال: 200000 دج',fDescPh:'المنتج، الهدف، المواصفات، الملفات التي سترفقها...',
+  contactT:'معلومات الاتصال',contactN:'نرد خلال ٢٤ ساعة',
+  lblName:'اسمك',lblPhone:'الهاتف / واتساب',lblEmail:'البريد الإلكتروني',lblCompany:'الشركة (اختياري)',lblCity:'مدينة التسليم',lblShip:'شحن للخارج؟',
+  plName:'الاسم الكامل',plEmail:'you@email.com',plCompany:'اسم الشركة',plCity:'مثال: سكيكدة',
+  p3idx:'الخطوة ٣',p3title:'مراجعة وإرفاق الملفات',p3sub:'راجع الملخص، أضف المخططات/الصور، ثم أرسل',
+  dropTxt:'اسحب وأفلت الملفات هنا، أو <strong>تصفح</strong>',dropHint:'الحد ~48MB لكل ملف • ٦ ملفات كحد أقصى',
+  back1t:'← رجوع',back2t:'← رجوع',submitTxt:'أرسل مشروعي',sending:'جارِ الرفع والإرسال الآمن...',
+  revService:'الخدمة',revContact:'معلومات الاتصال',revFiles:'المرفقات',
+  okTitle:'تم استلام <span>مشروعك!</span>',okDesc:'شكراً — مشروعك وملفاتك معنا. سنراجع كل شيء ونعود إليك بعرض سعر، عادة خلال ٢٤ ساعة في أيام العمل.',
+  okRef:'تم تسجيل الطلب • تم إرسال مرجع إلى بريدك',okWhats:'💬 أو راسلنا على واتساب',
+  sec:'ملفاتك تصل مباشرة إلى ITS — تُستخدم فقط لتجهيز عرض السعر. لا تُشارك علناً أبداً.',
+  need:'الرجاء ملء جميع الحقول المطلوبة (المميزة بـ *).',
+  needDesc:'الرجاء وصف مشروعك في حقل الوصف.',
+  err:'حدث خطأ ما من جهتنا. حاول مرة أخرى، أو تواصل معنا مباشرة على واتساب 0699 32 40 76.',
+  tooBig:'يزيد عن 48MB. الرجاء ضغط الملف أو تقسيمه.',max6:'الحد الأقصى ٦ ملفات.',
+  footer:'ITS — الحلول الصناعية التكنولوجية • طاقة، تحكم وآلات'
+}
+};
+
+function applyLang(){
+  var s=STR[lang];
+  // generic text via data-i18n
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var k=el.getAttribute('data-i18n');
+    if(s[k]!==undefined) el.innerHTML=s[k];
+  });
+  // placeholders via data-i18n-ph
+  document.querySelectorAll('[data-i18n-ph]').forEach(function(el){
+    var k=el.getAttribute('data-i18n-ph');
+    if(STR.en[k]!==undefined) el.setAttribute('placeholder',s[k]);
+  });
+  // service cards + select options + chips + pills use data-en/data-ar
+  var d=lang;
+  document.querySelectorAll('.svc .t').forEach(function(el){el.textContent=el.dataset[lang];});
+  document.querySelectorAll('.svc .d').forEach(function(el){el.textContent=el.dataset[lang];});
+  document.querySelectorAll('.chips .chip span').forEach(function(el){el.textContent=el.dataset[lang];});
+  document.querySelectorAll('.pills .pill span').forEach(function(el){el.textContent=el.dataset[lang];});
+  document.querySelectorAll('.field select option').forEach(function(el){el.textContent=el.dataset[lang]||el.textContent;});
+  // rebuild service chip + review if visible
+  updateServiceChip();
+  if(step===3) buildReview();
+}
+function toggleLang(){lang=lang==='en'?'ar':'en';document.documentElement.dir=lang==='ar'?'rtl':'ltr';applyLang();}
+
+// ============================================================
+// SERVICE → BLOCK mapping
+// ============================================================
+var SVC={
+  'Repair':{block:'block-repair',ico:'🔧'},
+  'Design':{block:'block-design',ico:'📐'},
+  'Fabrication (PCB)':{block:'block-fab',ico:'🏭'}
+};
+var svc='Repair';
+function getSvcVal(){return document.querySelector('input[name=service]:checked')?document.querySelector('input[name=service]:checked').value:'Repair';}
+function updateServiceChip(){
+  svc=getSvcVal();
+  document.getElementById('svcChipVal').textContent=svc;
+  document.getElementById('svcChipIco').textContent=SVC[svc].ico;
+  document.querySelectorAll('.svc-block').forEach(function(b){b.classList.remove('active');});
+  document.getElementById(SVC[svc].block).classList.add('active');
+}
+// live: when any service radio changes, update immediately
+document.querySelectorAll('input[name=service]').forEach(function(r){r.addEventListener('change',updateServiceChip);});
+
+// ============================================================
+// STEPPER
+// ============================================================
+var step=1;
+function goStep(n){
+  step=n;
+  for(var i=1;i<=3;i++){
+    document.getElementById('panel'+i).classList.toggle('active',i===n);
+    var st=document.getElementById('st'+i);
+    st.classList.toggle('active',i===n);
+    st.classList.toggle('done',i<n);
+  }
+  if(n===3) buildReview();
+  document.querySelector('.card').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+// ============================================================
+// CHARACTER COUNTERS
+// ============================================================
+['rDesc','dDesc','fDesc'].forEach(function(id){
+  document.getElementById(id).addEventListener('input',function(){
+    document.getElementById(id+'C').textContent=this.value.length;
+  });
+});
+
+// ============================================================
+// REVIEW SUMMARY
+// ============================================================
+function val(id){var el=document.getElementById(id);return el?el.value.trim():'';}
+function radios(name){var r=document.querySelector('input[name="'+name+'"]:checked');return r?r.value:'';}
+function symptoms(){
+  var chk=document.querySelectorAll('#rSymptomsChips input:checked');
+  var a=[];chk.forEach(function(c){a.push(c.value);});
+  return a.join(', ')||'—';
+}
+
+function reviewRows(){
+  var s=language(); function L(k){return STR[s][k]||STR.en[k];}
+  var rows=[];
+  var svcName=svc, ico=SVC[svc].ico;
+  if(svc==='Repair'){
+    rows=[['Device / machine',val('rDevice')||'—'],['Brand & model',val('rBrand')||'—'],
+      ['Symptom',symptoms()],[L('rCondition'),val('rCondition')],
+      [L('rSchematic'),radios('rSchematic')||'—'],[L('rDesc'),val('rDesc')||'—']];
+  }else if(svc==='Design'){
+    rows=[['Design type',val('dType')||'—'],['PCB layers',val('dLayers')||'—'],
+      [L('dApp'),val('dApp')||'—'],[L('dPower'),val('dPower')||'—'],
+      [L('dProto'),radios('dProto')||'—'],[L('dTimeline'),val('dTimeline')||'—'],
+      [L('dDesc'),val('dDesc')||'—']];
+  }else{
+    rows=[[L('fBoard'),val('fBoard')||'—'],[L('fQty'),val('fQty')||'—'],
+      [L('fAssembly'),val('fAssembly')||'—'],[L('fComponents'),val('fComponents')||'—'],
+      [L('fVenue'),val('fVenue')||'—'],[L('fTest'),val('fTest')||'—'],
+      [L('fLead'),val('fLead')||'—'],[L('fBudget'),val('fBudget')||'—'],
+      [L('fDesc'),val('fDesc')||'—']];
+  }
+  // contact
+  var contactParts=[];
+  if(val('name'))contactParts.push(val('name'));
+  if(val('phone'))contactParts.push(val('phone'));
+  if(val('company'))contactParts.push(val('company'));
+  rows.push([L('revContact'),contactParts.join(' · ')||'—']);
+  return rows;
+}
+
+function buildReview(){
+  var s=language(); function L(k){return STR[s][k]||STR.en[k];}
+  var rows=reviewRows();
+  var ico=SVC[svc].ico;
+  var html='<div class="rev-head"><div class="ico">'+ico+'</div><div class="t">'+svc+'</div><button class="chg" onclick="goStep(2)">✎</button></div>';
+  rows.forEach(function(r){
+    html+='<div class="rev-row"><div class="k">'+r[0]+'</div><div class="v">'+(r[1]||'—')+'</div></div>';
+  });
+  document.getElementById('reviewCard').innerHTML=html;
+}
+
+// short language code for helpers
+function language(){return lang;}
+
+// ============================================================
+// FILE UPLOAD
+// ============================================================
+var MAX_MB=48, MAX_N=6, files=[];
+var dropEl=document.getElementById('drop'), fileInput=document.getElementById('fileInput');
+dropEl.addEventListener('click',function(){fileInput.click();});
+fileInput.addEventListener('change',function(){addFiles(fileInput.files);fileInput.value='';});
+dropEl.addEventListener('dragover',function(e){e.preventDefault();dropEl.classList.add('drag');});
+dropEl.addEventListener('dragleave',function(){dropEl.classList.remove('drag');});
+dropEl.addEventListener('drop',function(e){e.preventDefault();dropEl.classList.remove('drag');addFiles(e.dataTransfer.files);});
+
+function addFiles(list){
+  for(var i=0;i<list.length;i++){
+    if(files.length>=MAX_N){alert(STR[lang].max6);break;}
+    var f=list[i];
+    if(f.size>MAX_MB*1024*1024){alert('"'+f.name+'" '+STR[lang].tooBig);continue;}
+    files.push({file:f});
+  }
+  renderFiles();
+}
+function renderFiles(){
+  var box=document.getElementById('files');box.innerHTML='';
+  files.forEach(function(item,idx){
+    var kb=Math.round(item.file.size/1024);
+    var sizeTxt=kb>1024?(kb/1024).toFixed(1)+' MB':kb+' KB';
+    var isImg=/image\//.test(item.file.type);
+    var chip=document.createElement('div');chip.className='filechip';
+    chip.innerHTML='<div class="thumb'+(isImg?'':' other')+'">'+(isImg?'🖼':'📄')+'</div>'+
+      '<span class="nm">'+item.file.name+'</span><span class="sz">'+sizeTxt+'</span>'+
+      '<button class="rm" onclick="removeFile('+idx+')">&times;</button>';
+    box.appendChild(chip);
+  });
+}
+function removeFile(i){files.splice(i,1);renderFiles();}
+
+// ============================================================
+// SUBMIT
+// ============================================================
+function requiredFields(){
+  var missing=[];
+  if(!val('name'))missing.push('name');
+  if(!val('phone'))missing.push('phone');
+  if(svc==='Repair'){if(!val('rDevice'))missing.push('device');if(!val('rBrand'))missing.push('brand');if(!val('rDesc'))missing.push('desc');}
+  else if(svc==='Design'){if(!val('dDesc'))missing.push('desc');}
+  else{if(!val('fBoard'))missing.push('board');if(!val('fQty'))missing.push('qty');if(!val('fDesc'))missing.push('desc');}
+  return missing;
+}
+
+function collectDetails(){
+  var s=language(); function L(k){return STR[s][k]||STR.en[k];}
+  var lines=[];
+  if(svc==='Repair'){
+    lines.push(L('rDevice')+': '+val('rDevice'));
+    lines.push(L('rBrand')+': '+val('rBrand'));
+    lines.push(L('rSymptom')+': '+symptoms());
+    lines.push(L('rCondition')+': '+val('rCondition'));
+    lines.push(L('rSchematic')+': '+radios('rSchematic'));
+    lines.push(val('rDesc'));
+  }else if(svc==='Design'){
+    lines.push(L('dType')+': '+val('dType'));
+    lines.push(L('dLayers')+': '+val('dLayers'));
+    lines.push(L('dApp')+': '+val('dApp'));
+    lines.push(L('dPower')+': '+val('dPower'));
+    lines.push(L('dProto')+': '+radios('dProto'));
+    lines.push(L('dTimeline')+': '+val('dTimeline'));
+    lines.push(val('dDesc'));
+  }else{
+    lines.push(L('fBoard')+': '+val('fBoard'));
+    lines.push(L('fQty')+': '+val('fQty'));
+    lines.push(L('fAssembly')+': '+val('fAssembly'));
+    lines.push(L('fComponents')+': '+val('fComponents'));
+    lines.push(L('fVenue')+': '+val('fVenue'));
+    lines.push(L('fTest')+': '+val('fTest'));
+    lines.push(L('fLead')+': '+val('fLead'));
+    lines.push(L('fBudget')+': '+val('fBudget'));
+    lines.push(val('fDesc'));
+  }
+  return lines.filter(function(l){return l && l!=='—';}).join('\n');
+}
+
+function submitForm(){
+  var missing=requiredFields();
+  if(missing.length){
+    showMsg(STR[lang].need,'err');
+    goStep(2);
+    return;
+  }
+  if(WEB_APP_URL.indexOf('PASTE_')===0){showMsg(STR[lang].err,'err');return;}
+
+  var btn=document.getElementById('submit');btn.disabled=true;
+  var st=document.querySelector('#panel3 .status');st.classList.add('show');
+
+  var payload={
+    name:val('name'),phone:val('phone'),
+    email:val('email'),company:val('company'),
+    service:svc,
+    projectType:svc,
+    description:collectDetails(),
+    quantity:svc==='Fabrication (PCB)'?val('fQty'):'',
+    budget:svc==='Fabrication (PCB)'?val('fBudget'):val('dPower'),
+    city:val('city'),
+    ship:radios('ship')||'',
+    contactPref:'va',
+    details:collectDetails(),
+    files:[]
+  };
+
+  readAll().then(function(){
+    return fetch(WEB_APP_URL,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(payload)});
+  }).then(function(){
+    finishSuccess();
+  }).catch(function(e){
+    st.classList.remove('show');btn.disabled=false;
+    showMsg(STR[lang].err,'err');console.error(e);
+  });
+}
+
+function readAll(){
+  return Promise.all(files.map(function(item){
+    return new Promise(function(resolve){
+      if(!item.file){resolve();return;}
+      var reader=new FileReader();
+      reader.onload=function(e){
+        var r=e.target.result;
+        var b64=r.indexOf(',')>=0?r.split(',')[1]:r;
+        payload.files.push({name:item.file.name,mimeType:item.file.type||'application/octet-stream',b64:b64});
+        resolve();
+      };
+      reader.onerror=resolve;
+      reader.readAsDataURL(item.file);
+    });
+  }));
+}
+var payload={};
+
+function finishSuccess(){
+  document.getElementById('formView').style.display='none';
+  document.getElementById('successView').classList.add('show');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function showMsg(text,type){
+  var el=document.getElementById('msg');
+  el.className='msg show '+(type||'err');
+  el.innerHTML='<span class="mi">'+(type==='ok'?'✅':'⚠️')+'</span><span>'+text+'</span>';
+  el.scrollIntoView({behavior:'smooth',block:'nearest'});
+  setTimeout(function(){el.className='msg';},9000);
+}
+
+applyLang();
+updateServiceChip();
+</script>
+</body>
+</html>
