@@ -1000,23 +1000,23 @@ function toggleLang(){lang=lang==='en'?'ar':'en';document.documentElement.dir=la
 // SERVICE → BLOCK mapping
 // ============================================================
 var SVC={
-  'Control Panel Design & Assembly':{block:'block-panel',ico:'🔌',req:[['val','pType'],['val','pPower'],['desc','pDesc']],fields:[
+  'Control Panel Design & Assembly':{block:'block-panel',ico:'🔌',req:[['pType','val','pType'],['pPower','val','pPower'],['pDesc','desc','pDesc']],fields:[
     ['pType','val','pType'],['pPower','val','pPower'],['pEnclosure','val','pEnclosure'],['pQty','val','pQty'],['pTimeline','val','pTimeline'],['pDesc','desc','pDesc']]},
-  'PLC Programming & Automation':{block:'block-plc',ico:'⚙️',req:[['val','lBrand'],['chips','lTaskChips'],['desc','lDesc']],fields:[
+  'PLC Programming & Automation':{block:'block-plc',ico:'⚙️',req:[['lBrand','val','lBrand'],['lTask','chips','lTaskChips'],['lDesc','desc','lDesc']],fields:[
     ['lBrand','val','lBrand'],['lModel','val','lModel'],['lTask','chips','lTaskChips'],['lIO','val','lIO'],['lHmi','rd','lHmi'],['lDesc','desc','lDesc']]},
-  'Machine Build & Commissioning':{block:'block-machine',ico:'🏗️',req:[['val','mType'],['rd','mBuild'],['desc','mDesc']],fields:[
+  'Machine Build & Commissioning':{block:'block-machine',ico:'🏗️',req:[['mType','val','mType'],['mBuild','rd','mBuild'],['mDesc','desc','mDesc']],fields:[
     ['mType','val','mType'],['mPower','val','mPower'],['mBuild','rd','mBuild'],['mAuto','val','mAuto'],['mTimeline','val','mTimeline'],['mDesc','desc','mDesc']]},
-  'Industrial Wiring & Installation':{block:'block-wiring',ico:'🔩',req:[['chips','wWorkChips'],['desc','wDesc']],fields:[
+  'Industrial Wiring & Installation':{block:'block-wiring',ico:'🔩',req:[['wWork','chips','wWorkChips'],['wDesc','desc','wDesc']],fields:[
     ['wWork','chips','wWorkChips'],['wVoltage','val','wVoltage'],['wSite','val','wSite'],['wDesc','desc','wDesc']]},
-  'Advanced Diagnostics & Troubleshooting':{block:'block-diag',ico:'🔍',req:[['val','gDevice'],['chips','gIssueChips'],['desc','gDesc']],fields:[
+  'Advanced Diagnostics & Troubleshooting':{block:'block-diag',ico:'🔍',req:[['gDevice','val','gDevice'],['gIssue','chips','gIssueChips'],['gDesc','desc','gDesc']],fields:[
     ['gDevice','val','gDevice'],['gBrand','val','gBrand'],['gIssue','chips','gIssueChips'],['gUrgent','rd','gUrgent'],['gDesc','desc','gDesc']]},
-  'SLA Preventive Maintenance':{block:'block-sla',ico:'🕐',req:[['val','aTier'],['desc','aDesc']],fields:[
+  'SLA Preventive Maintenance':{block:'block-sla',ico:'🕐',req:[['aTier','val','aTier'],['aDesc','desc','aDesc']],fields:[
     ['aTier','val','aTier'],['aCount','val','aCount'],['aFreq','val','aFreq'],['aSite','val','aSite'],['aDesc','desc','aDesc']]},
-  'PCB & Power Supply Repair':{block:'block-repair',ico:'💾',req:[['val','rDevice'],['val','rBrand'],['chips','rSymptomsChips'],['desc','rDesc']],fields:[
+  'PCB & Power Supply Repair':{block:'block-repair',ico:'💾',req:[['rDevice','val','rDevice'],['rBrand','val','rBrand'],['rSymptom','chips','rSymptomsChips'],['rDesc','desc','rDesc']],fields:[
     ['rDevice','val','rDevice'],['rBrand','val','rBrand'],['rSymptom','chips','rSymptomsChips'],['rCondition','val','rCondition'],['rSchematic','rd','rSchematic'],['rDesc','desc','rDesc']]},
-  'PCB Design':{block:'block-design',ico:'📐',req:[['val','dType'],['desc','dDesc']],fields:[
+  'PCB Design':{block:'block-design',ico:'📐',req:[['dType','val','dType'],['dDesc','desc','dDesc']],fields:[
     ['dType','val','dType'],['dLayers','val','dLayers'],['dApp','val','dApp'],['dPower','val','dPower'],['dProto','rd','dProto'],['dTimeline','val','dTimeline'],['dDesc','desc','dDesc']]},
-  'PCB Fabrication':{block:'block-fab',ico:'🏭',req:[['val','fBoard'],['val','fQty'],['desc','fDesc']],fields:[
+  'PCB Fabrication':{block:'block-fab',ico:'🏭',req:[['fBoard','val','fBoard'],['fQty','val','fQty'],['fDesc','desc','fDesc']],fields:[
     ['fBoard','val','fBoard'],['fQty','val','fQty'],['fAssembly','val','fAssembly'],['fComponents','val','fComponents'],['fVenue','val','fVenue'],['fTest','val','fTest'],['fLead','val','fLead'],['fBudget','val','fBudget'],['fDesc','desc','fDesc']]}
 };
 var svc='Control Panel Design & Assembly';
