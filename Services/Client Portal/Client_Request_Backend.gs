@@ -289,7 +289,7 @@ function testSubmission() {
     name: "Test Client",
     phone: "0699 32 40 76",
     email: "test@example.com",
-    service: "Fabrication (PCB)",
+    service: "PCB Fabrication",
     projectType: "2-layer PCB",
     description: "This is a test submission.",
     details: "Board type / layers: 2-layer FR-4\nQuantity: 100 units\nVenue: Recommended\nWhat to fabricate: Test board",
