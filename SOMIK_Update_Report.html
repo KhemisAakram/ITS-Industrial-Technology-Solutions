@@ -127,6 +127,16 @@ td:first-child{color:var(--dark);font-weight:600}
 .reveal-left.visible,.reveal-right.visible{opacity:1;transform:none}
 .delay-1{transition-delay:0.12s}.delay-2{transition-delay:0.24s}.delay-3{transition-delay:0.36s}.delay-4{transition-delay:0.48s}
 
+/* ─── TIMETABLE (8-day plan) ─── */
+.tt-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:24px}
+.tt-block{background:var(--white);border:1px solid var(--border);border-radius:10px;padding:22px;position:relative;overflow:hidden}
+.tt-block::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--orange)}
+.tt-days{display:inline-block;font-size:11px;font-weight:800;letter-spacing:1px;color:var(--white);background:var(--orange);padding:4px 12px;border-radius:99px;margin-bottom:12px;text-transform:uppercase}
+[dir=rtl] .tt-days{letter-spacing:0}
+.tt-block h3{font-size:15px;font-weight:800;color:var(--dark);margin-bottom:6px}
+.tt-block p{font-size:13px;color:var(--gray);line-height:1.6}
+@media(max-width:768px){.tt-grid{grid-template-columns:1fr}}
+
 /* ─── ANIMATED PROGRESS ─── */
 .progress-card{background:var(--white);border-radius:10px;border:1px solid var(--border);padding:30px 32px}
 .progress-row{margin-bottom:22px}
@@ -278,6 +288,24 @@ section{padding:56px 0}
 <h3 data-i18n="st5-t">Suivant</h3>
 <p data-i18n="st5-d">Partie 2 Plasma : THC, ignition, console gaz.</p>
 </div>
+</div>
+</div>
+
+<div class="tt-grid">
+<div class="tt-block reveal">
+<span class="tt-days" data-i18n="tt-d1">Jours 1–4</span>
+<h3 data-i18n="tt-t1">Vérification &amp; diagnostic du système</h3>
+<p data-i18n="tt-p1">Contrôle complet de la machine et relevés — état des lieux.</p>
+</div>
+<div class="tt-block reveal delay-1">
+<span class="tt-days" data-i18n="tt-d2">Jours 5–6</span>
+<h3 data-i18n="tt-t2">Adaptation du système</h3>
+<p data-i18n="tt-p2">Adaptation du système à nos solutions ITS.</p>
+</div>
+<div class="tt-block reveal delay-2">
+<span class="tt-days" data-i18n="tt-d3">Jours 7–8</span>
+<h3 data-i18n="tt-t3">Application des solutions</h3>
+<p data-i18n="tt-p3">Mise en œuvre et validation de nos solutions.</p>
 </div>
 </div>
 
@@ -530,6 +558,9 @@ const i18n={fr:{
 'pb3-n':'Câblage variateur ↔ servo','pb3-v':'100%',
 'pb4-n':'Test axe X — Partie 1','pb4-v':'85%',
 'pb5-n':'Partie 2 — Plasma (THC, ignition, console gaz)','pb5-v':'0%',
+'tt-d1':'Jours 1–4','tt-t1':'Vérification &amp; diagnostic du système','tt-p1':'Contrôle complet de la machine et relevés — état des lieux.',
+'tt-d2':'Jours 5–6','tt-t2':'Adaptation du système','tt-p2':'Adaptation du système à nos solutions ITS.',
+'tt-d3':'Jours 7–8','tt-t3':'Application des solutions','tt-p3':'Mise en œuvre et validation de nos solutions.',
 'sys-label':'Aperçu du système','sys-title':'Architecture de conversion','sys-sub':'La conversion Sentrol 2 → Mach3 + UC300 modernise le pilotage de la machine.',
 'sys-th1':'Composant','sys-th2':'Détail',
 'sys-m':'Machine','sys-c':'Contrôleur','sys-xy':'Axes X/Y','sys-z':'Axe Z','sys-pl':'Plasma',
@@ -592,6 +623,9 @@ const i18n={fr:{
 'pb3-n':'Drive ↔ servo wiring','pb3-v':'100%',
 'pb4-n':'X-axis test — Part 1','pb4-v':'85%',
 'pb5-n':'Part 2 — Plasma (THC, ignition, gas console)','pb5-v':'0%',
+'tt-d1':'Days 1–4','tt-t1':'System check &amp; notes','tt-p1':'Full machine inspection and readings — status report.',
+'tt-d2':'Days 5–6','tt-t2':'System adaptation','tt-p2':'Adapting the system to our ITS solutions.',
+'tt-d3':'Days 7–8','tt-t3':'Applying the solutions','tt-p3':'Implementation and validation of our solutions.',
 'sys-label':'System overview','sys-title':'Conversion architecture','sys-sub':'The Sentrol 2 → Mach3 + UC300 conversion modernizes the machine control.',
 'sys-th1':'Component','sys-th2':'Detail',
 'sys-m':'Machine','sys-c':'Controller','sys-xy':'X/Y axes','sys-z':'Z axis','sys-pl':'Plasma',
@@ -654,6 +688,9 @@ const i18n={fr:{
 'pb3-n':'الكابلات بين المشغل والسيرفو','pb3-v':'100%',
 'pb4-n':'اختبار المحور X — الجزء 1','pb4-v':'85%',
 'pb5-n':'الجزء 2 — البلازما (THC، الإشعال، وحدة الغاز)','pb5-v':'0%',
+'tt-d1':'الأيام 1–4','tt-t1':'فحص النظام وتدوين الملاحظات','tt-p1':'فحص شامل للآلة وأخذ القياسات — تقرير الحالة.',
+'tt-d2':'الأيام 5–6','tt-t2':'تكييف النظام','tt-p2':'تكييف النظام مع حلول ITS.',
+'tt-d3':'الأيام 7–8','tt-t3':'تطبيق الحلول','tt-p3':'تنفيذ حلولنا والتحقق منها.',
 'sys-label':'نظرة عامة على النظام','sys-title':'هندسة التحويل','sys-sub':'التحويل من Sentrol 2 إلى Mach3 + UC300 يحدّث طريقة التحكم في الآلة.',
 'sys-th1':'المكوّن','sys-th2':'التفاصيل',
 'sys-m':'الآلة','sys-c':'وحدة التحكم','sys-xy':'المحوران X/Y','sys-z':'المحور Z','sys-pl':'البلازما',
