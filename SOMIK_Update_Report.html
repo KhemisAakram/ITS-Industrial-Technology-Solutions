@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>ITS — SOMIK Update Report & Offer</title>
+<link rel="icon" type="image/png" href="IMAGES/LOGO%20BGR.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{--orange:#FF9F00;--orange-dark:#E08A00;--dark:#1A1A1A;--gray:#4B5563;--gray-2:#6B7280;--warm:#FAF8F5;--warm-2:#F5F2ED;--white:#FFFFFF;--green:#10B981;--red:#EF4444;--border:#E5E7EB;--border-light:#F3F4F6;--border-dark:#D1D5DB}
+[data-theme=dark]{--dark:#F3F4F6;--gray:#9CA3AF;--gray-2:#6B7280;--warm:#1A1A1A;--warm-2:#2A2A2A;--white:#111827;--border:#2A2A2A;--border-light:#1F1F1F;--border-dark:#374151}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',-apple-system,sans-serif;color:var(--dark);background:var(--white);line-height:1.6;-webkit-font-smoothing:antialiased}
+[dir=rtl] body{font-family:'Tajawal','Inter',-apple-system,sans-serif}
+.container{max-width:1120px;margin:0 auto;padding:0 24px}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 28px;border-radius:6px;font-weight:600;font-size:13px;text-decoration:none;transition:all 0.25s;cursor:pointer;border:none;letter-spacing:0.2px}
+[dir=rtl] .btn{letter-spacing:0}
+.btn-primary{background:var(--orange);color:var(--white)}
+.btn-primary:hover{background:var(--orange-dark);transform:translateY(-2px)}
+.btn-outline{background:transparent;color:var(--dark);border:1.5px solid var(--border-dark)}
+.btn-outline:hover{border-color:var(--orange);color:var(--orange);transform:translateY(-2px)}
+.section-label{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--orange);text-transform:uppercase;margin-bottom:8px}
+[dir=rtl] .section-label{letter-spacing:0}
+.section-title{font-size:32px;font-weight:800;color:var(--dark);letter-spacing:-0.5px;margin-bottom:12px;line-height:1.15}
+[dir=rtl] .section-title{letter-spacing:0}
+.section-sub{font-size:14px;color:var(--gray);max-width:640px;margin-bottom:40px;line-height:1.7}
+[dir=rtl] .section-sub{max-width:100%}
+
+/* ─── NAV ─── */
+nav{position:fixed;top:0;left:0;right:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(14px);z-index:1000;border-bottom:1px solid var(--border)}
+[data-theme=dark] nav{background:rgba(17,24,39,0.95)}
+nav .container{display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0}
+.logo-mark{width:40px;height:40px;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.logo-mark img{width:100%;height:100%;object-fit:contain}
+[data-theme=dark] .logo-mark img{filter:brightness(1.1)}
+.logo-text{font-weight:700;font-size:14px;color:var(--dark);letter-spacing:-0.2px;line-height:1.3}
+[dir=rtl] .logo-text{letter-spacing:0}
+.logo-text small{display:block;font-weight:400;font-size:10px;color:var(--orange)}
+.nav-right{display:flex;gap:10px;align-items:center}
+.lang-btn{background:none;border:1.5px solid var(--border);border-radius:6px;cursor:pointer;padding:5px 10px;font-size:12px;font-weight:600;color:var(--gray);font-family:inherit;transition:all 0.2s}
+.lang-btn:hover{border-color:var(--orange);color:var(--orange)}
+.dark-toggle{background:none;border:none;cursor:pointer;padding:4px;display:flex;color:var(--gray)}
+
+/* ─── HERO ─── */
+.hero{background:var(--white);padding:140px 0 72px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-60%;right:-10%;width:900px;height:900px;background:radial-gradient(circle,rgba(255,159,0,0.06)0%,transparent 70%);pointer-events:none}
+[dir=rtl] .hero::before{right:auto;left:-10%}
+.hero-content{position:relative;z-index:1;max-width:860px}
+.hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,159,0,0.08);color:var(--orange);font-size:11px;font-weight:600;letter-spacing:1px;padding:5px 14px;border-radius:4px;margin-bottom:20px;text-transform:uppercase;border:1px solid rgba(255,159,0,0.12)}
+[dir=rtl] .hero-badge{letter-spacing:0}
+.hero h1{font-size:44px;font-weight:900;color:var(--dark);line-height:1.1;letter-spacing:-0.5px;margin-bottom:16px}
+[dir=rtl] .hero h1{letter-spacing:0}
+.hero h1 span{color:var(--orange)}
+.hero p{font-size:17px;color:var(--gray);max-width:700px;margin-bottom:28px;line-height:1.7}
+[dir=rtl] .hero p{max-width:100%}
+
+/* ─── SECTIONS ─── */
+section{padding:80px 0}
+.alt{background:var(--warm)}
+.table-card{background:var(--white);border-radius:8px;border:1px solid var(--border);overflow:hidden}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th{background:var(--warm-2);color:var(--dark);font-weight:700;text-align:left;padding:14px 18px;font-size:12px;text-transform:uppercase;letter-spacing:0.5px}
+[dir=rtl] th{text-align:right}
+td{padding:14px 18px;color:var(--gray);border-top:1px solid var(--border-light);vertical-align:top}
+td:first-child{color:var(--dark);font-weight:600}
+
+/* ─── STATUS CARDS ─── */
+.status-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.status-card{background:var(--white);border-radius:8px;padding:24px;border:1px solid var(--border);display:flex;gap:14px;align-items:flex-start;transition:all 0.3s}
+.status-card:hover{transform:translateY(-2px);border-color:rgba(255,159,0,0.25)}
+.status-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.status-icon.ok{background:rgba(16,185,129,0.12)}
+.status-icon.busy{background:rgba(255,159,0,0.12)}
+.status-icon.next{background:var(--warm-2)}
+.status-card h3{font-size:14px;font-weight:700;color:var(--dark);margin-bottom:4px}
+.status-card p{font-size:13px;color:var(--gray);line-height:1.6}
+
+/* ─── GALLERY ─── */
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px}
+.gallery-grid--4{grid-template-columns:repeat(4,1fr);gap:16px}
+.gallery-item{border-radius:12px;overflow:hidden;border:1px solid var(--border);background:var(--white);box-shadow:0 1px 3px rgba(0,0,0,0.03)}
+.gallery-item img{width:100%;height:200px;object-fit:cover;display:block}
+.gallery-grid--4 .gallery-item img{height:170px}
+@media(max-width:1000px){.gallery-grid--4{grid-template-columns:1fr 1fr}}
+@media(max-width:560px){.gallery-grid--4{grid-template-columns:1fr}}
+.gallery-head{margin-bottom:6px}
+
+/* ─── CHECKLIST ─── */
+.check-list{list-style:none;display:grid;gap:12px;margin-bottom:28px}
+.check-list li{display:flex;gap:12px;align-items:flex-start;font-size:14px;color:var(--gray);line-height:1.6;background:var(--white);border:1px solid var(--border);border-radius:8px;padding:16px 18px}
+.check-list li::before{content:'✓';color:var(--green);font-weight:800;flex-shrink:0}
+.check-list li.next::before{content:'❯';color:var(--orange)}
+[dir=rtl] .check-list li.next::before{content:'❮'}
+
+/* ─── OFFCARD ─── */
+.off-slug{display:inline-flex;align-items:center;gap:8px;background:rgba(255,159,0,0.08);color:var(--orange);font-size:11px;font-weight:700;letter-spacing:1px;padding:5px 12px;border-radius:4px;margin-bottom:14px;text-transform:uppercase;border:1px solid rgba(255,159,0,0.12)}
+[dir=rtl] .off-slug{letter-spacing:0}
+
+/* ─── MODEL CARDS ─── */
+.models-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.model-card{background:var(--white);border-radius:10px;border:1px solid var(--border);overflow:hidden;transition:all 0.3s}
+.model-card:hover{transform:translateY(-3px);box-shadow:0 12px 32px rgba(0,0,0,0.05);border-color:rgba(255,159,0,0.25)}
+.model-head{padding:24px 26px;border-bottom:1px solid var(--border-light)}
+.model-tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1px;color:var(--orange);background:rgba(255,159,0,0.08);padding:3px 9px;border-radius:3px;margin-bottom:8px;text-transform:uppercase}
+[dir=rtl] .model-tag{letter-spacing:0}
+.model-head h3{font-size:18px;font-weight:800;color:var(--dark)}
+.model-head p{font-size:12px;color:var(--gray-2);margin-top:4px}
+.model-body{padding:22px 26px}
+.model-feats{list-style:none}
+.model-feats li{font-size:13px;color:var(--gray);padding:8px 0;border-bottom:1px solid var(--border-light);display:flex;align-items:flex-start;gap:10px;line-height:1.6}
+.model-feats li::before{content:'✓';color:var(--green);font-weight:800;flex-shrink:0}
+.model-figs{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 26px 24px}
+.fig{background:var(--warm);border:1px solid var(--border);border-radius:6px;padding:10px 14px}
+.fig .k{font-size:10px;color:var(--gray-2);text-transform:uppercase;letter-spacing:0.5px}
+.fig .v{font-size:13px;font-weight:700;color:var(--dark);margin-top:2px}
+
+/* ─── SCROLL REVEAL ─── */
+.reveal{opacity:0;transform:translateY(34px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal.visible{opacity:1;transform:none}
+.reveal-left{opacity:0;transform:translateX(-40px);transition:opacity 0.7s ease,transform 0.7s ease}
+.reveal-right{opacity:0;transform:translateX(40px);transition:opacity 0.7s ease,transform 0.7s ease}
+[dir=rtl] .reveal-left{transform:translateX(40px)}
+[dir=rtl] .reveal-right{transform:translateX(-40px)}
+.reveal-left.visible,.reveal-right.visible{opacity:1;transform:none}
+.delay-1{transition-delay:0.12s}.delay-2{transition-delay:0.24s}.delay-3{transition-delay:0.36s}.delay-4{transition-delay:0.48s}
+
+/* ─── ANIMATED PROGRESS ─── */
+.progress-card{background:var(--white);border-radius:10px;border:1px solid var(--border);padding:30px 32px}
+.progress-row{margin-bottom:22px}
+.progress-row:last-child{margin-bottom:0}
+.progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.progress-name{font-size:13px;font-weight:600;color:var(--dark)}
+.progress-pct{font-size:13px;font-weight:800;color:var(--orange);font-variant-numeric:tabular-nums}
+.progress-track{height:8px;border-radius:99px;background:var(--warm-2);border:1px solid var(--border);overflow:hidden}
+.progress-fill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--orange),var(--orange-dark));transition:width 1.2s cubic-bezier(0.22,1,0.36,1);position:relative;overflow:hidden}
+.progress-fill::after{content:'';position:absolute;top:0;left:-40%;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,0.55),transparent);animation:shimmer 2.2s infinite}
+@keyframes shimmer{0%{left:-45%}100%{left:105%}}
+.progress-fill.done{background:linear-gradient(90deg,var(--green),#059669)}
+.progress-fill.working{background:linear-gradient(90deg,var(--orange),var(--orange-dark))}
+.progress-fill.pending{background:var(--border-dark)}
+.progress-tag{font-size:10px;font-weight:700;letter-spacing:0.5px;color:var(--gray-2);margin-top:6px;display:inline-block;text-transform:uppercase}
+.progress-tag.ok{color:var(--green)}
+.progress-tag.busy{color:var(--orange)}
+[dir=rtl] .progress-pct{font-variant-numeric:tabular-nums}
+
+/* ─── IMAGE CARD EFFECTS ─── */
+.gallery-item{position:relative;cursor:pointer;transition:transform 0.35s,box-shadow 0.35s,border-color 0.35s}
+.gallery-item img{transition:transform 0.6s cubic-bezier(0.22,1,0.36,1),filter 0.4s}
+.gallery-item:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(0,0,0,0.09);border-color:rgba(255,159,0,0.35)}
+.gallery-item:hover img{transform:scale(1.12)}
+.gallery-item::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(180deg,transparent 55%,rgba(26,26,26,0.55));opacity:0;transition:opacity 0.4s;pointer-events:none}
+.gallery-item:hover::after{opacity:1}
+.gallery-item .gallery-num{position:absolute;top:10px;left:10px;z-index:2;background:rgba(255,159,0,0.92);color:#fff;font-size:10px;font-weight:800;letter-spacing:0.5px;min-width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;opacity:0;transform:translateY(-6px);transition:all 0.35s}
+[dir=rtl] .gallery-item .gallery-num{left:auto;right:10px}
+.gallery-item:hover .gallery-num{opacity:1;transform:none}
+.gallery-item .zoom-hint{position:absolute;bottom:12px;right:12px;width:30px;height:30px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;opacity:0;transform:scale(0.5);transition:all 0.4s cubic-bezier(0.22,1,0.36,1);pointer-events:none;z-index:2}
+[dir=rtl] .gallery-item .zoom-hint{right:auto;left:12px}
+.gallery-item:hover .zoom-hint{opacity:1;transform:scale(1)}
+
+/* ─── COIL MODEL SECTION ─── */
+.model-block{max-width:760px;margin:0 auto}
+.model-block .model-card{margin-bottom:8px}
+.gallery-note{display:flex;align-items:center;gap:10px;margin:26px 0 16px}
+.gallery-note .line{flex:1;height:1px;background:var(--border)}
+.gallery-note .txt{font-size:11px;font-weight:600;letter-spacing:1.5px;color:var(--gray-2);text-transform:uppercase}
+[dir=rtl] .gallery-note .txt{letter-spacing:0}
+
+/* ─── OFFER BIG BANNER ─── */
+.big-banner{background:var(--white);color:var(--dark);padding:88px 0;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
+.big-banner::before{content:'';position:absolute;top:-40%;left:10%;width:600px;height:600px;background:radial-gradient(circle,rgba(255,159,0,0.06)0%,transparent 70%);pointer-events:none}
+[dir=rtl] .big-banner::before{left:auto;right:10%}
+.big-banner .step{font-size:12px;font-weight:700;letter-spacing:3px;color:var(--orange);text-transform:uppercase;margin-bottom:16px}
+[dir=rtl] .big-banner .step{letter-spacing:0}
+.big-banner h2{font-size:64px;font-weight:900;line-height:1.02;letter-spacing:-1.5px;margin-bottom:18px;color:var(--dark)}
+[dir=rtl] .big-banner h2{letter-spacing:0}
+.big-banner h2 span{color:var(--orange)}
+.big-banner p{font-size:17px;color:var(--gray);max-width:640px;line-height:1.7}
+[dir=rtl] .big-banner p{max-width:100%}
+@media(max-width:768px){.big-banner{padding:56px 0}.big-banner h2{font-size:38px}}
+
+/* ─── CONTACT ─── */
+#contact{background:var(--warm);border-top:1px solid var(--border)}
+.contact-rows{display:flex;gap:28px;flex-wrap:wrap;margin-top:8px}
+.contact-row{display:flex;align-items:center;gap:12px}
+[dir=rtl] .contact-row{gap:16px}
+.contact-row .ico{width:40px;height:40px;border-radius:8px;background:rgba(255,159,0,0.08);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;color:var(--orange)}
+.contact-row .lbl{font-size:11px;color:var(--gray-2)}
+.contact-row .val{font-size:14px;color:var(--dark);font-weight:600}
+
+/* ─── FOOTER ─── */
+footer{background:#1A1A1A;padding:32px 0;text-align:center}
+[data-theme=dark] footer{background:#0A0A0A}
+footer p{font-size:12px;color:rgba(255,255,255,0.25)}
+footer span{color:var(--orange)}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:768px){
+nav .container{height:56px}
+.hero{padding:112px 0 52px}
+.hero h1{font-size:28px}
+section{padding:56px 0}
+.section-title{font-size:25px}
+.status-grid,.models-grid{grid-template-columns:1fr}
+.contact-rows{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<nav>
+<div class="container">
+<a href="index.html" class="logo">
+<div class="logo-mark"><img src="IMAGES/LOGO BGR.png" alt="ITS Logo"></div>
+<div class="logo-text" data-i18n="nav-brand">Industrial Technology Solutions<small>Report &amp; Offer — SOMIK SKIKDA</small></div>
+</a>
+<div class="nav-right">
+<button class="lang-btn" id="langToggle">EN</button>
+<button class="dark-toggle" id="darkToggle" aria-label="Toggle dark mode"><svg id="moonIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg><svg id="sunIcon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button>
+</div>
+</div>
+</nav>
+
+<section class="hero">
+<div class="container">
+<div class="hero-content">
+<div class="hero-badge reveal" data-i18n="hero-badge">Rapport d'Avancement &amp; Offre</div>
+<h1 class="reveal delay-1" data-i18n-html="hero-title">ITS — Industrial Technology Solutions<br><span>SOMIK SKIKDA</span></h1>
+<p class="reveal delay-2" data-i18n="hero-desc">Rapport d'état du contrôleur CNC Plasma + offre de machine à bobiner (modèles V1 &amp; V3). Tous les équipements testés, drivers configurés, câblage connecté — test de l'axe X en cours.</p>
+<div class="hero-buttons reveal delay-3">
+<a href="#plasma" class="btn btn-primary" data-i18n="hero-cta1">Voir le rapport</a>
+<a href="#offer" class="btn btn-outline" data-i18n="hero-cta2">Voir l'offre</a>
+</div>
+</div>
+</div>
+</section>
+
+<section id="plasma">
+<div class="container">
+<div class="section-label" data-i18n="plasma-label">Rapport — CNC Plasma</div>
+<h2 class="section-title" data-i18n="plasma-title">Progrès — Partie 1 (Mouvement)</h2>
+<p class="section-sub" data-i18n="plasma-sub">Machine KOTEC KTPG-320 · le mouvement est en cours de validation avant la partie Plasma (THC, ignition, console gaz).</p>
+
+<div class="status-grid">
+<div class="status-card reveal">
+<div class="status-icon ok">✓</div>
+<div>
+<h3 data-i18n="st1-t">Équipements testés</h3>
+<p data-i18n="st1-d">Tous les équipements testés + rapport d'essai rédigé et remis pour vos archives.</p>
+</div>
+</div>
+<div class="status-card reveal delay-1">
+<div class="status-icon ok">✓</div>
+<div>
+<h3 data-i18n="st2-t">Drivers configurés</h3>
+<p data-i18n="st2-d">Tous les variateurs configurés pour le contrôleur UC300 (EC500).</p>
+</div>
+</div>
+<div class="status-card reveal delay-2">
+<div class="status-icon ok">✓</div>
+<div>
+<h3 data-i18n="st3-t">Câblage connecté</h3>
+<p data-i18n="st3-d">Câblage variateur ↔ servo driver connecté et vérifié.</p>
+</div>
+</div>
+<div class="status-card reveal delay-1">
+<div class="status-icon busy">🔶</div>
+<div>
+<h3 data-i18n="st4-t">Test axe X — en cours</h3>
+<p data-i18n="st4-d">En cours : test de l'axe X → termine la Partie 1 (Mouvement).</p>
+</div>
+</div>
+<div class="status-card reveal delay-2">
+<div class="status-icon next">▶</div>
+<div>
+<h3 data-i18n="st5-t">Suivant</h3>
+<p data-i18n="st5-d">Partie 2 Plasma : THC, ignition, console gaz.</p>
+</div>
+</div>
+</div>
+
+<div class="progress-card reveal" style="margin-top:24px" data-progress-block>
+<div class="progress-row">
+<div class="progress-top"><span class="progress-name" data-i18n="pb1-n">Équipements testés + rapport</span><span class="progress-pct" data-i18n="pb1-v">100%</span></div>
+<div class="progress-track"><div class="progress-fill done" data-fill="100"></div></div>
+</div>
+<div class="progress-row">
+<div class="progress-top"><span class="progress-name" data-i18n="pb2-n">Config variateurs UC300</span><span class="progress-pct" data-i18n="pb2-v">100%</span></div>
+<div class="progress-track"><div class="progress-fill done" data-fill="100"></div></div>
+</div>
+<div class="progress-row">
+<div class="progress-top"><span class="progress-name" data-i18n="pb3-n">Câblage variateur ↔ servo</span><span class="progress-pct" data-i18n="pb3-v">100%</span></div>
+<div class="progress-track"><div class="progress-fill done" data-fill="100"></div></div>
+</div>
+<div class="progress-row">
+<div class="progress-top"><span class="progress-name" data-i18n="pb4-n">Test axe X — Partie 1</span><span class="progress-pct" data-i18n="pb4-v">85%</span></div>
+<div class="progress-track"><div class="progress-fill working" data-fill="85"></div></div>
+</div>
+<div class="progress-row">
+<div class="progress-top"><span class="progress-name" data-i18n="pb5-n">Partie 2 — Plasma (THC, ignition, console gaz)</span><span class="progress-pct" data-i18n="pb5-v">0%</span></div>
+<div class="progress-track"><div class="progress-fill pending" data-fill="0"></div></div>
+</div>
+</div>
+</div>
+</section>
+
+<section class="alt">
+<div class="container">
+<div class="section-label" data-i18n="sys-label">Aperçu du système</div>
+<h2 class="section-title" data-i18n="sys-title">Architecture de conversion</h2>
+<p class="section-sub reveal" data-i18n="sys-sub">La conversion Sentrol 2 → Mach3 + UC300 modernise le pilotage de la machine.</p>
+<div class="table-card reveal">
+<table>
+<tr><th data-i18n="sys-th1">Composant</th><th data-i18n="sys-th2">Détail</th></tr>
+<tr><td data-i18n="sys-m">Machine</td><td>KOTEC KTPG-320 CNC Plasma (SOMIK SKIKDA)</td></tr>
+<tr><td data-i18n="sys-c">Contrôleur</td><td>Sentrol 2 → Mach3 + UC300 (EC500)</td></tr>
+<tr><td data-i18n="sys-xy">Axes X/Y</td><td>Servos YE-LI YPV (YBL13S-75L.Z)</td></tr>
+<tr><td data-i18n="sys-z">Axe Z</td><td>SLO-SYN + DM556</td></tr>
+<tr><td data-i18n="sys-pl">Plasma</td><td>Hypertherm HPR + Proma THC</td></tr>
+</table>
+</div>
+</div>
+</section>
+
+<section>
+<div class="container">
+<div class="section-label" data-i18n="deliv-label">Livré à ce jour</div>
+<h2 class="section-title" data-i18n="deliv-title">Ce qui est fait sur le terrain</h2>
+<ul class="check-list">
+<li class="reveal" data-i18n="deliv-1">Système de mouvement vérifié — variateurs configurés + câblage connecté.</li>
+<li class="reveal delay-1" data-i18n="deliv-2">Rapport d'essai documenté remis pour vos archives.</li>
+<li class="next reveal delay-2" data-i18n="deliv-3">En attente : test final axe X → Partie 1 complète (Partie 2 Plasma ensuite).</li>
+</ul>
+<div class="gallery-grid gallery-grid--4">
+<div class="gallery-item reveal"><img src="IMAGES/Somik_Report/plasma/plasma-1.jpg" alt="Somik CNC Plasma" loading="lazy"><span class="gallery-num">1</span><span class="zoom-hint">↗</span></div>
+<div class="gallery-item reveal delay-1"><img src="IMAGES/Somik_Report/plasma/plasma-2.jpg" alt="Somik CNC Plasma" loading="lazy"><span class="gallery-num">2</span><span class="zoom-hint">↗</span></div>
+<div class="gallery-item reveal delay-2"><img src="IMAGES/Somik_Report/plasma/plasma-3.jpg" alt="Somik CNC Plasma" loading="lazy"><span class="gallery-num">3</span><span class="zoom-hint">↗</span></div>
+<div class="gallery-item reveal delay-3"><img src="IMAGES/Somik_Report/plasma/plasma-4.jpg" alt="Somik CNC Plasma" loading="lazy"><span class="gallery-num">4</span><span class="zoom-hint">↗</span></div>
+</div>
+</div>
+</section>
+
+<section class="big-banner reveal" id="offer">
+<div class="container">
+<div class="step" data-i18n="offer-step">Partie 2 — Notre offre</div>
+<h2 data-i18n="offer-big-title">L'Offre</h2>
+<p data-i18n="offer-big-sub">Vous avez vu le rapport — voici maintenant ce que nous pouvons livrer : machines à bobiner fabriquées en Algérie, prêtes à commander.</p>
+</div>
+</section>
+
+<section class="alt">
+<div class="container">
+<div class="section-label" data-i18n="offer-label">Offre — Machines à bobiner</div>
+<h2 class="section-title" data-i18n="offer-title">Gamme ITSC04 · prête à commander</h2>
+<p class="section-sub reveal" data-i18n="offer-sub">Machines à bobiner moteurs &amp; transformateurs — fabriquées en Algérie, disponibles en deux versions.</p>
+<div class="table-card reveal">
+<table>
+<tr><th data-i18n="offer-th1">Caractéristique</th><th data-i18n="offer-th2">Valeur</th></tr>
+<tr><td data-i18n="off1-k">Désignation</td><td data-i18n="off1-v">Machine à bobiner moteurs &amp; transformateurs</td></tr>
+<tr><td data-i18n="off2-k">Charge max</td><td>80 kg</td></tr>
+<tr><td data-i18n="off3-k">Tension</td><td>240V monophasé</td></tr>
+<tr><td data-i18n="off4-k">Vitesse</td><td>100 tr/min</td></tr>
+<tr><td data-i18n="off5-k">Origine</td><td data-i18n="off5-v">Fabriqué en Algérie</td></tr>
+</table>
+</div>
+</div>
+</section>
+
+<section class="alt">
+<div class="container">
+<div class="section-label reveal" data-i18n="v1-section-label">Modèle V1</div>
+<h2 class="section-title reveal" data-i18n="v1-section-title">Bobinage CNC de précision</h2>
+
+<div class="model-block reveal">
+<div class="model-card">
+<div class="model-head">
+<div class="model-tag" data-i18n="v1-tag">Bobinage CNC de précision</div>
+<h3 data-i18n="v1-name">Modèle V1</h3>
+<p data-i18n="v1-sub">Précision et répétabilité pour bobines et transformateurs.</p>
+</div>
+<div class="model-body">
+<ul class="model-feats">
+<li data-i18n="v1-1">Commande à 2 axes : rotation + positionnement longitudinal du fil.</li>
+<li data-i18n="v1-2">Superposition parfaite des couches — pas de chevauchement.</li>
+<li data-i18n="v1-3">Diamètre de fil réglable pour bobines personnalisées.</li>
+<li data-i18n="v1-4">Structure interne accessible pour la maintenance.</li>
+</ul>
+</div>
+<div class="model-figs">
+<div class="fig"><div class="k" data-i18n="v1fg1-k">Contrôle</div><div class="v" data-i18n="v1fg1-v">2 axes stepper (CNC)</div></div>
+<div class="fig"><div class="k" data-i18n="v1fg2-k">Moteurs</div><div class="v" data-i18n="v1fg2-v">Steppers doubles</div></div>
+<div class="fig"><div class="k" data-i18n="v1fg3-k">Vitesse</div><div class="v" data-i18n="v1fg3-v">Programmable</div></div>
+<div class="fig"><div class="k" data-i18n="v1fg4-k">Idéal pour</div><div class="v" data-i18n="v1fg4-v">Transformateurs de précision</div></div>
+</div>
+</div>
+</div>
+
+<div class="gallery-note reveal">
+<div class="txt" data-i18n="gallery-photos">Photos</div>
+<div class="line"></div>
+</div>
+<div class="gallery-grid gallery-grid--4">
+<div class="gallery-item reveal"><img src="IMAGES/Somik_Report/coil_v1/v1-1.jpg" alt="Coil Winder V1" loading="lazy"><span class="gallery-num">1</span><span class="zoom-hint">↗</span></div>
+<div class="gallery-item reveal delay-1"><img src="IMAGES/Somik_Report/coil_v1/v1-2.jpg" alt="Coil Winder V1" loading="lazy"><span class="gallery-num">2</span><span class="zoom-hint">↗</span></div>
+<div class="gallery-item reveal delay-2"><img src="IMAGES/Somik_Report/coil_v1/v1-3.jpg" alt="Coil Winder V1" loading="lazy"><span class="gallery-num">3</span><span class="zoom-hint">↗</span></div>
+<div class="gallery-item reveal delay-3"><img src="IMAGES/Somik_Report/coil_v1/v1-4.jpg" alt="Coil Winder V1" loading="lazy"><span class="gallery-num">4</span><span class="zoom-hint">↗</span></div>
+</div>
+<div class="off-slug reveal" data-i18n="v1-slug">Modèle V1 — bobinage CNC de précision</div>
+</div>
+</section>
+
+<section>
+<div class="container">
+<div class="section-label reveal" data-i18n="v3-section-label">Modèle V3</div>
+<h2 class="section-title reveal" data-i18n="v3-section-title">Console ergonomique haute cadence</h2>
+
+<div class="model-block reveal">
+<div class="model-card">
+<div class="model-head">
+<div class="model-tag" data-i18n="v3-tag">Console ergonomique</div>
+<h3 data-i18n="v3-name">Modèle V3</h3>
+<p data-i18n="v3-sub">Haute cadence, couple constant, double production.</p>
+</div>
+<div class="model-body">
+<ul class="model-feats">
+<li data-i18n="v3-1">Moteur industriel 0,75 kW — couple constant pour fils épais.</li>
+<li data-i18n="v3-2">Variateur CHINT — démarrage progressif + couple à basse vitesse.</li>
+<li data-i18n="v3-3">Double bobinage (droite + gauche) → productivité doublée.</li>
+<li data-i18n="v3-4">Pédales au pied pour garder les mains libres.</li>
+<li data-i18n="v3-5">Console verte au sol avec porte d'accès VFD.</li>
+</ul>
+</div>
+<div class="model-figs">
+<div class="fig"><div class="k" data-i18n="v3fg1-k">Contrôle</div><div class="v" data-i18n="v3fg1-v">VFD + console ergonomique</div></div>
+<div class="fig"><div class="k" data-i18n="v3fg2-k">Moteur</div><div class="v">0,75 kW AC</div></div>
+<div class="fig"><div class="k" data-i18n="v3fg3-k">Vitesse</div><div class="v">100 tr/min</div></div>
+<div class="fig"><div class="k" data-i18n="v3fg4-k">Idéal pour</div><div class="v" data-i18n="v3fg4-v">Production haut volume</div></div>
+</div>
+</div>
+</div>
+
+<div class="gallery-note reveal">
+<div class="txt" data-i18n="gallery-photos">Photos</div>
+<div class="line"></div>
+</div>
+<div class="gallery-grid gallery-grid--4">
+<div class="gallery-item reveal"><img src="IMAGES/Somik_Report/coil_v3/v3-1.jpg" alt="Coil Winder V3" loading="lazy"><span class="gallery-num">1</span><span class="zoom-hint">↗</span></div>
+<div class="gallery-item reveal delay-1"><img src="IMAGES/Somik_Report/coil_v3/v3-2.jpg" alt="Coil Winder V3" loading="lazy"><span class="gallery-num">2</span><span class="zoom-hint">↗</span></div>
+<div class="gallery-item reveal delay-2"><img src="IMAGES/Somik_Report/coil_v3/v3-3.jpg" alt="Coil Winder V3" loading="lazy"><span class="gallery-num">3</span><span class="zoom-hint">↗</span></div>
+<div class="gallery-item reveal delay-3"><img src="IMAGES/Somik_Report/coil_v3/v3-4.jpg" alt="Coil Winder V3" loading="lazy"><span class="gallery-num">4</span><span class="zoom-hint">↗</span></div>
+</div>
+<div class="off-slug reveal" data-i18n="v3-slug">Modèle V3 — console ergonomique haute cadence</div>
+</div>
+</section>
+
+<section class="alt">
+<div class="container">
+<div class="section-label reveal" data-i18n="cmp-label">Comparaison</div>
+<h2 class="section-title reveal" data-i18n="cmp-title">V1 vs V3 en un coup d'œil</h2>
+<div class="table-card reveal">
+<table>
+<tr><th data-i18n="cmp-th">Fonction</th><th>V1</th><th>V3</th></tr>
+<tr><td data-i18n="cmp-1k">Contrôle</td><td data-i18n="cmp-1v1">2 axes stepper (CNC)</td><td data-i18n="cmp-1v3">VFD + console ergonomique</td></tr>
+<tr><td data-i18n="cmp-2k">Moteur</td><td data-i18n="cmp-2v1">Moteurs stepper doubles</td><td>0,75 kW AC</td></tr>
+<tr><td data-i18n="cmp-3k">Variateur</td><td data-i18n="cmp-3v1">XY Stepper Driver</td><td data-i18n="cmp-3v3">CHINT VFD</td></tr>
+<tr><td data-i18n="cmp-4k">Vitesse</td><td data-i18n="cmp-4v1">Programmable</td><td>100 tr/min</td></tr>
+<tr><td data-i18n="cmp-5k">Meilleur pour</td><td data-i18n="cmp-5v1">Transformateurs de précision</td><td data-i18n="cmp-5v3">Production haut volume</td></tr>
+</table>
+</div>
+</div>
+</section>
+
+<section id="contact">
+<div class="container">
+<div class="section-label" data-i18n="contact-label">Contact</div>
+<h2 class="section-title" data-i18n="contact-title">Parlons de tarification</h2>
+<p class="section-sub" data-i18n="contact-sub">Rapport d'avancement livré · offre machine à bobiner valable — contactez-nous pour la tarification.</p>
+<div class="contact-rows">
+<div class="contact-row">
+<div class="ico">✉</div>
+<div>
+<div class="lbl" data-i18n="ct-email">Email</div>
+<div class="val">industrialtechnologysolutions2@gmail.com</div>
+</div>
+</div>
+<div class="contact-row">
+<div class="ico">☎</div>
+<div>
+<div class="lbl" data-i18n="ct-phone">Téléphone</div>
+<div class="val">+213 69 93 24 076</div>
+</div>
+</div>
+<div class="contact-row">
+<div class="ico">📍</div>
+<div>
+<div class="lbl" data-i18n="ct-loc">Localisation</div>
+<div class="val" data-i18n="ct-loc-val">El Harrouch, Skikda, Algérie</div>
+</div>
+</div>
+</div>
+<div style="margin-top:24px">
+<a href="index.html" class="btn btn-primary" data-i18n="ct-back">Retour au site ITS</a>
+</div>
+</div>
+</section>
+
+<footer>
+<div class="container">
+<p data-i18n="footer-text">Industrial Technology Solutions. Power, Control &amp; Machinery. | El Harrouch, Skikda, Algeria — <span>SOMIK SKIKDA Report</span></p>
+</div>
+</footer>
+
+<script>
+const i18n={fr:{
+'nav-brand':'Industrial Technology Solutions<small>Rapport &amp; Offre — SOMIK SKIKDA</small>',
+'hero-badge':'Rapport d\u2019Avancement &amp; Offre',
+'hero-title':'ITS — Industrial Technology Solutions<br><span>SOMIK SKIKDA</span>',
+'hero-desc':'Rapport d\u2019état du contrôleur CNC Plasma + offre de machine à bobiner (modèles V1 &amp; V3). Tous les équipements testés, drivers configurés, câblage connecté — test de l\u2019axe X en cours.',
+'hero-cta1':'Voir le rapport','hero-cta2':'Voir l\u2019offre',
+'plasma-label':'Rapport — CNC Plasma','plasma-title':'Progrès — Partie 1 (Mouvement)','plasma-sub':'Machine KOTEC KTPG-320 · le mouvement est en cours de validation avant la partie Plasma (THC, ignition, console gaz).',
+'st1-t':'Équipements testés','st1-d':'Tous les équipements testés + rapport d\u2019essai rédigé et remis pour vos archives.',
+'st2-t':'Drivers configurés','st2-d':'Tous les variateurs configurés pour le contrôleur UC300 (EC500).',
+'st3-t':'Câblage connecté','st3-d':'Câblage variateur ↔ servo driver connecté et vérifié.',
+'st4-t':'Test axe X — en cours','st4-d':'En cours : test de l\u2019axe X → termine la Partie 1 (Mouvement).',
+'st5-t':'Suivant','st5-d':'Partie 2 Plasma : THC, ignition, console gaz.',
+'pb1-n':'Équipements testés + rapport','pb1-v':'100%',
+'pb2-n':'Config variateurs UC300','pb2-v':'100%',
+'pb3-n':'Câblage variateur ↔ servo','pb3-v':'100%',
+'pb4-n':'Test axe X — Partie 1','pb4-v':'85%',
+'pb5-n':'Partie 2 — Plasma (THC, ignition, console gaz)','pb5-v':'0%',
+'sys-label':'Aperçu du système','sys-title':'Architecture de conversion','sys-sub':'La conversion Sentrol 2 → Mach3 + UC300 modernise le pilotage de la machine.',
+'sys-th1':'Composant','sys-th2':'Détail',
+'sys-m':'Machine','sys-c':'Contrôleur','sys-xy':'Axes X/Y','sys-z':'Axe Z','sys-pl':'Plasma',
+'deliv-label':'Livré à ce jour','deliv-title':'Ce qui est fait sur le terrain',
+'deliv-1':'Système de mouvement vérifié — variateurs configurés + câblage connecté.',
+'deliv-2':'Rapport d\u2019essai documenté remis pour vos archives.',
+'deliv-3':'En attente : test final axe X → Partie 1 complète (Partie 2 Plasma ensuite).',
+'offer-label':'Offre — Machines à bobiner','offer-title':'Gamme ITSC04 · prête à commander','offer-sub':'Machines à bobiner moteurs &amp; transformateurs — fabriquées en Algérie, disponibles en deux versions.',
+'offer-step':'Partie 2 — Notre offre','offer-big-title':'L\u2019Offre','offer-big-sub':'Vous avez vu le rapport — voici maintenant ce que nous pouvons livrer : machines à bobiner fabriquées en Algérie, prêtes à commander.',
+'v1-section-label':'Modèle V1','v1-section-title':'Bobinage CNC de précision',
+'v3-section-label':'Modèle V3','v3-section-title':'Console ergonomique haute cadence',
+'gallery-photos':'Photos',
+'offer-th1':'Caractéristique','offer-th2':'Valeur',
+'off1-k':'Désignation','off1-v':'Machine à bobiner moteurs &amp; transformateurs',
+'off2-k':'Charge max','off3-k':'Tension','off4-k':'Vitesse','off5-k':'Origine','off5-v':'Fabriqué en Algérie',
+'models-label':'Deux modèles','models-title':'V1 vs V3 — choisissez votre cadence',
+'v1-tag':'Bobinage CNC de précision','v1-name':'Modèle V1','v1-sub':'Précision et répétabilité pour bobines et transformateurs.',
+'v1-1':'Commande à 2 axes : rotation + positionnement longitudinal du fil.',
+'v1-2':'Superposition parfaite des couches — pas de chevauchement.',
+'v1-3':'Diamètre de fil réglable pour bobines personnalisées.',
+'v1-4':'Structure interne accessible pour la maintenance.',
+'v1fg1-k':'Contrôle','v1fg1-v':'2 axes stepper (CNC)',
+'v1fg2-k':'Moteurs','v1fg2-v':'Steppers doubles',
+'v1fg3-k':'Vitesse','v1fg3-v':'Programmable',
+'v1fg4-k':'Idéal pour','v1fg4-v':'Transformateurs de précision',
+'v3-tag':'Console ergonomique','v3-name':'Modèle V3','v3-sub':'Haute cadence, couple constant, double production.',
+'v3-1':'Moteur industriel 0,75 kW — couple constant pour fils épais.',
+'v3-2':'Variateur CHINT — démarrage progressif + couple à basse vitesse.',
+'v3-3':'Double bobinage (droite + gauche) → productivité doublée.',
+'v3-4':'Pédales au pied pour garder les mains libres.',
+'v3-5':'Console verte au sol avec porte d\u2019accès VFD.',
+'v3fg1-k':'Contrôle','v3fg1-v':'VFD + console ergonomique',
+'v3fg2-k':'Moteur','v3fg3-k':'Vitesse','v3fg4-k':'Idéal pour','v3fg4-v':'Production haut volume',
+'v1-slug':'Modèle V1 — bobinage CNC de précision',
+'v3-slug':'Modèle V3 — console ergonomique haute cadence',
+'cmp-label':'Comparaison','cmp-title':'V1 vs V3 en un coup d\u2019œil','cmp-th':'Fonction',
+'cmp-1k':'Contrôle','cmp-1v1':'2 axes stepper (CNC)','cmp-1v3':'VFD + console ergonomique',
+'cmp-2k':'Moteur','cmp-2v1':'Moteurs stepper doubles','cmp-2v3':'0,75 kW AC',
+'cmp-3k':'Variateur','cmp-3v1':'XY Stepper Driver','cmp-3v3':'CHINT VFD',
+'cmp-4k':'Vitesse','cmp-4v1':'Programmable','cmp-4v3':'100 tr/min',
+'cmp-5k':'Meilleur pour','cmp-5v1':'Transformateurs de précision','cmp-5v3':'Production haut volume',
+'contact-label':'Contact','contact-title':'Parlons de tarification','contact-sub':'Rapport d\u2019avancement livré · offre machine à bobiner valable — contactez-nous pour la tarification.',
+'ct-email':'Email','ct-phone':'Téléphone','ct-loc':'Localisation','ct-loc-val':'El Harrouch, Skikda, Algérie',
+'ct-back':'Retour au site ITS',
+'footer-text':'Industrial Technology Solutions. Power, Control &amp; Machinery. | El Harrouch, Skikda, Algeria — <span>Rapport SOMIK SKIKDA</span>'
+},en:{
+'nav-brand':'Industrial Technology Solutions<small>Report &amp; Offer — SOMIK SKIKDA</small>',
+'hero-badge':'Update Report & Offer',
+'hero-title':'ITS — Industrial Technology Solutions<br><span>SOMIK SKIKDA</span>',
+'hero-desc':'Status report for the CNC Plasma controller + coil winding machine offer (models V1 &amp; V3). All equipment tested, drivers configured, wiring connected — X-axis test in progress.',
+'hero-cta1':'See the report','hero-cta2':'See the offer',
+'plasma-label':'Report — CNC Plasma','plasma-title':'Progress — Part 1 (Motion)','plasma-sub':'KOTEC KTPG-320 · motion is being validated before the Plasma part (THC, ignition, gas console).',
+'st1-t':'Equipment tested','st1-d':'All equipment tested + test report written and handed over for your records.',
+'st2-t':'Drivers configured','st2-d':'All drives configured for the UC300 (EC500) controller.',
+'st3-t':'Wiring connected','st3-d':'Drive ↔ servo driver wiring connected and verified.',
+'st4-t':'X-axis test — in progress','st4-d':'In progress: X-axis test → completes Part 1 (Motion).',
+'st5-t':'Next step','st5-d':'Part 2 Plasma: THC, ignition, gas console.',
+'pb1-n':'Equipment tested + report','pb1-v':'100%',
+'pb2-n':'UC300 drive configuration','pb2-v':'100%',
+'pb3-n':'Drive ↔ servo wiring','pb3-v':'100%',
+'pb4-n':'X-axis test — Part 1','pb4-v':'85%',
+'pb5-n':'Part 2 — Plasma (THC, ignition, gas console)','pb5-v':'0%',
+'sys-label':'System overview','sys-title':'Conversion architecture','sys-sub':'The Sentrol 2 → Mach3 + UC300 conversion modernizes the machine control.',
+'sys-th1':'Component','sys-th2':'Detail',
+'sys-m':'Machine','sys-c':'Controller','sys-xy':'X/Y axes','sys-z':'Z axis','sys-pl':'Plasma',
+'deliv-label':'Delivered so far','deliv-title':'What is done on the field',
+'deliv-1':'Motion system verified — drives configured + wiring connected.',
+'deliv-2':'Documented test report handed over for your archives.',
+'deliv-3':'Pending: final X-axis test → Part 1 complete (Part 2 Plasma next).',
+'offer-label':'Offer — Coil Winding Machines','offer-title':'ITSC04 range · ready to order','offer-sub':'Motor &amp; transformer coil winding machines — made in Algeria, available in two versions.',
+'offer-step':'Part 2 — Our offer','offer-big-title':'The Offer','offer-big-sub':'You have seen the report — now here is what we can deliver: coil winding machines made in Algeria, ready to order.',
+'v1-section-label':'Model V1','v1-section-title':'Precision CNC winding',
+'v3-section-label':'Model V3','v3-section-title':'High-cadence ergonomic console',
+'gallery-photos':'Photos',
+'offer-th1':'Specification','offer-th2':'Value',
+'off1-k':'Designation','off1-v':'Motor &amp; transformer coil winding machine',
+'off2-k':'Max load','off3-k':'Voltage','off4-k':'Speed','off5-k':'Origin','off5-v':'Made in Algeria',
+'models-label':'Two models','models-title':'V1 vs V3 — choose your pace',
+'v1-tag':'Precision CNC winding','v1-name':'Model V1','v1-sub':'Precision and repeatability for coils and transformers.',
+'v1-1':'2-axis control: rotation + longitudinal wire positioning.',
+'v1-2':'Perfect layer stacking — no overlap.',
+'v1-3':'Adjustable wire diameter for custom coils.',
+'v1-4':'Accessible internal structure for maintenance.',
+'v1fg1-k':'Control','v1fg1-v':'2-axis stepper (CNC)',
+'v1fg2-k':'Motors','v1fg2-v':'Dual steppers',
+'v1fg3-k':'Speed','v1fg3-v':'Programmable',
+'v1fg4-k':'Best for','v1fg4-v':'Precision transformers',
+'v3-tag':'Ergonomic console','v3-name':'Model V3','v3-sub':'High throughput, constant torque, double production.',
+'v3-1':'0.75 kW industrial motor — constant torque for thick wires.',
+'v3-2':'CHINT VFD — soft start + low-speed torque.',
+'v3-3':'Dual winding (right + left) → doubled productivity.',
+'v3-4':'Foot pedals to keep hands free.',
+'v3-5':'Green floor console with VFD access door.',
+'v3fg1-k':'Control','v3fg1-v':'VFD + ergonomic console',
+'v3fg2-k':'Motor','v3fg3-k':'Speed','v3fg4-k':'Best for','v3fg4-v':'High-volume production',
+'v1-slug':'Model V1 — precision CNC winding',
+'v3-slug':'Model V3 — high-cadence ergonomic console',
+'cmp-label':'Comparison','cmp-title':'V1 vs V3 at a glance','cmp-th':'Function',
+'cmp-1k':'Control','cmp-1v1':'2-axis stepper (CNC)','cmp-1v3':'VFD + ergonomic console',
+'cmp-2k':'Motor','cmp-2v1':'Dual stepper motors','cmp-2v3':'0.75 kW AC',
+'cmp-3k':'Drive','cmp-3v1':'XY Stepper Driver','cmp-3v3':'CHINT VFD',
+'cmp-4k':'Speed','cmp-4v1':'Programmable','cmp-4v3':'100 rpm',
+'cmp-5k':'Best for','cmp-5v1':'Precision transformers','cmp-5v3':'High-volume production',
+'contact-label':'Contact','contact-title':'Let\u2019s talk pricing','contact-sub':'Update report delivered · coil winding offer valid — contact us for pricing.',
+'ct-email':'Email','ct-phone':'Phone','ct-loc':'Location','ct-loc-val':'El Harrouch, Skikda, Algeria',
+'ct-back':'Back to ITS website',
+'footer-text':'Industrial Technology Solutions. Power, Control &amp; Machinery. | El Harrouch, Skikda, Algeria — <span>SOMIK SKIKDA Report</span>'
+},ar:{
+'nav-brand':'حلول التكنولوجيا الصناعية<small>التقرير والعرض — سوميك سكيكدة</small>',
+'hero-badge':'تقرير التقدم والعرض',
+'hero-title':'آي تي إس — حلول التكنولوجيا الصناعية<br><span>سوميك سكيكدة</span>',
+'hero-desc':'تقرير حالة آلة البلازما CNC + عرض آلة لف (الطرازان V1 و V3). تم اختبار جميع المعدات وضبط المشغلات وتوصيل الكابلات — اختبار المحور X جارٍ.',
+'hero-cta1':'عرض التقرير','hero-cta2':'عرض العرض',
+'plasma-label':'التقرير — بلازما CNC','plasma-title':'التقدم — الجزء 1 (الحركة)','plasma-sub':'KOTEC KTPG-320 · جارٍ التحقق من الحركة قبل الجزء الخاص بالبلازما (THC، الإشعال، وحدة الغاز).',
+'st1-t':'اختبار المعدات','st1-d':'تم اختبار جميع المعدات + إعداد تقرير الاختبار وتسليمه لسجلاتكم.',
+'st2-t':'ضبط المشغلات','st2-d':'تم ضبط جميع المشغلات للتحكم عبر UC300 (EC500).',
+'st3-t':'توصيل الكابلات','st3-d':'تم توصيل الكابلات بين المشغل والمشغل السيرفو والتحقق منها.',
+'st4-t':'اختبار المحور X — جارٍ','st4-d':'جارٍ: اختبار المحور X → إكمال الجزء 1 (الحركة).',
+'st5-t':'التالي','st5-d':'الجزء 2 البلازما: THC، الإشعال، وحدة الغاز.',
+'pb1-n':'اختبار المعدات + التقرير','pb1-v':'100%',
+'pb2-n':'ضبط المشغلات عبر UC300','pb2-v':'100%',
+'pb3-n':'الكابلات بين المشغل والسيرفو','pb3-v':'100%',
+'pb4-n':'اختبار المحور X — الجزء 1','pb4-v':'85%',
+'pb5-n':'الجزء 2 — البلازما (THC، الإشعال، وحدة الغاز)','pb5-v':'0%',
+'sys-label':'نظرة عامة على النظام','sys-title':'هندسة التحويل','sys-sub':'التحويل من Sentrol 2 إلى Mach3 + UC300 يحدّث طريقة التحكم في الآلة.',
+'sys-th1':'المكوّن','sys-th2':'التفاصيل',
+'sys-m':'الآلة','sys-c':'وحدة التحكم','sys-xy':'المحوران X/Y','sys-z':'المحور Z','sys-pl':'البلازما',
+'deliv-label':'المُنجز حتى اليوم','deliv-title':'ما تم إنجازه ميدانياً',
+'deliv-1':'نظام حركة مُتحقق منه — مشغلات مضبوطة + كابلات موصولة.',
+'deliv-2':'تقرير الاختبار الموثق تم تسليمه لسجلاتكم.',
+'deliv-3':'بانتظار: الاختبار النهائي للمحور X → إكمال الجزء 1 (ثم الجزء 2 البلازما).',
+'offer-label':'العرض — آلات اللف','offer-title':'النطاق ITSC04 · جاهز للطلب','offer-sub':'آلات لف محركات ومحولات — صنعت في الجزائر، متوفرة بنسختين.',
+'offer-step':'الجزء 2 — عرضنا','offer-big-title':'العرض','offer-big-sub':'رأيتم التقرير — إليكم ما يمكننا تسليمه: آلات لف مصنوعة في الجزائر، جاهزة للطلب.',
+'v1-section-label':'الطراز V1','v1-section-title':'لف CNC دقيق',
+'v3-section-label':'الطراز V3','v3-section-title':'خزانة مريحة عالية الإيقاع',
+'gallery-photos':'صور',
+'offer-th1':'المواصفة','offer-th2':'القيمة',
+'off1-k':'التسمية','off1-v':'آلة لف محركات ومحولات',
+'off2-k':'الحمولة القصوى','off3-k':'الجهد','off4-k':'السرعة','off5-k':'المنشأ','off5-v':'صنع في الجزائر',
+'models-label':'الطرازان','models-title':'V1 مقابل V3 — اختر إيقاعك',
+'v1-tag':'لف CNC دقيق','v1-name':'الطراز V1','v1-sub':'دقة وتكرارية للملفات والمحولات.',
+'v1-1':'تحكم ثنائي المحاور: دوران + تموضع طولي للسلك.',
+'v1-2':'ترتيب طبقات مثالي — دون تداخل.',
+'v1-3':'قطر سلك قابل للضبط لملفات مخصصة.',
+'v1-4':'هيكل داخلي يسهل الوصول إليه للصيانة.',
+'v1fg1-k':'التحكم','v1fg1-v':'محورا stepper (CNC)',
+'v1fg2-k':'المحركات','v1fg2-v':'stepper مزدوج',
+'v1fg3-k':'السرعة','v1fg3-v':'قابلة للبرمجة',
+'v1fg4-k':'مثالي لـ','v1fg4-v':'المحولات الدقيقة',
+'v3-tag':'خزانة مريحة','v3-name':'الطراز V3','v3-sub':'إنتاجية عالية، عزم ثابت، إنتاج مضاعف.',
+'v3-1':'محرك صناعي 0.75 كيلوواط — عزم ثابت للأسلاك السميكة.',
+'v3-2':'محول تردد CHINT — بداية ناعمة + عزم عند السرعات المنخفضة.',
+'v3-3':'لف مزدوج (يمين + يسار) → مضاعفة الإنتاجية.',
+'v3-4':'دواسات للقدم لتحرير اليدين.',
+'v3-5':'خزانة خضراء بأرضية وباب للصيانة.',
+'v3fg1-k':'التحكم','v3fg1-v':'محول تردد + خزانة مريحة',
+'v3fg2-k':'المحرك','v3fg3-k':'السرعة','v3fg4-k':'مثالي لـ','v3fg4-v':'الإنتاج عالي الحجم',
+'v1-slug':'الطراز V1 — لف CNC دقيق',
+'v3-slug':'الطراز V3 — خزانة مريحة عالية الإيقاع',
+'cmp-label':'المقارنة','cmp-title':'V1 مقابل V3 بنظرة واحدة','cmp-th':'الوظيفة',
+'cmp-1k':'التحكم','cmp-1v1':'محورا stepper (CNC)','cmp-1v3':'محول تردد + خزانة مريحة',
+'cmp-2k':'المحرك','cmp-2v1':'محركا stepper مزدوجان','cmp-2v3':'0.75 كيلوواط AC',
+'cmp-3k':'المشغل','cmp-3v1':'مشغل stepper XY','cmp-3v3':'محول تردد CHINT',
+'cmp-4k':'السرعة','cmp-4v1':'قابلة للبرمجة','cmp-4v3':'100 دورة/دقيقة',
+'cmp-5k':'مثالي لـ','cmp-5v1':'المحولات الدقيقة','cmp-5v3':'الإنتاج عالي الحجم',
+'contact-label':'التواصل','contact-title':'لنتحدث عن الأسعار','contact-sub':'تم تسليم تقرير التقدم · عرض آلة اللف سارٍ — تواصلوا معنا للأسعار.',
+'ct-email':'البريد الإلكتروني','ct-phone':'الهاتف','ct-loc':'الموقع','ct-loc-val':'الحروش، سكيكدة، الجزائر',
+'ct-back':'العودة إلى موقع ITS',
+'footer-text':'Industrial Technology Solutions. الطاقة، التحكم والآلات. | الحروش، سكيكدة، الجزائر — <span>تقرير سوميك سكيكدة</span>'
+}};
+
+let currentLang=localStorage.getItem('lang')||'fr';
+const langCycle=['fr','en','ar'];
+const langLabel={'fr':'EN','en':'ع','ar':'FR'};
+
+function applyLang(lang){
+currentLang=lang;
+const t=i18n[lang];
+document.documentElement.lang=lang;
+document.documentElement.dir=lang==='ar'?'rtl':'ltr';
+document.getElementById('langToggle').textContent=langLabel[lang];
+document.title=lang==='ar'?'ITS — تقرير سوميك والعرض':(lang==='en'?'ITS — SOMIK Update Report & Offer':'ITS — Rapport & Offre SOMIK');
+document.querySelectorAll('[data-i18n]').forEach(el=>{
+const key=el.getAttribute('data-i18n');
+if(t[key])el.innerHTML=t[key];
+});
+localStorage.setItem('lang',lang);
+}
+document.querySelectorAll('[data-i18n-html]').forEach(el=>{el.setAttribute('data-i18n',el.getAttribute('data-i18n-html'))});
+document.getElementById('langToggle').addEventListener('click',()=>{
+const idx=langCycle.indexOf(currentLang);
+applyLang(langCycle[(idx+1)%langCycle.length]);
+});
+applyLang(currentLang);
+
+const html=document.documentElement;
+const stored=localStorage.getItem('theme');
+if(stored==='dark')html.setAttribute('data-theme','dark');
+const dt=document.getElementById('darkToggle');
+const moon=document.getElementById('moonIcon');
+const sun=document.getElementById('sunIcon');
+if(html.getAttribute('data-theme')==='dark'){moon.style.display='none';sun.style.display='block'}
+dt.addEventListener('click',()=>{
+const isDark=html.getAttribute('data-theme')==='dark';
+html.setAttribute('data-theme',isDark?'':'dark');
+moon.style.display=isDark?'block':'none';
+sun.style.display=isDark?'none':'block';
+localStorage.setItem('theme',isDark?'':'dark');
+});
+
+// Scroll reveal
+const revealObs=new IntersectionObserver((entries)=>{
+entries.forEach(e=>{
+if(e.isIntersecting){e.target.classList.add('visible');revealObs.unobserve(e.target)}
+});
+},{threshold:0.12,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.reveal,.reveal-left,.reveal-right').forEach(el=>revealObs.observe(el));
+
+// Animated progress bars
+const progressObs=new IntersectionObserver((entries)=>{
+entries.forEach(e=>{
+if(!e.isIntersecting)return;
+e.target.querySelectorAll('.progress-fill').forEach((f,i)=>{
+const target=parseFloat(f.getAttribute('data-fill'))||0;
+if(target===0){f.style.width='2%'}
+else{setTimeout(()=>{f.style.width=target+'%'},i*140)}
+f.style.background=f.classList.contains('done')?'linear-gradient(90deg,var(--green),#059669)':f.classList.contains('pending')?'var(--border-dark)':'linear-gradient(90deg,var(--orange),var(--orange-dark))';
+});
+progressObs.unobserve(e.target);
+});
+},{threshold:0.25});
+document.querySelectorAll('[data-progress-block]').forEach(el=>progressObs.observe(el));
+
+// Hero entrance
+window.addEventListener('DOMContentLoaded',()=>{
+document.querySelectorAll('.hero-content .reveal').forEach(el=>el.classList.add('visible'));
+});
+</script>
+</body>
+</html>

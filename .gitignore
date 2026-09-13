@@ -1,0 +1,9 @@
+# Temp Python scripts
+*.py
+!**/*.gs
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db

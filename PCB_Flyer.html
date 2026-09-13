@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>PCB Repair Flyer — ITS</title>
+<style>
+@page{size:A4;margin:0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Arial,sans-serif;color:#1A1A1A;display:flex;justify-content:center;padding:20px;background:#eee}
+.flyer{width:210mm;min-height:297mm;background:#fff;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);position:relative}
+
+/* ─── HEADER ─── */
+.header{background:#1A1A1A;color:#fff;padding:28px 32px 20px;display:flex;align-items:center;gap:16px}
+.header h1{font-size:32px;font-weight:900;letter-spacing:-0.5px;line-height:1.1}
+.header h1 span{color:#FF9F00}
+.header .badge{background:#FF9F00;color:#1A1A1A;font-size:11px;font-weight:800;padding:4px 12px;border-radius:4px;text-transform:uppercase;letter-spacing:1px}
+.header p{font-size:12px;color:rgba(255,255,255,0.6);margin-top:4px}
+
+/* ─── TAGLINE ─── */
+.tagline{background:#FF9F00;color:#1A1A1A;text-align:center;padding:14px 24px;font-size:20px;font-weight:800;letter-spacing:-0.3px}
+
+/* ─── BODY ─── */
+.body{padding:28px 32px 20px}
+.body h2{font-size:16px;font-weight:800;color:#1A1A1A;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px}
+.card{border:1.5px solid #E5E7EB;border-radius:8px;padding:16px}
+.card h3{font-size:13px;font-weight:700;color:#FF9F00;margin-bottom:4px}
+.card p{font-size:11px;color:#4B5563;line-height:1.5}
+.card .price{font-size:15px;font-weight:800;color:#1A1A1A;margin-top:6px}
+.card .price small{font-weight:400;font-size:11px;color:#6B7280}
+
+/* ─── GUARANTEE ─── */
+.guarantee{background:#FFF8F0;border:2px solid #FF9F00;border-radius:8px;padding:16px 20px;text-align:center;margin-bottom:24px}
+.guarantee strong{font-size:15px;color:#1A1A1A;display:block}
+.guarantee span{font-size:12px;color:#4B5563}
+
+/* ─── CONTACT ─── */
+.contact{background:#1A1A1A;color:#fff;padding:20px 32px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.contact .item{font-size:12px;display:flex;align-items:center;gap:6px}
+.contact .item strong{color:#FF9F00}
+.footer{text-align:center;padding:10px;font-size:9px;color:#9CA3AF}
+
+@media print{
+body{background:#fff;padding:0}
+.flyer{box-shadow:none}
+.no-print{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="flyer">
+
+<div class="header">
+<div>
+<div class="badge">SAME-DAY SERVICE</div>
+<h1>PCB <span>REPAIR</span></h1>
+<p>Industrial Technology Solutions — El Harrouch, Skikda</p>
+</div>
+</div>
+
+<div class="tagline">3,000 – 5,000 DA  &nbsp;·&nbsp;  Flat Rate Per Board  &nbsp;·&nbsp;  Same Day</div>
+
+<div class="body">
+<h2>What We Repair</h2>
+<div class="grid">
+<div class="card">
+<h3>CNC Control Boards</h3>
+<p>Control cards, spindle drives, axis boards for industrial CNC machines.</p>
+<div class="price">3,000 DA <small>standard</small></div>
+</div>
+<div class="card">
+<h3>PLC Modules</h3>
+<p>I/O modules, CPU units, communication cards — Siemens, Schneider, Allen-Bradley.</p>
+<div class="price">3,000–5,000 DA</div>
+</div>
+<div class="card">
+<h3>VFD / Inverter Drives</h3>
+<p>Variable frequency drive power boards and control logic repair.</p>
+<div class="price">3,000–5,000 DA</div>
+</div>
+<div class="card">
+<h3>Power Supplies (SMPS)</h3>
+<p>Industrial switch-mode power supplies, UPS boards, voltage regulator modules.</p>
+<div class="price">3,000 DA <small>standard</small></div>
+</div>
+</div>
+
+<h2>Additional Services</h2>
+<div class="grid">
+<div class="card">
+<h3>Custom PCB Design</h3>
+<p>Design and prototype new PCBs from scratch for your specific application.</p>
+</div>
+<div class="card">
+<h3>Full Electrical &amp; Automation</h3>
+<p>Control panels, wiring, PLC programming, machine building, and SLA maintenance.</p>
+</div>
+</div>
+
+<div class="guarantee">
+<strong>&#9989; No Fix, No Pay Guarantee</strong>
+<span>If we can't repair your board, there is absolutely no charge. 30-day warranty on all repairs.</span>
+</div>
+</div>
+
+<div class="contact">
+<div class="item"><strong>Call / WhatsApp:</strong> 0699 32 40 76</div>
+<div class="item"><strong>Email:</strong> industrialtechnologysolutions2@gmail.com</div>
+<div class="item"><strong>Location:</strong> El Harrouch, Skikda, Algeria</div>
+</div>
+
+<div class="footer">
+ITS — Industrial Technology Solutions  |  Power, Control &amp; Machinery  |  August 2026
+</div>
+
+</div>
+
+</body>
+</html>
