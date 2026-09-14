@@ -191,6 +191,13 @@ td:first-child{color:var(--dark);font-weight:600}
 [dir=rtl] .big-banner p{max-width:100%}
 @media(max-width:768px){.big-banner{padding:56px 0}.big-banner h2{font-size:38px}}
 
+/* ─── SYSTEM OVERVIEW BLOCK ─── */
+.sys-block{margin:0 0 36px}
+.sys-block-title{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.sys-block-title span{font-size:11px;font-weight:700;letter-spacing:2px;color:var(--orange);text-transform:uppercase}
+[dir=rtl] .sys-block-title span{letter-spacing:0}
+.sys-block-title i{font-style:normal;font-size:16px;font-weight:700;color:var(--dark)}
+
 /* ─── CONTACT ─── */
 #contact{background:var(--warm);border-top:1px solid var(--border)}
 .contact-rows{display:flex;gap:28px;flex-wrap:wrap;margin-top:8px}
@@ -251,7 +258,21 @@ section{padding:56px 0}
 <div class="container">
 <div class="section-label" data-i18n="plasma-label">Rapport — CNC Plasma</div>
 <h2 class="section-title" data-i18n="plasma-title">Progrès — Partie 1 (Mouvement)</h2>
-<p class="section-sub" data-i18n="plasma-sub">Machine KOTEC KTPG-320 · le mouvement est en cours de validation avant la partie Plasma (THC, ignition, console gaz).</p>
+<p class="section-sub reveal" data-i18n="plasma-sub">Machine KOTEC KTPG-320 · le mouvement est en cours de validation avant la partie Plasma (THC, ignition, console gaz).</p>
+
+<div class="sys-block reveal" data-i18n-root>
+<div class="sys-block-title reveal"><span data-i18n="sys-label">Aperçu du système</span><i data-i18n="sys-title">Architecture de conversion</i></div>
+<div class="table-card">
+<table>
+<tr><th data-i18n="sys-th1">Composant</th><th data-i18n="sys-th2">Détail</th></tr>
+<tr><td data-i18n="sys-m">Machine</td><td>KOTEC KTPG-320 CNC Plasma (SOMIK SKIKDA)</td></tr>
+<tr><td data-i18n="sys-c">Contrôleur</td><td>Sentrol 2 → Mach3 + UC300 (EC500)</td></tr>
+<tr><td data-i18n="sys-xy">Axes X/Y</td><td>Servos YE-LI YPV (YBL13S-75L.Z)</td></tr>
+<tr><td data-i18n="sys-z">Axe Z</td><td>SLO-SYN + DM556</td></tr>
+<tr><td data-i18n="sys-pl">Plasma</td><td>Hypertherm HPR + Proma THC</td></tr>
+</table>
+</div>
+</div>
 
 <div class="status-grid">
 <div class="status-card reveal">
@@ -330,24 +351,6 @@ section{padding:56px 0}
 <div class="progress-top"><span class="progress-name" data-i18n="pb5-n">Partie 2 — Plasma (THC, ignition, console gaz)</span><span class="progress-pct" data-i18n="pb5-v">0%</span></div>
 <div class="progress-track"><div class="progress-fill pending" data-fill="0"></div></div>
 </div>
-</div>
-</div>
-</section>
-
-<section class="alt">
-<div class="container">
-<div class="section-label" data-i18n="sys-label">Aperçu du système</div>
-<h2 class="section-title" data-i18n="sys-title">Architecture de conversion</h2>
-<p class="section-sub reveal" data-i18n="sys-sub">La conversion Sentrol 2 → Mach3 + UC300 modernise le pilotage de la machine.</p>
-<div class="table-card reveal">
-<table>
-<tr><th data-i18n="sys-th1">Composant</th><th data-i18n="sys-th2">Détail</th></tr>
-<tr><td data-i18n="sys-m">Machine</td><td>KOTEC KTPG-320 CNC Plasma (SOMIK SKIKDA)</td></tr>
-<tr><td data-i18n="sys-c">Contrôleur</td><td>Sentrol 2 → Mach3 + UC300 (EC500)</td></tr>
-<tr><td data-i18n="sys-xy">Axes X/Y</td><td>Servos YE-LI YPV (YBL13S-75L.Z)</td></tr>
-<tr><td data-i18n="sys-z">Axe Z</td><td>SLO-SYN + DM556</td></tr>
-<tr><td data-i18n="sys-pl">Plasma</td><td>Hypertherm HPR + Proma THC</td></tr>
-</table>
 </div>
 </div>
 </section>
