@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Projects — ITS Command Center{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <h1>Projects</h1>
+  <p class="muted">Live source: <code>Planning/04_Projects/*.md</code> frontmatter · edits update status / progress / due</p>
+</div>
+
+<div class="grid two">
+  {% for p in projects %}
+  <section class="card">
+    <div class="proj-head">
+      <h2>{{ p.title }}</h2>
+      <span class="pill {% if p.status == 'done' or p.status == 'completed' %}pill-income{% elif p.status == 'in-progress' %}pill-accent{% else %}pill{% endif %}">{{ p.status }}</span>
+    </div>
+    <div class="progress big"><div class="bar" style="width: {{ p.progress }}%"></div><span>{{ p.progress }}%</span></div>
+    <p class="muted">
+      {% if p.due %}Due {{ p.due }} · {% endif %}{{ p.tasks_done }}/{{ p.tasks_total }} checklist items
+      {% if p.tags %}<span> · {{ p.tags | join(", ") }}</span>{% endif %}
+    </p>
+    <details class="inline-edit">
+      <summary>Update</summary>
+      <form class="row-form tight" method="post" action="{{ url_for('projects_update', project_id=p.id) }}">
+        <input type="text" name="status" value="{{ p.status }}" placeholder="status">
+        <input type="date" name="due" value="{{ p.due }}">
+        <input type="number" name="progress" value="{{ p.progress }}" placeholder="% complete" min="0" max="100">
+        <button type="submit">Save</button>
+      </form>
+    </details>
+  </section>
+  {% else %}
+  <p class="muted">No projects found.</p>
+  {% endfor %}
+</div>
+
+{% endblock %}

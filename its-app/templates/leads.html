@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Leads — ITS Command Center{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <h1>Leads &amp; prospecting</h1>
+  <p class="muted">Editable source: <code>documents/02_Prospecting/ITS_Leads.csv</code> · below: read-only Skikda mapping from the Prospecting dashboard</p>
+</div>
+
+<section class="card">
+  <h2>Add lead</h2>
+  <form class="row-form wrap" method="post" action="{{ url_for('leads_add') }}">
+    <input type="text" name="company" placeholder="Company" required>
+    <input type="text" name="contact" placeholder="Contact person">
+    <input type="text" name="title" placeholder="Title">
+    <input type="text" name="phone" placeholder="Phone">
+    <input type="text" name="zone" placeholder="Zone">
+    <select name="status">
+      <option value="New">New</option><option value="Contacted">Contacted</option>
+      <option value="Quoted">Quoted</option><option value="Won">Won</option>
+      <option value="Lost">Lost</option>
+    </select>
+    <input type="number" name="value_da" placeholder="Value (DA)">
+    <input type="date" name="last_contact" placeholder="Last contact">
+    <input type="text" name="notes" placeholder="Notes">
+    <button type="submit">Add lead</button>
+  </form>
+</section>
+
+<section class="card">
+  <h2>{{ leads|length }} leads</h2>
+  <table class="table">
+    <tr>
+      <th>Company</th><th>Contact</th><th>Title</th><th>Phone</th><th>Zone</th>
+      <th>Status</th><th>Value</th><th>Last contact</th><th>Notes</th><th></th>
+    </tr>
+    {% for l in leads %}
+    <tr>
+      <td><strong>{{ l.company }}</strong></td>
+      <td>{{ l.contact or '—' }}</td>
+      <td>{{ l.title or '—' }}</td>
+      <td>{{ l.phone or '—' }}</td>
+      <td>{{ l.zone or '—' }}</td>
+      <td><span class="pill">{{ l.status }}</span></td>
+      <td class="num">{{ l.value_da|da }}</td>
+      <td>{{ l.last_contact or '—' }}</td>
+      <td class="small-cell">{{ l.notes or '—' }}</td>
+      <td class="cell-actions">
+        <details class="inline-edit">
+          <summary>Edit</summary>
+          <form class="row-form wrap tight" method="post" action="{{ url_for('leads_update', lead_id=l.id) }}">
+            <input type="text" name="company" value="{{ l.company }}" required>
+            <input type="text" name="contact" value="{{ l.contact }}">
+            <input type="text" name="title" value="{{ l.title }}">
+            <input type="text" name="phone" value="{{ l.phone }}">
+            <input type="text" name="zone" value="{{ l.zone }}">
+            <select name="status">
+              {% for s in ['New','Contacted','Quoted','Won','Lost'] %}<option value="{{ s }}" {% if l.status == s %}selected{% endif %}>{{ s }}</option>{% endfor %}
+            </select>
+            <input type="number" name="value_da" value="{{ l.value_da }}">
+            <input type="date" name="last_contact" value="{{ l.last_contact }}">
+            <input type="text" name="notes" value="{{ l.notes }}">
+            <button type="submit">Save</button>
+          </form>
+        </details>
+        <form method="post" action="{{ url_for('leads_delete', lead_id=l.id) }}" onsubmit="return confirm('Delete this lead?')">
+          <button class="danger" type="submit">Del</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="10" class="muted">No leads yet — add your first one.</td></tr>
+    {% endfor %}
+  </table>
+</section>
+
+{% if mapping %}
+<section class="card">
+  <h2>Skikda industrial mapping (from ITS_Prospecting_Dashboard.xlsx)</h2>
+  <table class="table">
+    <tr><th>Company</th><th>Zone</th><th>Contact / Notes</th><th>Status</th><th>Follow-up</th></tr>
+    {% for m in mapping %}
+    <tr>
+      <td>{{ m.company or '—' }}</td>
+      <td>{{ m.zone or '—' }}</td>
+      <td class="small-cell">{{ m.contact or '—' }}</td>
+      <td><span class="pill">{{ m.status }}</span></td>
+      <td>{{ m.follow_up or '—' }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</section>
+{% endif %}
+
+{% endblock %}

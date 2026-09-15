@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Documents — ITS Command Center{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <h1>Document library</h1>
+  <p class="muted">Live scan of <code>documents/</code>, <code>Services/</code> and <code>Planning/</code> · read-only registry · {{ n }} files · {{ "%.1f"|format(total_mb) }} MB</p>
+</div>
+
+<form class="filters" method="get">
+  <input type="search" name="q" value="{{ q }}" placeholder="Search by name or folder">
+  <select name="ext">
+    <option value="">All types</option>
+    {% for e in exts %}<option value="{{ e }}" {% if e == ext %}selected{% endif %}>{{ e }}</option>{% endfor %}
+  </select>
+  <button type="submit">Filter</button>
+</form>
+
+<section class="card">
+  <table class="table">
+    <tr><th>Name</th><th>Folder</th><th>Type</th><th>Size</th><th></th></tr>
+    {% for d in docs %}
+    <tr>
+      <td class="doc-name">{{ d.name }}</td>
+      <td class="muted small-cell">{{ d.folder }}</td>
+      <td><span class="pill">{{ d.ext }}</span></td>
+      <td class="num">{{ d.size_kb }} KB</td>
+      <td>
+        <a class="btn small" target="_blank" href="{{ url_for('vault_file', relpath=d.path) }}">Open</a>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="5" class="muted">Nothing matches.</td></tr>
+    {% endfor %}
+  </table>
+</section>
+
+{% endblock %}

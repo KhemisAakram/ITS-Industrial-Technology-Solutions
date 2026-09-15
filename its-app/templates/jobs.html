@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}Jobs — ITS Command Center{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <h1>Jobs &amp; work orders</h1>
+  <p class="muted">Live source: <code>Services/PCB Service/04_Tracking/PCB_Job_Tracker.xlsx</code></p>
+</div>
+
+<section class="card">
+  <h2>New work order</h2>
+  <form class="row-form wrap" method="post" action="{{ url_for('jobs_add') }}">
+    <input type="date" name="date_in" value="{{ now }}" required>
+    <input type="text" name="wo" placeholder="WO # (e.g. PCB-002)" required>
+    <input type="text" name="customer" placeholder="Customer">
+    <input type="text" name="company" placeholder="Company">
+    <input type="text" name="phone" placeholder="Phone">
+    <input type="text" name="board" placeholder="Board model">
+    <input type="text" name="equipment" placeholder="Equipment">
+    <input type="text" name="symptoms" placeholder="Symptoms">
+    <input type="text" name="diagnosis" placeholder="Diagnosis">
+    <input type="number" name="quote" placeholder="Quote (DA)">
+    <select name="accepted"><option value="">Accepted?</option><option>Yes</option><option>No</option></select>
+    <input type="date" name="date_out" placeholder="Date out">
+    <input type="number" name="paid" placeholder="Paid (DA)">
+    <input type="text" name="status" value="Received" placeholder="Status">
+    <input type="text" name="notes" placeholder="Notes">
+    <button type="submit">Add job</button>
+  </form>
+</section>
+
+<section class="card">
+  <h2>{{ jobs|length }} work orders</h2>
+  <table class="table">
+    <tr>
+      <th>In</th><th>WO#</th><th>Customer</th><th>Company</th><th>Board</th><th>Equipment</th>
+      <th>Symptoms</th><th>Diagnosis</th><th>Quote</th><th>Paid</th><th>Status</th><th></th>
+    </tr>
+    {% for j in jobs %}
+    <tr>
+      <td>{{ j.date_in or '—' }}</td>
+      <td><strong>{{ j.wo }}</strong></td>
+      <td>{{ j.customer or '—' }}</td>
+      <td>{{ j.company or '—' }}</td>
+      <td>{{ j.board or '—' }}</td>
+      <td>{{ j.equipment or '—' }}</td>
+      <td class="small-cell">{{ j.symptoms or '—' }}</td>
+      <td class="small-cell">{{ j.diagnosis or '—' }}</td>
+      <td class="num">{{ j.quote|da }}</td>
+      <td class="num">{{ j.paid|da }}</td>
+      <td><span class="pill">{{ j.status }}</span></td>
+      <td class="cell-actions">
+        <details class="inline-edit">
+          <summary>Edit</summary>
+          <form class="row-form wrap tight" method="post" action="{{ url_for('jobs_update', wo=j.wo) }}">
+            <input type="date" name="date_in" value="{{ j.date_in }}">
+            <input type="text" name="customer" value="{{ j.customer }}" placeholder="Customer">
+            <input type="text" name="company" value="{{ j.company }}" placeholder="Company">
+            <input type="text" name="phone" value="{{ j.phone }}" placeholder="Phone">
+            <input type="text" name="board" value="{{ j.board }}" placeholder="Board">
+            <input type="text" name="equipment" value="{{ j.equipment }}" placeholder="Equipment">
+            <input type="text" name="symptoms" value="{{ j.symptoms }}" placeholder="Symptoms">
+            <input type="text" name="diagnosis" value="{{ j.diagnosis }}" placeholder="Diagnosis">
+            <input type="number" name="quote" value="{{ j.quote }}" placeholder="Quote">
+            <select name="accepted"><option value="" {% if not j.accepted %}selected{% endif %}>—</option><option {% if j.accepted == 'Yes' %}selected{% endif %}>Yes</option><option {% if j.accepted == 'No' %}selected{% endif %}>No</option></select>
+            <input type="date" name="date_out" value="{{ j.date_out }}">
+            <input type="number" name="paid" value="{{ j.paid }}" placeholder="Paid">
+            <input type="text" name="status" value="{{ j.status }}" placeholder="Status">
+            <input type="text" name="notes" value="{{ j.notes }}" placeholder="Notes">
+            <button type="submit">Save</button>
+          </form>
+        </details>
+        <form method="post" action="{{ url_for('jobs_delete', wo=j.wo) }}" onsubmit="return confirm('Delete job {{ j.wo }}?')">
+          <button class="danger" type="submit">Del</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="12" class="muted">No jobs in the tracker.</td></tr>
+    {% endfor %}
+  </table>
+</section>
+
+{% endblock %}

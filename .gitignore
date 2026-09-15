@@ -13,3 +13,17 @@ node_modules/
 
 # Obsidian vault config (local workspace, don't commit)
 .obsidian/
+
+# Safety backups created by the ITS web app
+*.bak
+
+# ITS web app code (keep inside the vault so git backs it up too)
+!its-app/
+!its-app/app.py
+!its-app/readers.py
+!its-app/writers.py
+!its-app/requirements.txt
+!its-app/static/
+!its-app/static/style.css
+!its-app/templates/
+!its-app/templates/*.html

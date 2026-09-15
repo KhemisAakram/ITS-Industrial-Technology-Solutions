@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Clients — ITS Command Center{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <h1>Clients</h1>
+  <p class="muted">Live source: <code>documents/02_Prospecting/ITS_Clients.csv</code></p>
+</div>
+
+<section class="card">
+  <h2>Add client</h2>
+  <form class="row-form wrap" method="post" action="{{ url_for('clients_add') }}">
+    <input type="text" name="name" placeholder="Name" required>
+    <input type="text" name="company" placeholder="Company">
+    <input type="text" name="phone" placeholder="Phone">
+    <input type="text" name="email" placeholder="Email">
+    <input type="text" name="source" placeholder="Source (Facebook, LinkedIn...)">
+    <input type="text" name="notes" placeholder="Notes">
+    <button type="submit">Add client</button>
+  </form>
+</section>
+
+<section class="card">
+  <h2>{{ clients|length }} clients</h2>
+  <table class="table">
+    <tr><th>Name</th><th>Company</th><th>Phone</th><th>Email</th><th>Source</th><th>Notes</th><th></th></tr>
+    {% for c in clients %}
+    <tr>
+      <td><strong>{{ c.name or '—' }}</strong></td>
+      <td>{{ c.company or '—' }}</td>
+      <td>{{ c.phone or '—' }}</td>
+      <td>{{ c.email or '—' }}</td>
+      <td>{{ c.source or '—' }}</td>
+      <td class="small-cell">{{ c.notes or '—' }}</td>
+      <td class="cell-actions">
+        <details class="inline-edit">
+          <summary>Edit</summary>
+          <form class="row-form wrap tight" method="post" action="{{ url_for('clients_update', client_id=c.id) }}">
+            <input type="text" name="name" value="{{ c.name }}" required>
+            <input type="text" name="company" value="{{ c.company }}">
+            <input type="text" name="phone" value="{{ c.phone }}">
+            <input type="text" name="email" value="{{ c.email }}">
+            <input type="text" name="source" value="{{ c.source }}">
+            <input type="text" name="notes" value="{{ c.notes }}">
+            <button type="submit">Save</button>
+          </form>
+        </details>
+        <form method="post" action="{{ url_for('clients_delete', client_id=c.id) }}" onsubmit="return confirm('Delete this client?')">
+          <button class="danger" type="submit">Del</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="7" class="muted">No clients yet.</td></tr>
+    {% endfor %}
+  </table>
+</section>
+
+{% endblock %}

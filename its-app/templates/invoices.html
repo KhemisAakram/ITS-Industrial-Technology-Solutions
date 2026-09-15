@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Invoices — ITS Command Center{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <h1>Invoices</h1>
+  <p class="muted">Live source: <code>documents/05_Financial/Invoices/*.md</code></p>
+</div>
+
+<section class="card">
+  <h2>Create invoice</h2>
+  <form class="row-form" method="post" action="{{ url_for('invoices_add') }}">
+    <input type="text" name="number" value="{{ next_number }}" placeholder="Invoice #" required>
+    <input type="text" name="client" placeholder="Client" required>
+    <input type="date" name="date" value="{{ now }}">
+    <input type="number" name="amount" step="0.01" placeholder="Amount (DA)" required>
+    <button type="submit">Create</button>
+  </form>
+</section>
+
+<section class="card">
+  <h2>{{ invoices|length }} invoices</h2>
+  <table class="table">
+    <tr><th>Number</th><th>Date</th><th>Client</th><th>Amount</th><th>Status</th><th></th></tr>
+    {% for inv in invoices %}
+    <tr>
+      <td><strong>{{ inv.number }}</strong></td>
+      <td>{{ inv.date or '—' }}</td>
+      <td>{{ inv.client or '—' }}</td>
+      <td class="num">{{ inv.amount|da }}</td>
+      <td><span class="pill {{ 'pill-income' if inv.paid else 'pill-expense' }}">{{ 'Paid' if inv.paid else 'Unpaid' }}</span></td>
+      <td class="cell-actions">
+        <a class="btn small" target="_blank" href="{{ url_for('vault_file', relpath=inv.path) }}" title="{{ inv.path }}">Open</a>
+        <form method="post" action="{{ url_for('invoices_toggle', number=inv.number) }}">
+          <button class="small" type="submit">{{ 'Mark unpaid' if inv.paid else 'Mark paid' }}</button>
+        </form>
+        <form method="post" action="{{ url_for('invoices_delete', number=inv.number) }}" onsubmit="return confirm('Delete invoice {{ inv.number }}?')">
+          <button class="danger small" type="submit">Del</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6" class="muted">No invoices yet.</td></tr>
+    {% endfor %}
+  </table>
+</section>
+
+{% endblock %}

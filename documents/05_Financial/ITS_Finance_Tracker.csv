@@ -1,17 +1,17 @@
 Date,Type,Category,Description,Amount (DA)
-2026-08-25,income,General,work done,1000
-2026-08-25,expense,tools,tools/supplies,100
-2026-08-26,income,3D Print,3D print job (6 parts) - invoice 3DP-003 -30% discount,10780
-2026-08-26,income,PCB Repair,PCB Repair 4,3000
-2026-08-26,income,PCB Repair,PCB Repair 3,200
-2026-08-26,income,PCB Repair,PCB Repair 5,200
-2026-08-26,expense,parts,PETG 1kg,4000
-2026-08-26,expense,parts,resistors + capacitors,100
-2026-08-27,expense,overhead,misc/admin,300
-2026-08-29,income,PCB Repair,PCB Repair 2,1000
-2026-08-30,income,PCB Repair,PCB Repair 7,2000
-2026-08-31,income,Prototype,Build Prototype,1500
-2026-09-01,income,3D Print,3D Design and Print PM,1500
-2026-09-02,income,Coil Winding,Coil winding ×2,1500
-2026-09-03,income,Coil Winding,Coil winding ×2,1500
-2026-09-05,income,SOMIK,Mach3 bench test,1000
+2026-08-25,expense,tools,tools/supplies,100.0
+2026-08-25,income,General,work done,1000.0
+2026-08-26,income,3D Print,3D print job (6 parts) - invoice 3DP-003 -30% discount,10780.0
+2026-08-26,income,PCB Repair,PCB Repair 3,200.0
+2026-08-26,income,PCB Repair,PCB Repair 4,3000.0
+2026-08-26,income,PCB Repair,PCB Repair 5,200.0
+2026-08-26,expense,parts,PETG 1kg,4000.0
+2026-08-26,expense,parts,resistors + capacitors,100.0
+2026-08-27,expense,overhead,misc/admin,300.0
+2026-08-29,income,PCB Repair,PCB Repair 2,1000.0
+2026-08-30,income,PCB Repair,PCB Repair 7,2000.0
+2026-08-31,income,Prototype,Build Prototype,1500.0
+2026-09-01,income,3D Print,3D Design and Print PM,1500.0
+2026-09-02,income,Coil Winding,Coil winding ×2,1500.0
+2026-09-03,income,Coil Winding,Coil winding ×2,1500.0
+2026-09-05,income,SOMIK,Mach3 bench test,1000.0

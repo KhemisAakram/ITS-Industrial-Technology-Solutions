@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+{% block title %}Finance — ITS Command Center{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <h1>Finance</h1>
+  <p class="muted">Live source: <code>documents/05_Financial/ITS_Finance_Tracker.csv</code> · edits rewrite the CSV (with .bak)</p>
+  <div class="kpis small">
+    <div class="kpi good"><span class="label">Filtered income</span><span class="value">{{ income|da }}</span></div>
+    <div class="kpi bad"><span class="label">Filtered expenses</span><span class="value">{{ expense|da }}</span></div>
+    <div class="kpi accent"><span class="label">Net</span><span class="value">{{ (income - expense)|da }}</span></div>
+  </div>
+</div>
+
+<form class="filters" method="get">
+  <input type="search" name="q" value="{{ q }}" placeholder="Search description / category">
+  <select name="month">
+    <option value="">All months</option>
+    {% for m in months %}<option value="{{ m }}" {% if m == month %}selected{% endif %}>{{ m }}</option>{% endfor %}
+  </select>
+  <button type="submit">Filter</button>
+  <a class="btn" href="{{ url_for('finance_export') }}">Export CSV</a>
+</form>
+
+<section class="card">
+  <h2>Add transaction</h2>
+  <form class="row-form" method="post" action="{{ url_for('finance_add') }}">
+    <input type="date" name="date" required value="{{ now }}">
+    <select name="type" required>
+      <option value="income">income</option>
+      <option value="expense">expense</option>
+    </select>
+    <input type="text" name="category" list="cats" placeholder="Category" required>
+    <datalist id="cats">
+      {% for t, cs in cats.items() %}{% for c in cs %}<option value="{{ c }}">{% endfor %}{% endfor %}
+      <option value="General"><option value="3D Print"><option value="PCB Repair">
+      <option value="Prototype"><option value="Coil Winding"><option value="SOMIK">
+      <option value="parts"><option value="tools"><option value="transport"><option value="overhead">
+    </datalist>
+    <input type="text" name="description" placeholder="Description" required>
+    <input type="number" name="amount" step="0.01" placeholder="Amount (DA)" required>
+    <button type="submit">Add</button>
+  </form>
+</section>
+
+<section class="card">
+  <h2>{{ tx|length }} transactions</h2>
+  <table class="table">
+    <tr>
+      <th>Date</th><th>Type</th><th>Category</th><th>Description</th><th>Amount (DA)</th><th></th>
+    </tr>
+    {% for t in tx %}
+    <tr>
+      <td>{{ t.date }}</td>
+      <td><span class="pill {{ 'pill-income' if t.type == 'income' else 'pill-expense' }}">{{ t.type }}</span></td>
+      <td>{{ t.category }}</td>
+      <td>{{ t.description }}</td>
+      <td class="num {{ 'good-text' if t.type == 'income' else 'bad-text' }}">{{ t.amount|da }}</td>
+      <td class="cell-actions">
+        <details class="inline-edit">
+          <summary>Edit</summary>
+          <form class="row-form" method="post" action="{{ url_for('finance_edit', index=t.index) }}">
+            <input type="date" name="date" value="{{ t.date }}" required>
+            <select name="type">
+              <option value="income" {% if t.type=='income' %}selected{% endif %}>income</option>
+              <option value="expense" {% if t.type=='expense' %}selected{% endif %}>expense</option>
+            </select>
+            <input type="text" name="category" value="{{ t.category }}" required>
+            <input type="text" name="description" value="{{ t.description }}" required>
+            <input type="number" name="amount" step="0.01" value="{{ t.amount }}" required>
+            <button type="submit">Save</button>
+          </form>
+        </details>
+        <form method="post" action="{{ url_for('finance_delete', index=t.index) }}" onsubmit="return confirm('Delete this transaction?')">
+          <button class="danger" type="submit">Del</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="6" class="muted">No transactions match.</td></tr>
+    {% endfor %}
+  </table>
+</section>
+
+{% endblock %}

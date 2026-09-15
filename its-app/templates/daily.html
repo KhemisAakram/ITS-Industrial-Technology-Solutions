@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Daily log — ITS Command Center{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <h1>Daily log</h1>
+  <p class="muted">Live source: <code>Planning/05_Daily_Notes/*.md</code> YAML · edits update the frontmatter</p>
+  <div class="kpis small">
+    <div class="kpi"><span class="label">Days shown</span><span class="value">{{ notes|length }}</span></div>
+    <div class="kpi good"><span class="label">Income</span><span class="value">{{ n_income|da }}</span></div>
+    <div class="kpi bad"><span class="label">Expenses</span><span class="value">{{ n_expense|da }}</span></div>
+    <div class="kpi"><span class="label">Hours worked</span><span class="value">{{ hours|round|int }}</span></div>
+  </div>
+</div>
+
+<form class="filters" method="get">
+  <select name="month">
+    <option value="">All months</option>
+    {% for m in months %}<option value="{{ m }}" {% if m == month %}selected{% endif %}>{{ m }}</option>{% endfor %}
+  </select>
+  <button type="submit">Filter</button>
+</form>
+
+<section class="card">
+  <table class="table">
+    <tr>
+      <th>Date</th><th>Focus</th><th>Energy</th><th>Hrs</th><th>Billable</th>
+      <th>Income</th><th>Expense</th><th>Status</th><th></th>
+    </tr>
+    {% for n in notes %}
+    <tr>
+      <td>{{ n.date }}</td>
+      <td class="focus-cell">{{ n.focus or '—' }}</td>
+      <td>{{ n.energy or '—' }}</td>
+      <td class="num">{{ n.hours_worked }}</td>
+      <td class="num">{{ n.hours_billable }}</td>
+      <td class="num good-text">{{ n.income_da|da }}</td>
+      <td class="num bad-text">{{ (n.expense_parts + n.expense_tools + n.expense_transport + n.expense_overhead)|da }}</td>
+      <td><span class="pill" title="Expenses: parts {{ n.expense_parts|da }} · tools {{ n.expense_tools|da }} · transport {{ n.expense_transport|da }} · overhead {{ n.expense_overhead|da }}">{{ n.status or '—' }}</span></td>
+      <td class="cell-actions">
+        <details class="inline-edit">
+          <summary>Edit</summary>
+          <form class="row-form tight" method="post" action="{{ url_for('daily_update', date=n.date) }}">
+            <input type="text" list="energy-cats" name="energy" value="{{ n.energy }}" placeholder="Energy">
+            <datalist id="energy-cats"><option value="Low"><option value="Medium"><option value="High"><option value="fresh"></datalist>
+            <input type="number" name="hours_worked" value="{{ n.hours_worked }}" placeholder="Hrs" step="0.5">
+            <input type="number" name="hours_billable" value="{{ n.hours_billable }}" placeholder="Billable" step="0.5">
+            <input type="number" name="income_da" value="{{ n.income_da }}" placeholder="Income DA">
+            <input type="number" name="expense_parts" value="{{ n.expense_parts }}" placeholder="Parts">
+            <input type="number" name="expense_tools" value="{{ n.expense_tools }}" placeholder="Tools">
+            <input type="number" name="expense_transport" value="{{ n.expense_transport }}" placeholder="Transport">
+            <input type="number" name="expense_overhead" value="{{ n.expense_overhead }}" placeholder="Overhead">
+            <input type="text" name="status" value="{{ n.status }}" placeholder="Status">
+            <button type="submit">Save</button>
+          </form>
+        </details>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="9" class="muted">No daily notes found.</td></tr>
+    {% endfor %}
+  </table>
+</section>
+
+{% endblock %}
