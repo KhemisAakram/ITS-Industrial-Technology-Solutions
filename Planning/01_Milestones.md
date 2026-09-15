@@ -42,10 +42,10 @@ tags: [milestones, planning]
 | W20 | 12–15 Dec | **Submit · buffer · DEADLINE Tue 15 Dec** |
 
 ## North-star tasks (with dates — picked up by the Tasks dashboard)
-- [ ] VFD + coil winding jobs done 📅 2026-08-27
+- [ ] VFD + coil winding jobs done 📅 2026-08-27 <!-- coil winding done 09-02/03, VFD still pending -->
 - [ ] PCB + 3D printer repairs done 📅 2026-09-24
 - [ ] SOMIK parts list confirmed 📅 2026-09-03
-- [ ] Mach3 test bench running 📅 2026-08-27
+- [x] Mach3 test bench running 📅 2026-08-27 ✅ 2026-09-05
 - [ ] SOMIK machine runs under Mach3 📅 2026-10-08
 - [ ] SOMIK handed over + invoice followed up 📅 2026-11-05
 - [ ] Report submitted for review 📅 2026-12-03

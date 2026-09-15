@@ -8,3 +8,10 @@ Date,Type,Category,Description,Amount (DA)
 2026-08-26,expense,parts,PETG 1kg,4000
 2026-08-26,expense,parts,resistors + capacitors,100
 2026-08-27,expense,overhead,misc/admin,300
+2026-08-29,income,PCB Repair,PCB Repair 2,1000
+2026-08-30,income,PCB Repair,PCB Repair 7,2000
+2026-08-31,income,Prototype,Build Prototype,1500
+2026-09-01,income,3D Print,3D Design and Print PM,1500
+2026-09-02,income,Coil Winding,Coil winding ×2,1500
+2026-09-03,income,Coil Winding,Coil winding ×2,1500
+2026-09-05,income,SOMIK,Mach3 bench test,1000

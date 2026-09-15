@@ -2,7 +2,7 @@
 type: project
 status: in-progress
 due: 2026-10-31
-progress: 5
+progress: 8
 tags: [project, somik]
 ---
 
@@ -20,7 +20,7 @@ KOTEC KTPG-320 CNC plasma machine converted from **Sentrol 2** (relay-based, no 
 - [ ] Teardown + condition assessment
 - [ ] Wiring plan (Sentrol 2 → Mach3 layout)
 - [ ] Hardware procured (BOB, drives, plasma interface)
-- [ ] Mach3 test bench running
+- [x] Mach3 test bench running ✅ 2026-09-05
 - [ ] Machine reassembly + wiring
 - [ ] Mach3 config + tuning
 - [ ] Plasma integration
