@@ -54,7 +54,7 @@
       <td>{{ t.date }}</td>
       <td><span class="pill {{ 'pill-income' if t.type == 'income' else 'pill-expense' }}">{{ t.type }}</span></td>
       <td>{{ t.category }}</td>
-      <td>{{ t.description }}{% if t.description.startswith('[daily') %} <span class="pill pill-accent">auto</span>{% endif %}</td>
+      <td>{{ t.description }}{% if t.description.startswith('[daily') %} <span class="pill pill-accent">auto</span>{% elif t.description.startswith('[invoice') %} <span class="pill pill-income">inv</span>{% endif %}</td>
       <td class="num {{ 'good-text' if t.type == 'income' else 'bad-text' }}">{{ t.amount|da }}</td>
       <td class="cell-actions">
         <details class="inline-edit">

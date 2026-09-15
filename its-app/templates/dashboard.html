@@ -11,6 +11,7 @@
   <div class="kpi good"><span class="label">Income</span><span class="value">{{ income|da }} <small>DA</small></span></div>
   <div class="kpi bad"><span class="label">Expenses</span><span class="value">{{ expense|da }} <small>DA</small></span></div>
   <div class="kpi accent"><span class="label">Profit</span><span class="value">{{ profit|da }} <small>DA</small></span></div>
+  <div class="kpi"><span class="label">Receivables</span><span class="value">{{ receivables|da }} <small>DA</small><br><small class="muted">{{ n_unpaid }} unpaid invoice{{ 's' if n_unpaid != 1 }}</small></span></div>
   <div class="kpi"><span class="label">Hours (billable)</span><span class="value">{{ billable }} <small>h</small></span></div>
   <div class="kpi"><span class="label">Yield</span><span class="value">{{ yield_per_hr|round|int }} <small>DA/hr</small></span></div>
   <div class="kpi"><span class="label">Open jobs</span><span class="value">{{ open_jobs|length }}</span></div>
@@ -18,32 +19,57 @@
   <div class="kpi"><span class="label">Active projects</span><span class="value">{{ active_projects|length }}</span></div>
 </div>
 
+{% if attention %}
+<section class="card card-alert">
+  <h2>Needs attention</h2>
+  <ul class="attention-list">
+    {% for a in attention %}
+    <li><span class="pill pill-expense">{{ a.type }}</span> <strong>{{ a.label }}</strong> — {{ a.detail }}</li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
 <div class="grid two">
   <section class="card">
-    <h2>Finance by month</h2>
-    <table class="table">
-      <tr><th>Month</th><th>Income</th><th>Expense</th><th>Net</th></tr>
-      {% for m in monthly %}
-      <tr>
-        <td>{{ m.month }}</td>
-        <td class="num good-text">{{ m.income|da }}</td>
-        <td class="num bad-text">{{ m.expense|da }}</td>
-        <td class="num">{{ (m.income - m.expense)|da }}</td>
-      </tr>
+    <h2>Monthly income vs expense</h2>
+    <div class="bars">
+      {% for m in monthly|reverse %}
+      <div class="bar-pair">
+        <span class="bar good" style="height: {{ (m.income / max_month * 100)|round|int }}%"></span>
+        <span class="bar bad" style="height: {{ (m.expense / max_month * 100)|round|int }}%"></span>
+        <label>{{ m.month[5:] }}</label>
+      </div>
       {% else %}
-      <tr><td colspan="4" class="muted">No transactions yet.</td></tr>
+      <p class="muted">No transactions yet.</p>
       {% endfor %}
-    </table>
+    </div>
+    <div class="bar-legend"><span class="dot good-bg"></span> Income <span class="dot bad-bg"></span> Expense</div>
   </section>
 
   <section class="card">
+    <h2>Profit trend</h2>
+    {{ sparkline|safe }}
+  </section>
+</div>
+
+<div class="grid two">
+  <section class="card">
     <h2>Income by category</h2>
-    <table class="table">
-      <tr><th>Category</th><th>Total</th></tr>
-      {% for cat, tot in by_category.items() %}
-      <tr><td>{{ cat }}</td><td class="num">{{ tot|da }}</td></tr>
-      {% endfor %}
-    </table>
+    {% for k in income_cats[:6] %}
+    <div class="hbar-row"><span class="hbar-label">{{ k }}</span><div class="hbar"><div class="hbar-fill good" style="width:{{ (cat_income[k] / max_cat_income * 100)|round|int }}%"></div></div><span class="hbar-val">{{ cat_income[k]|da }}</span></div>
+    {% else %}
+    <p class="muted">No income yet.</p>
+    {% endfor %}
+  </section>
+
+  <section class="card">
+    <h2>Expense by category</h2>
+    {% for k in expense_cats[:6] %}
+    <div class="hbar-row"><span class="hbar-label">{{ k }}</span><div class="hbar"><div class="hbar-fill bad" style="width:{{ (cat_expense[k] / max_cat_expense * 100)|round|int }}%"></div></div><span class="hbar-val">{{ cat_expense[k]|da }}</span></div>
+    {% else %}
+    <p class="muted">No expenses yet.</p>
+    {% endfor %}
   </section>
 </div>
 
@@ -88,5 +114,18 @@
     </div>
   </section>
 </div>
+
+{% if backups %}
+<section class="card">
+  <h2>Recent backups</h2>
+  <table class="table">
+    <tr><th>File</th><th>Size</th></tr>
+    {% for b in backups %}
+    <tr><td>{{ b.name }}</td><td>{{ b.size_mb }} MB</td></tr>
+    {% endfor %}
+  </table>
+  <a class="btn" href="{{ url_for('backup_page') }}">Create new backup</a>
+</section>
+{% endif %}
 
 {% endblock %}

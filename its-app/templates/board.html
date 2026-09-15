@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block title %}Jobs Board — ITS Command Center{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <h1>Jobs board</h1>
+  <p class="muted">Drag isn't needed — use "Advance" to move work orders through the pipeline. <a href="{{ url_for('jobs_page') }}">Table view</a></p>
+</div>
+
+<div class="kanban">
+  {% for col in columns %}
+  <div class="kanban-col{% if col.terminal %} terminal{% endif %}">
+    <h3>{{ col.stage }} <span class="pill">{{ col.jobs|length }}</span></h3>
+    {% for j in col.jobs %}
+    <div class="kanban-card{% if col.terminal %} done{% endif %}">
+      <div class="card-head"><strong>{{ j.wo }}</strong> <span class="pill pill-accent">{{ j.status or '—' }}</span></div>
+      <div class="card-body">
+        <div>{{ j.customer or j.company or '—' }}</div>
+        <div class="muted">{{ j.board or '—' }}</div>
+        {% if j.quote %}<div class="num">Quote {{ j.quote|da }}</div>{% endif %}
+        {% if j.paid %}<div class="num good-text">Paid {{ j.paid|da }}</div>{% endif %}
+        {% if j.phone %}
+        <a class="whatsapp-link" target="_blank" href="https://wa.me/{{ j.phone|replace(' ','')|replace('+','') }}">WhatsApp</a>
+        {% endif %}
+      </div>
+      <div class="card-actions">
+        {% if not col.terminal %}
+        <form class="inline-form" method="post" action="{{ url_for('jobs_update', wo=j.wo) }}">
+          <select name="status">
+            {% for s in ['Received','Diagnosed','Quoted','Accepted','In Progress','Done','Delivered','Picked up','Cancelled'] %}
+            <option {% if s.lower() == (j.status or '').lower() %}selected{% endif %}>{{ s }}</option>
+            {% endfor %}
+          </select>
+          <button type="submit" class="small">Set status</button>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+    {% else %}
+    <p class="muted" style="padding:8px 4px;font-size:12px">No jobs</p>
+    {% endfor %}
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

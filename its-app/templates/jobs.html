@@ -4,7 +4,7 @@
 
 <div class="page-head">
   <h1>Jobs &amp; work orders</h1>
-  <p class="muted">Live source: <code>Services/PCB Service/04_Tracking/PCB_Job_Tracker.xlsx</code></p>
+  <p class="muted">Live source: <code>Services/PCB Service/04_Tracking/PCB_Job_Tracker.xlsx</code> · <a href="{{ url_for('jobs_board') }}">Kanban board</a></p>
 </div>
 
 <section class="card">
@@ -33,7 +33,7 @@
   <h2>{{ jobs|length }} work orders</h2>
   <table class="table">
     <tr>
-      <th>In</th><th>WO#</th><th>Customer</th><th>Company</th><th>Board</th><th>Equipment</th>
+      <th>In</th><th>WO#</th><th>Customer</th><th>Company</th><th>Phone</th><th>Board</th><th>Equipment</th>
       <th>Symptoms</th><th>Diagnosis</th><th>Quote</th><th>Paid</th><th>Status</th><th></th>
     </tr>
     {% for j in jobs %}
@@ -42,6 +42,7 @@
       <td><strong>{{ j.wo }}</strong></td>
       <td>{{ j.customer or '—' }}</td>
       <td>{{ j.company or '—' }}</td>
+      {% if j.phone %}<td><a class="whatsapp-link" target="_blank" href="https://wa.me/{{ j.phone|replace(' ','')|replace('+','') }}">WA</a></td>{% else %}<td>—</td>{% endif %}
       <td>{{ j.board or '—' }}</td>
       <td>{{ j.equipment or '—' }}</td>
       <td class="small-cell">{{ j.symptoms or '—' }}</td>
@@ -76,7 +77,7 @@
       </td>
     </tr>
     {% else %}
-    <tr><td colspan="12" class="muted">No jobs in the tracker.</td></tr>
+    <tr><td colspan="13" class="muted">No jobs in the tracker.</td></tr>
     {% endfor %}
   </table>
 </section>

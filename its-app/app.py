@@ -55,7 +55,26 @@ def _this_month() -> str:
     return datetime.now().strftime("%Y-%m")
 
 
-# --------------------------------------------------------------------------- routes
+def _sparkline(series, w=560, h=70):
+    """Build an SVG polyline of cumulative profit."""
+    if len(series) < 2:
+        return ""
+    vals = [s["cum"] for s in series]
+    mn, mx = min(vals), max(vals)
+    rng = (mx - mn) or 1
+    pts = []
+    for i, v in enumerate(vals):
+        x = i * (w - 10) / (len(vals) - 1) + 5
+        y = h - 6 - (v - mn) / rng * (h - 12)
+        pts.append(f"{x:.1f},{y:.1f}".rstrip() if v != v else "5,0")
+    poly = " ".join(pts)
+    color = "--good" if vals[-1] >= 0 else "--bad"
+    return (f'<svg class="spark" viewBox="0 0 {w} {h}" preserveAspectRatio="none">'
+            f'<line x1="0" y1="{h/2:.0f}" x2="{w}" y2="{h/2:.0f}" class="spark-line"/>'
+            f'<polyline class="spark-sm" points="{poly}"/>'
+            f'<polyline class="spark" style="stroke: var({color})" points="{poly}"/></svg>')
+
+
 @app.route("/")
 def dashboard():
     tx = readers.finance()
@@ -125,7 +144,10 @@ def dashboard():
                            n_tx=len(tx), monthly=monthly, max_month=max_month,
                            profit_series=profit_series,
                            income_cats=income_cats, cat_income=cat_income,
+                           max_cat_income=max(cat_income.values()) if cat_income else 1,
                            expense_cats=expense_cats, cat_expense=cat_expense,
+                           max_cat_expense=max(cat_expense.values()) if cat_expense else 1,
+                           sparkline=_sparkline(profit_series),
                            receivables=receivables, n_unpaid=sum(1 for i in invoices if not i["paid"]),
                            worked=worked, billable=billable, notes_income=notes_income,
                            yield_per_hr=yield_per_hr, energy=energy, n_notes=len(notes),
@@ -264,7 +286,6 @@ def finance_export():
 # ------------------------------------------------------------------ report
 @app.route("/report")
 def report_page():
-    month = form_str("month", _this_month()) if request.args.get("month") else _this_month()
     month = request.args.get("month") or _this_month()
     tx = [t for t in readers.finance() if t["date"].startswith(month)]
     income = sum(t["amount"] for t in tx if t["type"] == "income")
@@ -447,7 +468,8 @@ def calendar_page():
             cls += " has-note"
         days.append({"d": d, "date": f"{ym}-{dd}", "income": inc, "expense": exp,
                      "note": bool(note), "cls": cls})
-    return render_template("calendar.html", ym=ym, first_weekday=first_weekday,
+    return render_template("calendar.html", ym=ym, year=year, month=month,
+                           first_weekday=first_weekday,
                            month_days=month_days, days=days,
                            prev_month=prev_m, next_month=next_m)
 

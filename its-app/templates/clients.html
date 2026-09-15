@@ -33,6 +33,7 @@
       <td>{{ c.source or '—' }}</td>
       <td class="small-cell">{{ c.notes or '—' }}</td>
       <td class="cell-actions">
+        <a class="btn small" href="{{ url_for('client_detail_route', name=c.name or c.company) }}">Profile</a>
         <details class="inline-edit">
           <summary>Edit</summary>
           <form class="row-form wrap tight" method="post" action="{{ url_for('clients_update', client_id=c.id) }}">
@@ -54,6 +55,18 @@
     <tr><td colspan="7" class="muted">No clients yet.</td></tr>
     {% endfor %}
   </table>
+</section>
+
+<section class="card">
+  <h2>Everyone in your data</h2>
+  <p class="muted">Auto-detected from finance income, invoices, jobs and leads. Click any name for a full per-client report.</p>
+  <p class="tag-cloud">
+    {% for n in known %}
+    <a href="{{ url_for('client_detail_route', name=n) }}"><span class="pill pill-income">{{ n }}</span></a>
+    {% else %}
+    <span class="muted">No client names found yet.</span>
+    {% endfor %}
+  </p>
 </section>
 
 {% endblock %}

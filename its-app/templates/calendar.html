@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Calendar — ITS Command Center{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <h1>Calendar — {{ year }}-{{ '%02d'|format(month) }}</h1>
+  <div class="row-form" style="margin-top:8px">
+    <a class="btn small" href="{{ url_for('calendar_page', month=prev_month) }}">&#8592; Prev</a>
+    <a class="btn small" href="{{ url_for('calendar_page') }}">Today</a>
+    <a class="btn small" href="{{ url_for('calendar_page', month=next_month) }}">Next &#8594;</a>
+  </div>
+</div>
+
+<div class="card">
+  <div class="cal-head">
+    {% for d in ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'] %}<span>{{ d }}</span>{% endfor %}
+  </div>
+  <div class="cal-grid">
+    {% for _ in range(first_weekday) %}<div class="cal-empty"></div>{% endfor %}
+    {% for day in days %}
+    <div class="cal-cell {{ day.cls }}">
+      <div class="cal-date">{{ day.d }}</div>
+      {% if day.income %}<span class="cal-money cal-income">{{ day.income|da }}</span>{% endif %}
+      {% if day.expense %}<span class="cal-money cal-expense">{{ day.expense|da }}</span>{% endif %}
+      {% if day.note %}<span class="cal-dot" title="Has daily note"></span>{% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  <div class="cal-legend">
+    <span class="dot good-bg"></span> Income
+    <span class="dot bad-bg"></span> Expense
+    <span class="dot" style="background:#b8860b"></span> Has daily note
+  </div>
+</div>
+
+{% endblock %}

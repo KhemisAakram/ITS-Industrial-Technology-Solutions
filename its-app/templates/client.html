@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+{% block title %}{{ client.name }} — ITS Command Center{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <h1>{{ client.name }}</h1>
+  <p class="muted">Aggregated live from finance, invoices, jobs and leads · <a href="{{ url_for('clients_page') }}">All clients</a></p>
+</div>
+
+{% if client.leads %}
+<section class="card">
+  <h2>Leads</h2>
+  <table class="table">
+    <tr><th>Company</th><th>Contact</th><th>Phone</th><th>Status</th><th>Value</th></tr>
+    {% for l in client.leads %}
+    <tr>
+      <td>{{ l.company }}</td>
+      <td>{{ l.contact }}</td>
+      <td>{% if l.phone %}<a href="https://wa.me/{{ l.phone|replace(' ','')|replace('+','') }}" target="_blank">WhatsApp</a>{% endif %}</td>
+      <td><span class="pill">{{ l.status }}</span></td>
+      <td class="num">{{ l.value_da|da }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</section>
+{% endif %}
+
+{% if client.invoices %}
+<section class="card">
+  <h2>Invoices</h2>
+  <table class="table">
+    <tr><th>Number</th><th>Date</th><th>Amount</th><th>Status</th></tr>
+    {% for i in client.invoices %}
+    <tr>
+      <td>{{ i.number }}</td>
+      <td>{{ i.date or '—' }}</td>
+      <td class="num">{{ i.amount|da }}</td>
+      <td><span class="pill {{ 'pill-income' if i.paid else 'pill-expense' }}">{{ 'Paid' if i.paid else 'Unpaid' }}</span></td>
+    </tr>
+    {% endfor %}
+  </table>
+  {% if client.unpaid %}<p class="bad-text">Unpaid total: {{ client.unpaid|da }} DA</p>{% endif %}
+</section>
+{% endif %}
+
+{% if client.jobs %}
+<section class="card">
+  <h2>Jobs</h2>
+  <table class="table">
+    <tr><th>WO</th><th>Board</th><th>Equipment</th><th>Quote</th><th>Paid</th><th>Status</th></tr>
+    {% for j in client.jobs %}
+    <tr>
+      <td>{{ j.wo }}</td>
+      <td>{{ j.board }}</td>
+      <td>{{ j.equipment }}</td>
+      <td class="num">{{ j.quote|da }}</td>
+      <td class="num">{{ j.paid|da }}</td>
+      <td><span class="pill">{{ j.status }}</span></td>
+    </tr>
+    {% endfor %}
+  </table>
+</section>
+{% endif %}
+
+{% if client.finance %}
+<section class="card">
+  <h2>Finance — revenue vs cost</h2>
+  <div class="kpis">
+    <div class="kpi good"><span class="label">Income</span><span class="value">{{ client.income|da }}</span></div>
+    <div class="kpi bad"><span class="label">Expenses</span><span class="value">{{ client.expense|da }}</span></div>
+    <div class="kpi accent"><span class="label">Profit</span><span class="value">{{ client.profit|da }}</span></div>
+  </div>
+  <table class="table">
+    <tr><th>Date</th><th>Type</th><th>Category</th><th>Description</th><th>Amount</th></tr>
+    {% for t in client.finance %}
+    <tr>
+      <td>{{ t.date }}</td>
+      <td><span class="pill {{ 'pill-income' if t.type == 'income' else 'pill-expense' }}">{{ t.type }}</span></td>
+      <td>{{ t.category }}</td>
+      <td>{{ t.description }}</td>
+      <td class="num {{ 'good-text' if t.type == 'income' else 'bad-text' }}">{{ t.amount|da }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</section>
+{% else %}
+<section class="card"><p class="muted">No finance transactions matched for this client yet.</p></section>
+{% endif %}
+
+{% endblock %}

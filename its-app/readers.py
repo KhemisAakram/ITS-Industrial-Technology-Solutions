@@ -313,7 +313,7 @@ def invoices():
     out = []
     if not INVOICES_DIR.exists():
         return out
-    total = re.compile(r"[Tt]otal\s*\|\s*([\d, ]+)\s*\|")
+    total = re.compile(r"\*\*[Tt]otal\*\*\s*\|\s*\*\*([\d, .]+)\*\*")
     paid = re.compile(r"(?:[Pp]aido?u?t?)\s*[:#]\s*(.+)$")
     for p in sorted(INVOICES_DIR.glob("*.md")):
         text = p.read_text(encoding="utf-8")

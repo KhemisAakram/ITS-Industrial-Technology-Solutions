@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Search — ITS Command Center{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <h1>Search</h1>
+  <form class="row-form" method="get" action="{{ url_for('search_page') }}">
+    <input type="search" name="q" value="{{ q }}" placeholder="Search documents, finance, jobs, clients…" autofocus style="flex:1">
+    <button type="submit">Search</button>
+  </form>
+</div>
+
+{% if q %}
+<p class="muted">{{ total }} result{{ 's' if total != 1 }} for "{{ q }}"</p>
+
+<section class="card">
+  <h2>Documents ({{ counts.documents }})</h2>
+  {% for d in results.documents[:12] %}
+  <div class="search-hit">
+    <a href="{{ url_for('vault_file', relpath=d.path) }}" target="_blank">{{ d.folder }}/{{ d.name }}</a>
+    {% if d.snippet %}<p class="muted snippet">{{ d.snippet }}…</p>{% endif %}
+  </div>
+  {% else %}
+  <p class="muted">—</p>
+  {% endfor %}
+</section>
+
+<section class="card">
+  <h2>Finance ({{ counts.finance }})</h2>
+  <table class="table">
+    <tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th></tr>
+    {% for t in results.finance[:20] %}
+    <tr>
+      <td>{{ t.date }}</td><td>{{ t.category }}</td><td>{{ t.description }}</td>
+      <td class="num {{ 'good-text' if t.type == 'income' else 'bad-text' }}">{{ t.amount|da }}</td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4" class="muted">—</td></tr>
+    {% endfor %}
+  </table>
+</section>
+
+<section class="card">
+  <h2>Daily notes ({{ counts.daily }})</h2>
+  <ul class="search-list">
+  {% for n in results.daily[:20] %}
+  <li><a href="{{ url_for('daily_page', month=n.date[:7]) }}">{{ n.date }}</a> — {{ n.focus or n.status or '' }}</li>
+  {% endfor %}
+  </ul>
+</section>
+
+<section class="card">
+  <h2>Projects ({{ counts.projects }})</h2>
+  <ul class="search-list">
+  {% for p in results.projects[:10] %}
+  <li><a href="{{ url_for('projects_page') }}">{{ p.title }}</a> — {{ p.status or '' }}</li>
+  {% endfor %}
+  </ul>
+</section>
+
+<section class="card">
+  <h2>Invoices ({{ counts.invoices }})</h2>
+  <ul class="search-list">
+  {% for i in results.invoices[:10] %}
+  <li><a href="{{ url_for('invoices_page') }}">{{ i.number }}</a> — {{ i.client or '' }} · {{ i.amount|da }} DA</li>
+  {% endfor %}
+  </ul>
+</section>
+
+<section class="card">
+  <h2>Jobs ({{ counts.jobs }})</h2>
+  <ul class="search-list">
+  {% for j in results.jobs[:10] %}
+  <li><a href="{{ url_for('jobs_page') }}">{{ j.wo }}</a> — {{ j.customer or j.company or '' }} · {{ j.board or '' }}</li>
+  {% endfor %}
+  </ul>
+</section>
+
+<section class="card">
+  <h2>Clients ({{ counts.clients }})</h2>
+  <ul class="search-list">
+  {% for c in results.clients[:10] %}
+  <li><a href="{{ url_for('client_detail_route', name=c.name or c.company) }}">{{ c.name or c.company }}</a></li>
+  {% endfor %}
+  </ul>
+</section>
+
+<section class="card">
+  <h2>Leads ({{ counts.leads }})</h2>
+  <ul class="search-list">
+  {% for l in results.leads[:10] %}
+  <li><a href="{{ url_for('leads_page') }}">{{ l.company or l.contact }}</a></li>
+  {% endfor %}
+  </ul>
+</section>
+{% endif %}
+
+{% endblock %}

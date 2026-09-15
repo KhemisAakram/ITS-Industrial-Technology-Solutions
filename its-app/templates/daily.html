@@ -5,7 +5,7 @@
 <div class="page-head">
   <h1>Daily log</h1>
   <p class="muted">Live source: <code>Planning/05_Daily_Notes/*.md</code> YAML · edits update the frontmatter</p>
-  <p class="muted">Money fields (Income / Expenses) auto-sync to <code>ITS_Finance_Tracker.csv</code> — no double entry needed.</p>
+  <p class="muted">Money fields (Income / Expenses) auto-sync to <code>ITS_Finance_Tracker.csv</code> — no double entry needed. <a href="{{ url_for('calendar_page', month=month) }}">Open calendar</a></p>
   <div class="kpis small">
     <div class="kpi"><span class="label">Days shown</span><span class="value">{{ notes|length }}</span></div>
     <div class="kpi good"><span class="label">Income</span><span class="value">{{ n_income|da }}</span></div>
@@ -21,6 +21,25 @@
   </select>
   <button type="submit">Filter</button>
 </form>
+
+{% if mismatches %}
+<section class="card card-alert">
+  <h2>Sync health — {{ mismatches|length }} day{{ 's' if mismatches|length != 1 }} don't match Finance</h2>
+  <p class="muted" style="margin-bottom:8px">Saving any of these notes (or their Finance entries) will bring them back in line.</p>
+  <table class="table">
+    <tr><th>Date</th><th>Note income</th><th>Finance income</th><th>Note expenses</th><th>Finance expenses</th></tr>
+    {% for m in mismatches %}
+    <tr>
+      <td>{{ m.date }}</td>
+      <td class="num">{{ m.note_income|da }}</td>
+      <td class="num">{{ m.fin_income|da }}</td>
+      <td class="num">{{ m.note_expense|da }}</td>
+      <td class="num">{{ m.fin_expense|da }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</section>
+{% endif %}
 
 <section class="card">
   <table class="table">

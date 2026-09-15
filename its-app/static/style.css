@@ -152,3 +152,123 @@ input[type="date"] { width: auto; }
 .flash { padding: 10px 14px; border-radius: 8px; font-weight: 600; font-size: 13px; }
 .flash-ok { background: var(--good-bg); color: var(--good); border: 1px solid #bfe8d2; }
 .flash-err { background: var(--bad-bg); color: var(--bad); border: 1px solid #f2c3bc; }
+
+/* ========================== CHARTS ========================== */
+.bars { display: flex; align-items: flex-end; gap: 10px; height: 150px; padding: 10px 0 4px; }
+.bar-pair { flex: 1; display: flex; align-items: flex-end; gap: 3px; justify-content: center; flex-direction: column; position: relative; }
+.bar-pair label { font-size: 10px; color: var(--muted); text-align: center; margin-top: 3px; }
+.bar { width: 16px; min-height: 2px; border-radius: 3px 3px 0 0; transition: height .3s; }
+.bar.good { background: var(--good); }
+.bar.bad { background: var(--bad); opacity: .8; }
+.bar-legend { display: flex; gap: 14px; font-size: 11px; color: var(--muted); margin-top: 6px; }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: middle; margin-right: 3px; }
+.good-bg { background: var(--good); }
+.bad-bg { background: var(--bad); }
+
+.hbar-row { display: grid; grid-template-columns: 90px 1fr 70px; gap: 8px; align-items: center; margin-bottom: 6px; font-size: 12px; }
+.hbar { background: #e9eef5; border-radius: 6px; height: 12px; overflow: hidden; }
+.hbar-fill { height: 100%; border-radius: 6px; transition: width .3s; }
+.hbar-fill.good { background: var(--good); }
+.hbar-fill.bad { background: var(--bad); }
+.hbar-label { text-align: right; color: var(--muted); font-weight: 600; }
+.hbar-val { font-variant-numeric: tabular-nums; font-weight: 600; }
+
+/* sparkline */
+.spark { display: block; width: 100%; height: 70px; }
+.spark polyline.spark { stroke-width: 2; fill: none; }
+.spark polyline.spark-sm { stroke-width: 6; stroke: #e9eef5; fill: none; opacity: .4; }
+.spark-line { stroke: #dfe6ef; stroke-width: 1; stroke-dasharray: 4 4; }
+
+/* ========================== ATTENTION / SYNC HEALTH ========================== */
+.card-alert { border-left: 4px solid var(--accent); }
+.attention-list { list-style: none; padding: 0; margin: 0; }
+.attention-list li { padding: 5px 0; border-bottom: 1px solid var(--line); display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.attention-list li:last-child { border-bottom: 0; }
+
+.tag-cloud { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag-cloud a { text-decoration: none; }
+
+.snippet { font-size: 11px; line-height: 1.4; }
+.search-hit { padding: 6px 0; border-bottom: 1px solid var(--line); }
+.search-hit:last-child { border-bottom: 0; }
+.search-hit a { font-weight: 600; }
+.search-list { list-style: none; padding: 0; margin: 0; }
+.search-list li { padding: 4px 0; border-bottom: 1px solid var(--line); }
+.search-list li:last-child { border-bottom: 0; }
+
+/* ========================== CALENDAR ========================== */
+.cal-head { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 11px; color: var(--muted); font-weight: 600; padding-bottom: 6px; border-bottom: 1px solid var(--line); margin-bottom: 4px; }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal-cell { min-height: 48px; border-radius: 6px; padding: 4px 6px; font-size: 11px; position: relative; border: 1px solid transparent; }
+.cal-cell.day-income { background: var(--good-bg); border-color: #bfe8d2; }
+.cal-cell.day-expense { background: var(--bad-bg); border-color: #f2c3bc; }
+.cal-cell.day-both { background: var(--accent-bg); border-color: #f5e2a8; }
+.cal-cell.day-empty { background: #f7f9fc; }
+.cal-cell.has-note .cal-dot { display: block; }
+.cal-date { font-weight: 600; }
+.cal-money { display: block; font-size: 10px; }
+.cal-income { color: var(--good); }
+.cal-expense { color: var(--bad); }
+.cal-dot { display: none; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); position: absolute; top: 4px; right: 4px; }
+.cal-legend { margin-top: 8px; font-size: 11px; color: var(--muted); display: flex; gap: 14px; align-items: center; }
+.cal-empty { }
+
+/* ========================== KANBAN ========================== */
+.kanban { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 18px; }
+.kanban-col { min-width: 210px; max-width: 260px; flex: 1; background: #f2f5f9; border-radius: var(--radius); padding: 10px 10px 16px; }
+.kanban-col.terminal { opacity: .85; }
+.kanban-col h3 { margin: 0 0 8px; font-size: 13px; text-transform: uppercase; letter-spacing: .4px; display: flex; align-items: center; gap: 8px; }
+.kanban-card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin-bottom: 8px; box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+.kanban-card .card-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.kanban-card .card-body { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.kanban-card .card-body strong { color: var(--ink); }
+.kanban-card .card-actions { margin-top: 8px; }
+.kanban-card.done { opacity: .7; }
+.inline-form { display: flex; gap: 4px; align-items: center; }
+.inline-form select { font-size: 11px; padding: 3px 4px; max-width: 120px; }
+
+/* ========================== INVOICE PRINT ========================== */
+.invoice-page { background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 32px 28px; max-width: 800px; }
+.inv-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
+.inv-brand .brand-dot { width: 12px; height: 12px; border-radius: 50%; background: #ffd23f; display: inline-block; margin-right: 6px; }
+.inv-brand h1 { margin: 0; font-size: 18px; color: var(--brand); }
+.inv-brand p { margin: 2px 0 0; font-size: 12px; color: var(--muted); }
+.inv-meta h2 { margin: 0; font-size: 16px; color: var(--brand); text-align: right; }
+.inv-meta p { margin: 2px 0; font-size: 12px; text-align: right; }
+.inv-client { margin-bottom: 20px; }
+.inv-client h3 { margin: 0 0 4px; font-size: 12px; color: var(--muted); text-transform: uppercase; }
+.inv-items { margin-bottom: 16px; }
+.inv-summary { display: flex; justify-content: flex-end; margin-bottom: 20px; }
+.inv-summary table { border-collapse: collapse; }
+.inv-summary td { padding: 4px 12px; font-size: 13px; text-align: right; }
+.inv-summary .inv-total { font-weight: 700; font-size: 16px; border-top: 2px solid var(--ink); }
+.inv-footer { border-top: 1px solid var(--line); padding-top: 12px; font-size: 11px; color: var(--muted); text-align: center; }
+.inv-footer p { margin: 2px 0; }
+.whatsapp-link { color: var(--good); font-size: 11px; font-weight: 600; text-decoration: none; }
+
+/* ========================== DARK MODE ========================== */
+[data-theme="dark"] {
+  --bg: #161a22; --card: #1c2030; --ink: #e0e6f0; --muted: #8a97ad;
+  --line: #2b3348; --brand: #2a6be8; --brand-2: #4da3ff;
+  --good: #2ac06e; --good-bg: #162e1f; --bad: #e74c3c; --bad-bg: #3e1711;
+  --accent: #daa520; --accent-bg: #383112;
+}
+[data-theme="dark"] input, [data-theme="dark"] select, [data-theme="dark"] textarea {
+  background: #1c2030; color: #e0e6f0; border-color: #2b3348;
+}
+[data-theme="dark"] .kanban-col { background: #1c2030; }
+[data-theme="dark"] .cal-cell.day-empty { background: #1c2030; }
+[data-theme="dark"] .hbar { background: #2b3348; }
+[data-theme="dark"] .table th { background: #21263a; }
+[data-theme="dark"] .table tr:hover td { background: #1f2536; }
+[data-theme="dark"] .inline-edit .row-form { background: #1c2030; }
+[data-theme="dark"] .invoice-page { background: #fff; color: #16233c; }
+
+/* topbar extras */
+.top-search { margin-left: auto; }
+.top-search input { padding: 4px 10px; font-size: 12px; border-radius: 14px; background: rgba(255,255,255,.15); color: #fff; border: 1px solid rgba(255,255,255,.18); width: 140px; }
+.top-search input:focus { width: 220px; background: rgba(255,255,255,.25); }
+[data-theme="dark"] .top-search input { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.12); color: #e0e6f0; }
+.theme-toggle { background: rgba(255,255,255,.12); color: #fff; border: 0; border-radius: 6px; padding: 4px 10px; font-size: 16px; cursor: pointer; }
+.theme-toggle:hover { background: rgba(255,255,255,.22); }
+[data-theme="dark"] .brand-dot { background: #ffd23f; }

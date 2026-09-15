@@ -39,7 +39,7 @@
       <td><strong>{{ l.company }}</strong></td>
       <td>{{ l.contact or '—' }}</td>
       <td>{{ l.title or '—' }}</td>
-      <td>{{ l.phone or '—' }}</td>
+      <td>{% if l.phone %}<a class="whatsapp-link" target="_blank" href="https://wa.me/{{ l.phone|replace(' ','')|replace('+','') }}">WhatsApp</a>{% else %}—{% endif %}</td>
       <td>{{ l.zone or '—' }}</td>
       <td><span class="pill">{{ l.status }}</span></td>
       <td class="num">{{ l.value_da|da }}</td>

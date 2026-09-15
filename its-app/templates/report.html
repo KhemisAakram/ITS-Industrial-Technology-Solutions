@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Report {{ month }} — ITS Command Center{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <h1>Monthly report — {{ month }}</h1>
+  <form class="row-form" method="get" action="{{ url_for('report_page') }}">
+    <select name="month">
+      {% for m in months %}<option value="{{ m }}" {% if m == month %}selected{% endif %}>{{ m }}</option>{% endfor %}
+    </select>
+    <button type="submit">Show</button>
+    <a class="btn small" href="{{ url_for('report_export', month=month) }}">Export .xlsx</a>
+  </form>
+</div>
+
+<div class="kpis">
+  <div class="kpi good"><span class="label">Income</span><span class="value">{{ income|da }} <small>DA</small></span></div>
+  <div class="kpi bad"><span class="label">Expenses</span><span class="value">{{ expense|da }} <small>DA</small></span></div>
+  <div class="kpi accent"><span class="label">Net</span><span class="value">{{ net|da }} <small>DA</small></span></div>
+</div>
+
+<div class="grid two">
+  <section class="card">
+    <h2>Income by category</h2>
+    <table class="table">
+      <tr><th>Category</th><th>Amount</th></tr>
+      {% for k, v in cat_income.items() %}
+      <tr><td>{{ k }}</td><td class="num good-text">{{ v|da }}</td></tr>
+      {% else %}
+      <tr><td colspan="2" class="muted">No income this month.</td></tr>
+      {% endfor %}
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>Expenses by category</h2>
+    <table class="table">
+      <tr><th>Category</th><th>Amount</th></tr>
+      {% for k, v in cat_expense.items() %}
+      <tr><td>{{ k }}</td><td class="num bad-text">{{ v|da }}</td></tr>
+      {% else %}
+      <tr><td colspan="2" class="muted">No expenses this month.</td></tr>
+      {% endfor %}
+    </table>
+  </section>
+</div>
+
+<div class="grid two">
+  <section class="card">
+    <h2>Daily breakdown</h2>
+    <table class="table">
+      <tr><th>Date</th><th>Income</th><th>Expense</th><th>Net</th></tr>
+      {% for d, v in daily_rows %}
+      <tr>
+        <td>{{ d }}</td>
+        <td class="num good-text">{{ v.income|da }}</td>
+        <td class="num bad-text">{{ v.expense|da }}</td>
+        <td class="num">{{ (v.income - v.expense)|da }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+  </section>
+
+  <section class="card">
+    <h2>By client</h2>
+    <table class="table">
+      <tr><th>Client</th><th>Income</th><th>Expenses</th><th>Profit</th></tr>
+      {% for name, c in clients.items() %}
+      <tr>
+        <td><a href="{{ url_for('client_detail_route', name=name) }}">{{ name }}</a></td>
+        <td class="num good-text">{{ c.income|da }}</td>
+        <td class="num bad-text">{{ c.expense|da }}</td>
+        <td class="num">{{ c.profit|da }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" class="muted">No data.</td></tr>
+      {% endfor %}
+    </table>
+  </section>
+</div>
+
+<section class="card">
+  <h2>All transactions ({{ tx|length }})</h2>
+  <table class="table">
+    <tr><th>Date</th><th>Type</th><th>Category</th><th>Description</th><th>Amount</th></tr>
+    {% for t in tx %}
+    <tr>
+      <td>{{ t.date }}</td>
+      <td><span class="pill {{ 'pill-income' if t.type == 'income' else 'pill-expense' }}">{{ t.type }}</span></td>
+      <td>{{ t.category }}</td>
+      <td>{{ t.description }}</td>
+      <td class="num {{ 'good-text' if t.type == 'income' else 'bad-text' }}">{{ t.amount|da }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+</section>
+
+{% endblock %}

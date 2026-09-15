@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Invoice {{ inv.number }} — print{% endblock %}
+{% block content %}
+
+<div class="no-print page-head">
+  <h1>Invoice {{ inv.number }}</h1>
+  <button onclick="window.print()" class="btn">Print / Save PDF</button>
+  <a class="btn small" href="{{ url_for('invoices_page') }}">Back to invoices</a>
+</div>
+
+<div class="invoice-page">
+  <header class="inv-head">
+    <div class="inv-brand">
+      <span class="brand-dot"></span>
+      <h1>ITS — Industrial Technology Solutions</h1>
+      <p>Electronics · PCB Repair · 3D Printing · Automation</p>
+    </div>
+    <div class="inv-meta">
+      <h2>INVOICE # {{ inv.number }}</h2>
+      <p>Date: <strong>{{ inv.date or '—' }}</strong></p>
+      <p>Due: <strong>On receipt</strong></p>
+      <p>Status: <strong class="{{ 'good-text' if inv.paid else 'bad-text' }}">{{ 'PAID' if inv.paid else 'UNPAID' }}</strong></p>
+    </div>
+  </header>
+
+  <section class="inv-client">
+    <h3>Bill To</h3>
+    <p><strong>{{ inv.client or '—' }}</strong></p>
+  </section>
+
+  <section>
+    <table class="table inv-items">
+      <tr><th>#</th><th>Description</th><th>Qty</th><th>Unit</th><th>Rate (DA)</th><th>Amount (DA)</th></tr>
+      {% for it in inv.line_items %}
+      <tr>
+        <td>{{ loop.index }}</td>
+        <td>{{ it.description }}</td>
+        <td>{{ it.qty }}</td>
+        <td>{{ it.unit }}</td>
+        <td class="num">{{ it.rate|da }}</td>
+        <td class="num">{{ it.amount|da }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6" class="muted">No line items recorded.</td></tr>
+      {% endfor %}
+    </table>
+  </section>
+
+  <section class="inv-summary">
+    <table>
+      <tr><td>Subtotal (HT)</td><td class="num">{{ ht|da }} DA</td></tr>
+      <tr><td>TVA 19%</td><td class="num">{{ tva|da }} DA</td></tr>
+      <tr class="inv-total"><td>Total (TTC)</td><td class="num">{{ inv.amount|da }} DA</td></tr>
+    </table>
+  </section>
+
+  <footer class="inv-footer">
+    <p><strong>ITS — Industrial Technology Solutions</strong></p>
+    <p>El Harrouch, Skikda · Algeria</p>
+    <p>Thank you!</p>
+  </footer>
+</div>
+
+<style>
+  @media print {
+    .no-print, .topbar, .footer { display: none !important; }
+    body { background: #fff; }
+    .container { max-width: 100%; margin: 0; padding: 0; }
+    .invoice-page { box-shadow: none; border: 0; }
+  }
+</style>
+
+{% endblock %}

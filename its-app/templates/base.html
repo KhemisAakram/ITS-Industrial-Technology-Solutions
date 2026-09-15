@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{% block title %}ITS Command Center{% endblock %}</title>
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<script src="{{ url_for('static', filename='app.js') }}" defer></script>
 </head>
 <body>
 <header class="topbar">
@@ -15,14 +16,20 @@
   <nav>
     <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.path == '/' }}">Dashboard</a>
     <a href="{{ url_for('finance_page') }}" class="{{ 'active' if request.path.startswith('/finance') }}">Finance</a>
+    <a href="{{ url_for('report_page') }}" class="{{ 'active' if request.path.startswith('/report') }}">Report</a>
     <a href="{{ url_for('daily_page') }}" class="{{ 'active' if request.path.startswith('/daily') }}">Daily</a>
+    <a href="{{ url_for('calendar_page') }}" class="{{ 'active' if request.path.startswith('/calendar') }}">Cal</a>
     <a href="{{ url_for('projects_page') }}" class="{{ 'active' if request.path.startswith('/projects') }}">Projects</a>
     <a href="{{ url_for('jobs_page') }}" class="{{ 'active' if request.path.startswith('/jobs') }}">Jobs</a>
     <a href="{{ url_for('leads_page') }}" class="{{ 'active' if request.path.startswith('/leads') }}">Leads</a>
-    <a href="{{ url_for('clients_page') }}" class="{{ 'active' if request.path.startswith('/clients') }}">Clients</a>
-    <a href="{{ url_for('invoices_page') }}" class="{{ 'active' if request.path.startswith('/invoices') }}">Invoices</a>
+    <a href="{{ url_for('clients_page') }}" class="{{ 'active' if request.path.startswith('/clients') and request.path != '/clients' }}">Clients</a>
+    <a href="{{ url_for('invoices_page') }}" class="{{ 'active' if request.path.startswith('/invoices') and '/print' not in request.path }}">Invoices</a>
     <a href="{{ url_for('documents_page') }}" class="{{ 'active' if request.path.startswith('/documents') }}">Docs</a>
   </nav>
+  <form class="top-search" method="get" action="{{ url_for('search_page') }}">
+    <input type="search" name="q" placeholder="Search…" aria-label="Search">
+  </form>
+  <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" type="button">&#9681;</button>
 </header>
 
 <main class="container">
@@ -39,7 +46,8 @@
 </main>
 
 <footer class="footer">
-  Local app over <code>{{ vault }}</code> · all changes written back to the ITS Profile folder
+  Local app over <code>{{ vault }}</code> · all changes written back to the ITS Profile folder ·
+  <a href="{{ url_for('backup_page') }}">Download backup</a>
 </footer>
 </body>
 </html>

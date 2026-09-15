@@ -4,17 +4,25 @@
 
 <div class="page-head">
   <h1>Invoices</h1>
-  <p class="muted">Live source: <code>documents/05_Financial/Invoices/*.md</code></p>
+  <p class="muted">Live source: <code>documents/05_Financial/Invoices/*.md</code> · marking Paid auto-logs income in Finance (with .bak)</p>
+  <div class="kpis small">
+    <div class="kpi good"><span class="label">Invoiced</span><span class="value">{{ invoices|sum(attribute='amount')|da }} <small>DA</small></span></div>
+    <div class="kpi accent"><span class="label">Unpaid</span><span class="value">{{ invoices|selectattr('paid', 'equalto', false)|sum(attribute='amount')|da }} <small>DA</small></span></div>
+  </div>
 </div>
 
 <section class="card">
   <h2>Create invoice</h2>
-  <form class="row-form" method="post" action="{{ url_for('invoices_add') }}">
-    <input type="text" name="number" value="{{ next_number }}" placeholder="Invoice #" required>
-    <input type="text" name="client" placeholder="Client" required>
-    <input type="date" name="date" value="{{ now }}">
-    <input type="number" name="amount" step="0.01" placeholder="Amount (DA)" required>
-    <button type="submit">Create</button>
+  <form method="post" action="{{ url_for('invoices_add') }}">
+    <div class="row-form">
+      <input type="text" name="number" value="{{ next_number }}" placeholder="Invoice #" required>
+      <input type="text" name="client" placeholder="Client" required>
+      <input type="date" name="date" value="{{ now }}">
+      <input type="number" name="amount" step="0.01" placeholder="Amount (DA)">
+      <button type="submit">Create</button>
+    </div>
+    <p class="muted" style="font-size:12px">Optional line items — one per line: <code>description, qty, rate (DA)</code> · when set, the total auto-calculates and overrides the Amount field.</p>
+    <textarea name="line_items" rows="4" style="width:100%;box-sizing:border-box" placeholder="PCB repair, 1, 3500&#10;3D print part, 2, 1200"></textarea>
   </form>
 </section>
 
@@ -26,15 +34,27 @@
     <tr>
       <td><strong>{{ inv.number }}</strong></td>
       <td>{{ inv.date or '—' }}</td>
-      <td>{{ inv.client or '—' }}</td>
+      <td>{% if inv.client %}<a href="{{ url_for('client_detail_route', name=inv.client) }}">{{ inv.client }}</a>{% else %}—{% endif %}</td>
       <td class="num">{{ inv.amount|da }}</td>
       <td><span class="pill {{ 'pill-income' if inv.paid else 'pill-expense' }}">{{ 'Paid' if inv.paid else 'Unpaid' }}</span></td>
       <td class="cell-actions">
-        <a class="btn small" target="_blank" href="{{ url_for('vault_file', relpath=inv.path) }}" title="{{ inv.path }}">Open</a>
+        <a class="btn small" target="_blank" href="{{ url_for('invoice_print', number=inv.number) }}">Print</a>
+        <a class="btn small" target="_blank" href="{{ url_for('vault_file', relpath=inv.path) }}" title="{{ inv.path }}">MD</a>
+        <details class="inline-edit">
+          <summary>Edit</summary>
+          <form class="row-form" method="post" action="{{ url_for('invoices_update', number=inv.number) }}">
+            <input type="text" name="client" value="{{ inv.client }}" placeholder="Client">
+            <input type="date" name="date" value="{{ inv.date }}">
+            <input type="number" name="amount" step="0.01" value="{{ inv.amount if not inv.line_items else inv.line_items|sum(attribute='amount') }}" placeholder="Amount">
+            <textarea name="line_items" rows="3" style="flex:1 1 100%" placeholder="description, qty, rate DA — one per line">{% for it in inv.line_items %}{{ it.description }}, {{ it.qty }}, {{ it.rate }}
+{% endfor %}</textarea>
+            <button type="submit">Save</button>
+          </form>
+        </details>
         <form method="post" action="{{ url_for('invoices_toggle', number=inv.number) }}">
-          <button class="small" type="submit">{{ 'Mark unpaid' if inv.paid else 'Mark paid' }}</button>
+          <button class="small {{ 'pill-expense' if inv.paid else 'pill-income' }}" type="submit">{{ 'Mark unpaid' if inv.paid else 'Mark paid' }}</button>
         </form>
-        <form method="post" action="{{ url_for('invoices_delete', number=inv.number) }}" onsubmit="return confirm('Delete invoice {{ inv.number }}?')">
+        <form method="post" action="{{ url_for('invoices_delete', number=inv.number) }}" onsubmit="return confirm('Delete invoice {{ inv.number }}? Its Finance income row will be removed too.')">
           <button class="danger small" type="submit">Del</button>
         </form>
       </td>
