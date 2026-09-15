@@ -120,34 +120,50 @@ def finance_page():
 
 @app.post("/finance/add")
 def finance_add():
+    date = form_str("date", datetime.now().strftime("%Y-%m-%d"))
     writers.add_finance({
-        "date": form_str("date", datetime.now().strftime("%Y-%m-%d")),
+        "date": date,
         "type": form_str("type", "income"),
         "category": form_str("category"),
         "description": form_str("description"),
         "amount": form_num("amount"),
     })
-    flash("Transaction added — written to ITS_Finance_Tracker.csv", "ok")
+    synced = writers.sync_finance_to_daily(date)
+    msg = "Transaction added — written to ITS_Finance_Tracker.csv"
+    if synced:
+        msg += " · daily note updated"
+    flash(msg, "ok")
     return redirect(url_for("finance_page"))
 
 
 @app.post("/finance/edit/<int:index>")
 def finance_edit(index):
+    date = form_str("date")
     writers.update_finance(index, {
-        "date": form_str("date"),
+        "date": date,
         "type": form_str("type"),
         "category": form_str("category"),
         "description": form_str("description"),
         "amount": form_num("amount"),
     })
-    flash("Transaction updated — CSV rewritten", "ok")
+    synced = writers.sync_finance_to_daily(date) if date else False
+    msg = "Transaction updated — CSV rewritten"
+    if synced:
+        msg += " · daily note updated"
+    flash(msg, "ok")
     return redirect(url_for("finance_page"))
 
 
 @app.post("/finance/delete/<int:index>")
 def finance_delete(index):
+    rows = readers.finance()
+    date = rows[index]["date"] if 0 <= index < len(rows) else None
     writers.delete_finance(index)
-    flash("Transaction deleted — CSV rewritten", "ok")
+    synced = writers.sync_finance_to_daily(date) if date else False
+    msg = "Transaction deleted — CSV rewritten"
+    if synced:
+        msg += " · daily note updated"
+    flash(msg, "ok")
     return redirect(url_for("finance_page"))
 
 
@@ -172,7 +188,7 @@ def daily_page():
         notes = [n for n in notes if n["date"].startswith(month)]
     months = sorted({n["date"][:7] for n in readers.daily_notes()}, reverse=True)
     n_income = sum(n["income_da"] for n in notes)
-    n_expense = sum(n["expense_parts"] + n["expense_tools"] + n["expense_transport"] + n["expense_overhead"] for n in notes)
+    n_expense = sum(n["expense_parts"] + n["expense_tools"] + n["expense_transport"] + n["expense_overhead"] + n["expense_other"] for n in notes)
     hours = sum(n["hours_worked"] for n in notes)
     return render_template("daily.html", notes=notes, months=months, month=month,
                            n_income=n_income, n_expense=n_expense, hours=hours)
@@ -184,7 +200,7 @@ def daily_update(date):
     if request.form.get("energy") not in (None, ""):
         fields["energy"] = request.form["energy"].strip() or "''"
     for k in ("hours_worked", "hours_billable", "income_da",
-              "expense_parts", "expense_tools", "expense_transport", "expense_overhead"):
+              "expense_parts", "expense_tools", "expense_transport", "expense_overhead", "expense_other"):
         v = request.form.get(k, "")
         if v != "":
             fields[k] = v.strip()
@@ -195,6 +211,7 @@ def daily_update(date):
         try:
             writers.update_daily_note(date, fields)
             synced = writers.sync_daily_to_finance(date)
+            writers.sync_finance_to_daily(date)
             msg = f"Daily note {date} updated"
             if synced:
                 count = len(synced)

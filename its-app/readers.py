@@ -84,6 +84,8 @@ def finance():
 _FRONT_RE = re.compile(r"^---\s*$")
 _FOCUS_RE = re.compile(r"^\s*>\s*Focus:\s*(.+?)\s*$")
 
+EXPENSE_BUCKETS = {"parts", "tools", "transport", "overhead"}
+
 
 def _parse_frontmatter_block(lines):
     """Return (dict, start_idx, end_idx) for first YAML frontmatter block."""
@@ -128,6 +130,7 @@ def _parse_md_day(path: Path):
         "expense_tools": _num(fm.get("expense_tools")),
         "expense_transport": _num(fm.get("expense_transport")),
         "expense_overhead": _num(fm.get("expense_overhead")),
+        "expense_other": _num(fm.get("expense_other")),
         "status": fm.get("status", ""),
         "focus": focus,
     }

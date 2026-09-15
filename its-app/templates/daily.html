@@ -36,8 +36,8 @@
       <td class="num">{{ n.hours_worked }}</td>
       <td class="num">{{ n.hours_billable }}</td>
       <td class="num good-text">{{ n.income_da|da }}</td>
-      <td class="num bad-text">{{ (n.expense_parts + n.expense_tools + n.expense_transport + n.expense_overhead)|da }}</td>
-      <td><span class="pill" title="Expenses: parts {{ n.expense_parts|da }} · tools {{ n.expense_tools|da }} · transport {{ n.expense_transport|da }} · overhead {{ n.expense_overhead|da }}">{{ n.status or '—' }}</span></td>
+      <td class="num bad-text">{{ (n.expense_parts + n.expense_tools + n.expense_transport + n.expense_overhead + n.expense_other)|da }}</td>
+      <td><span class="pill" title="Expenses: parts {{ n.expense_parts|da }} · tools {{ n.expense_tools|da }} · transport {{ n.expense_transport|da }} · overhead {{ n.expense_overhead|da }} · other {{ n.expense_other|da }}">{{ n.status or '—' }}</span></td>
       <td class="cell-actions">
         <details class="inline-edit">
           <summary>Edit</summary>
@@ -56,6 +56,7 @@
               <label>Expense — tools <input type="number" name="expense_tools" value="{{ n.expense_tools }}"></label>
               <label>Expense — transport <input type="number" name="expense_transport" value="{{ n.expense_transport }}"></label>
               <label>Expense — overhead <input type="number" name="expense_overhead" value="{{ n.expense_overhead }}"></label>
+              <label>Expense — other <input type="number" name="expense_other" value="{{ n.expense_other }}"></label>
               <label>Status <input type="text" name="status" value="{{ n.status }}"></label>
             </div>
             <button type="submit">Save</button>

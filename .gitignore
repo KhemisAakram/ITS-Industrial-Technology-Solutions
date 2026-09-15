@@ -17,6 +17,10 @@ node_modules/
 # Safety backups created by the ITS web app
 *.bak
 
+# Python cache
+__pycache__/
+*.pyc
+
 # ITS web app code (keep inside the vault so git backs it up too)
 !its-app/
 !its-app/app.py

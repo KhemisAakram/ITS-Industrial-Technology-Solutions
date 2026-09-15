@@ -12,9 +12,9 @@ from pathlib import Path
 
 import openpyxl
 
-from readers import (BASE, CLIENT_COLS, CLIENTS_CSV, DAILY_DIR, FINANCE_CSV,
-                     FINANCE_HEADER, INVOICES_DIR, JOB_TRACKER_XLSX, LEAD_COLS,
-                     LEADS_CSV, PROJECTS_DIR)
+from readers import (BASE, CLIENT_COLS, CLIENTS_CSV, DAILY_DIR, EXPENSE_BUCKETS,
+                     FINANCE_CSV, FINANCE_HEADER, INVOICES_DIR, JOB_TRACKER_XLSX,
+                     LEAD_COLS, LEADS_CSV, PROJECTS_DIR)
 
 _FRONT_RE = re.compile(r"^---\s*$")
 
@@ -145,35 +145,47 @@ def _is_daily_tagged(row) -> bool:
     return str(row.get("description", "")).startswith(DAILY_TAG)
 
 
-def sync_daily_to_finance(date: str):
-    """Reconcile the finance CSV to the daily note totals for `date`.
+def _bucket_of(row):
+    """Map a finance row to a daily-note bucket key."""
+    if row["type"] == "income":
+        return ("income", "*")
+    cat = (row.get("category") or "").strip().lower()
+    if cat in EXPENSE_BUCKETS:
+        return ("expense", cat)
+    return ("expense", "other")
 
-    Never edits manual rows and never double-counts: it only adds a tagged
-    '[daily <date>] <category>' row when the note amount is greater than what
-    is already logged for the same (type, category) on that date. Returns the
-    list of created entries.
+
+def sync_daily_to_finance(date: str):
+    """Push daily note totals into the finance CSV (reconcile, no duplicates).
+
+    Only adds a tagged '[daily <date>] <bucket>' row when the note amount is
+    greater than what is already logged for the same bucket on that date.
+    Tagged rows for this date are refreshed first. Returns created entries.
     """
     import readers
     note = readers.daily_note(date)
     if not note:
         return []
     target = {
-        ("income", "General"): note["income_da"],
+        ("income", "*"): note["income_da"],
         ("expense", "parts"): note["expense_parts"],
         ("expense", "tools"): note["expense_tools"],
         ("expense", "transport"): note["expense_transport"],
         ("expense", "overhead"): note["expense_overhead"],
+        ("expense", "other"): note["expense_other"],
     }
 
     rows = [dict(r) for r in readers.finance()]
     day_rows = [r for r in rows if r["date"] == date]
-    rows = [r for r in rows if not (_is_daily_tagged(r) and r["date"] == date)]
+    kept = [r for r in rows if not (_is_daily_tagged(r) and r["date"] == date)]
+    removed = len(kept) != len(rows)
+    rows = kept
 
     manual = {}
     for r in day_rows:
         if _is_daily_tagged(r):
             continue
-        key = (r["type"], r["category"] or "General")
+        key = _bucket_of(r)
         manual[key] = manual.get(key, 0) + r.get("amount", 0)
 
     created = []
@@ -183,14 +195,58 @@ def sync_daily_to_finance(date: str):
         existing = manual.get((typ, cat), 0)
         delta = amt - existing
         if delta > 0:
-            row = {"date": date, "type": typ, "category": cat,
-                   "description": f"{DAILY_TAG}{date}] {cat}", "amount": delta}
+            word = "income" if typ == "income" else cat
+            row = {"date": date, "type": typ,
+                   "category": "General" if typ == "income"
+                   else (cat if cat in EXPENSE_BUCKETS else "Other"),
+                   "description": f"{DAILY_TAG}{date}] {word}", "amount": delta}
             rows.append(row)
             created.append(row)
 
-    if created:
+    if created or removed:
         write_finance(rows)
     return created
+
+
+def _clean_num(v):
+    v = float(v or 0)
+    return int(v) if v == int(v) else v
+
+
+def sync_finance_to_daily(date: str) -> bool:
+    """Pull finance totals for `date` back into the daily note's money fields.
+
+    Makes the daily note equal the finance ledger for that day:
+    income_da = all income; each expense bucket = that category's total;
+    expense_other = any expense not in the standard buckets. Returns True if
+    the daily note was changed.
+    """
+    import readers
+    note = readers.daily_note(date)
+    if not note:
+        return False
+
+    rows = [r for r in readers.finance() if r["date"] == date]
+    income = sum(r["amount"] for r in rows if r["type"] == "income")
+    buckets = {"parts": 0.0, "tools": 0.0, "transport": 0.0, "overhead": 0.0, "other": 0.0}
+    for r in rows:
+        if r["type"] != "expense":
+            continue
+        key = _bucket_of(r)[1]
+        buckets[key] += r["amount"]
+
+    fields = {
+        "income_da": _clean_num(income),
+        "expense_parts": _clean_num(buckets["parts"]),
+        "expense_tools": _clean_num(buckets["tools"]),
+        "expense_transport": _clean_num(buckets["transport"]),
+        "expense_overhead": _clean_num(buckets["overhead"]),
+        "expense_other": _clean_num(buckets["other"]),
+    }
+    changed = any(abs((note.get(k) or 0) - float(v)) > 0.001 for k, v in fields.items())
+    if changed:
+        update_daily_note(date, fields)
+    return changed
 
 
 # --------------------------------------------------------------------------- projects
