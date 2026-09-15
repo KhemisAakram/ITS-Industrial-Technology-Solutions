@@ -194,7 +194,12 @@ def daily_update(date):
     if fields:
         try:
             writers.update_daily_note(date, fields)
-            flash(f"Daily note {date} updated (YAML frontmatter)", "ok")
+            synced = writers.sync_daily_to_finance(date)
+            msg = f"Daily note {date} updated"
+            if synced:
+                count = len(synced)
+                msg += f" — {count} finance entr{'y' if count == 1 else 'ies'} auto-synced"
+            flash(msg, "ok")
         except FileNotFoundError:
             flash(f"No daily note for {date}", "err")
     return redirect(url_for("daily_page", month=date[:7]))

@@ -146,6 +146,17 @@ def daily_notes():
     return notes
 
 
+def daily_note(date: str):
+    """Return a single parsed daily note for `date` or None."""
+    path = DAILY_DIR / f"{date}.md"
+    if not path.exists():
+        return None
+    try:
+        return _parse_md_day(path)
+    except Exception:
+        return None
+
+
 def obsidian_daily_fallback():
     """Fallback: read obsidian_data.json if markdown parsing yields nothing."""
     if not OBSIDIAN_JSON.exists():

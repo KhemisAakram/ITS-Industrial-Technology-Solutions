@@ -138,6 +138,61 @@ def update_daily_note(date: str, fields: dict) -> None:
     _replace_frontmatter(path, fields)
 
 
+DAILY_TAG = "[daily "
+
+
+def _is_daily_tagged(row) -> bool:
+    return str(row.get("description", "")).startswith(DAILY_TAG)
+
+
+def sync_daily_to_finance(date: str):
+    """Reconcile the finance CSV to the daily note totals for `date`.
+
+    Never edits manual rows and never double-counts: it only adds a tagged
+    '[daily <date>] <category>' row when the note amount is greater than what
+    is already logged for the same (type, category) on that date. Returns the
+    list of created entries.
+    """
+    import readers
+    note = readers.daily_note(date)
+    if not note:
+        return []
+    target = {
+        ("income", "General"): note["income_da"],
+        ("expense", "parts"): note["expense_parts"],
+        ("expense", "tools"): note["expense_tools"],
+        ("expense", "transport"): note["expense_transport"],
+        ("expense", "overhead"): note["expense_overhead"],
+    }
+
+    rows = [dict(r) for r in readers.finance()]
+    day_rows = [r for r in rows if r["date"] == date]
+    rows = [r for r in rows if not (_is_daily_tagged(r) and r["date"] == date)]
+
+    manual = {}
+    for r in day_rows:
+        if _is_daily_tagged(r):
+            continue
+        key = (r["type"], r["category"] or "General")
+        manual[key] = manual.get(key, 0) + r.get("amount", 0)
+
+    created = []
+    for (typ, cat), amt in target.items():
+        if amt <= 0:
+            continue
+        existing = manual.get((typ, cat), 0)
+        delta = amt - existing
+        if delta > 0:
+            row = {"date": date, "type": typ, "category": cat,
+                   "description": f"{DAILY_TAG}{date}] {cat}", "amount": delta}
+            rows.append(row)
+            created.append(row)
+
+    if created:
+        write_finance(rows)
+    return created
+
+
 # --------------------------------------------------------------------------- projects
 def update_project(project_id: str, fields: dict) -> None:
     path = PROJECTS_DIR / f"{project_id}.md"

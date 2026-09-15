@@ -5,6 +5,7 @@
 <div class="page-head">
   <h1>Daily log</h1>
   <p class="muted">Live source: <code>Planning/05_Daily_Notes/*.md</code> YAML · edits update the frontmatter</p>
+  <p class="muted">Money fields (Income / Expenses) auto-sync to <code>ITS_Finance_Tracker.csv</code> — no double entry needed.</p>
   <div class="kpis small">
     <div class="kpi"><span class="label">Days shown</span><span class="value">{{ notes|length }}</span></div>
     <div class="kpi good"><span class="label">Income</span><span class="value">{{ n_income|da }}</span></div>
@@ -41,16 +42,22 @@
         <details class="inline-edit">
           <summary>Edit</summary>
           <form class="row-form tight" method="post" action="{{ url_for('daily_update', date=n.date) }}">
-            <input type="text" list="energy-cats" name="energy" value="{{ n.energy }}" placeholder="Energy">
-            <datalist id="energy-cats"><option value="Low"><option value="Medium"><option value="High"><option value="fresh"></datalist>
-            <input type="number" name="hours_worked" value="{{ n.hours_worked }}" placeholder="Hrs" step="0.5">
-            <input type="number" name="hours_billable" value="{{ n.hours_billable }}" placeholder="Billable" step="0.5">
-            <input type="number" name="income_da" value="{{ n.income_da }}" placeholder="Income DA">
-            <input type="number" name="expense_parts" value="{{ n.expense_parts }}" placeholder="Parts">
-            <input type="number" name="expense_tools" value="{{ n.expense_tools }}" placeholder="Tools">
-            <input type="number" name="expense_transport" value="{{ n.expense_transport }}" placeholder="Transport">
-            <input type="number" name="expense_overhead" value="{{ n.expense_overhead }}" placeholder="Overhead">
-            <input type="text" name="status" value="{{ n.status }}" placeholder="Status">
+            <div class="edit-grid">
+              <label>Energy
+                <select name="energy">
+                  <option value="" {% if not n.energy %}selected{% endif %}>—</option>
+                  {% for e in ['Low','Medium','High','fresh'] %}<option value="{{ e }}" {% if n.energy == e %}selected{% endif %}>{{ e }}</option>{% endfor %}
+                </select>
+              </label>
+              <label>Hours worked <input type="number" name="hours_worked" value="{{ n.hours_worked }}" step="0.5"></label>
+              <label>Hours billable <input type="number" name="hours_billable" value="{{ n.hours_billable }}" step="0.5"></label>
+              <label>Income (DA) <input type="number" name="income_da" value="{{ n.income_da }}"></label>
+              <label>Expense — parts <input type="number" name="expense_parts" value="{{ n.expense_parts }}"></label>
+              <label>Expense — tools <input type="number" name="expense_tools" value="{{ n.expense_tools }}"></label>
+              <label>Expense — transport <input type="number" name="expense_transport" value="{{ n.expense_transport }}"></label>
+              <label>Expense — overhead <input type="number" name="expense_overhead" value="{{ n.expense_overhead }}"></label>
+              <label>Status <input type="text" name="status" value="{{ n.status }}"></label>
+            </div>
             <button type="submit">Save</button>
           </form>
         </details>
