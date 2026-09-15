@@ -31,3 +31,6 @@ __pycache__/
 !its-app/static/style.css
 !its-app/templates/
 !its-app/templates/*.html
+
+# App password (local only, never commit)
+its-app/.password

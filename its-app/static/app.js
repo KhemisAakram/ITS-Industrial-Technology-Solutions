@@ -47,6 +47,7 @@ function toggleTheme() {
       var stage = zone.dataset.stage;
       var oldStage = dragging.dataset.stage;
       if (!wo || !stage || stage === oldStage) return;
+      if (stage === "Other") { alert("That column is only for unlisted statuses."); return; }
       if (!confirm("Move work order " + wo + " to “" + stage + "”?")) return;
       var fd = new FormData();
       fd.append("status", stage);
