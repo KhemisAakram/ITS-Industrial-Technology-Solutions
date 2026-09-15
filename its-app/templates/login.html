@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Locked — ITS Command Center{% endblock %}
+{% block content %}
+
+<div class="login-wrap">
+  <div class="card login-card">
+    <h1>ITS Command Center</h1>
+    <p class="muted">This app is password protected. Enter the password to continue.</p>
+    <form method="post" action="{{ url_for('login_page', next=request.args.get('next') or '') }}">
+      <input type="password" name="password" placeholder="Password" autofocus required>
+      <button type="submit">Unlock</button>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

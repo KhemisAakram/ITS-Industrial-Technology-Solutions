@@ -4,15 +4,15 @@
 
 <div class="page-head">
   <h1>Jobs board</h1>
-  <p class="muted">Drag isn't needed — use "Advance" to move work orders through the pipeline. <a href="{{ url_for('jobs_page') }}">Table view</a></p>
+  <p class="muted">Drag a card onto a column to advance it, or use "Set status". <a href="{{ url_for('jobs_page') }}">Table view</a></p>
 </div>
 
-<div class="kanban">
+<div class="kanban" id="kanban">
   {% for col in columns %}
-  <div class="kanban-col{% if col.terminal %} terminal{% endif %}">
+  <div class="kanban-col{% if col.terminal %} terminal{% endif %} dropzone" data-stage="{{ col.stage }}">
     <h3>{{ col.stage }} <span class="pill">{{ col.jobs|length }}</span></h3>
     {% for j in col.jobs %}
-    <div class="kanban-card{% if col.terminal %} done{% endif %}">
+    <div class="kanban-card{% if col.terminal %} done{% endif %}" draggable="true" data-wo="{{ j.wo }}" data-stage="{{ col.stage }}">
       <div class="card-head"><strong>{{ j.wo }}</strong> <span class="pill pill-accent">{{ j.status or '—' }}</span></div>
       <div class="card-body">
         <div>{{ j.customer or j.company or '—' }}</div>

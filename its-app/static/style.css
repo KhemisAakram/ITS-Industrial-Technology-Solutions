@@ -272,3 +272,50 @@ input[type="date"] { width: auto; }
 .theme-toggle { background: rgba(255,255,255,.12); color: #fff; border: 0; border-radius: 6px; padding: 4px 10px; font-size: 16px; cursor: pointer; }
 .theme-toggle:hover { background: rgba(255,255,255,.22); }
 [data-theme="dark"] .brand-dot { background: #ffd23f; }
+
+/* ========================== LOCK SCREEN ========================== */
+.login-wrap { display: flex; justify-content: center; padding: 60px 0; }
+.login-card { max-width: 380px; width: 100%; text-align: center; padding: 28px; }
+.login-card h1 { margin: 0 0 6px; font-size: 20px; color: var(--brand); }
+.login-card form { display: flex; gap: 8px; margin-top: 14px; }
+.login-card input { flex: 1; }
+.lock-link { color: #fff; background: rgba(255,255,255,.1); border-radius: 6px; padding: 4px 10px; text-decoration: none; font-size: 14px; }
+.lock-link:hover { background: rgba(255,255,255,.22); text-decoration: none; }
+
+/* ========================== KANBAN DRAG ========================== */
+.kanban-card[draggable="true"] { cursor: grab; }
+.kanban-card[draggable="true"]:active { cursor: grabbing; }
+.kanban-card.dragging { opacity: .45; transform: rotate(1deg); }
+.dropzone.drop-over { outline: 2px dashed var(--brand-2); background: #eef5ff; }
+[data-theme="dark"] .dropzone.drop-over { background: #20283c; }
+
+/* ========================== CLICKABLE CALENDAR ========================== */
+a.cal-cell { display: block; text-decoration: none; color: inherit; }
+a.cal-cell:hover { border-color: var(--brand-2); box-shadow: 0 1px 4px rgba(17,136,224,.25); transform: translateY(-1px); }
+
+/* ========================== RESPONSIVE / MOBILE ========================== */
+@media (max-width: 900px) {
+  .topbar { flex-direction: column; align-items: stretch; gap: 8px; position: static; }
+  .topbar nav { margin-left: 0; flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+  .top-search { margin-left: 0; }
+  .top-search input { width: 100%; }
+  .top-search input:focus { width: 100%; }
+  .kpis { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+  .card { padding: 12px; overflow-x: auto; }
+  .inline-edit .row-form { min-width: 0; max-width: 100%; }
+  .kanban { flex-wrap: nowrap; }
+  .kanban-col { min-width: 80vw; max-width: 80vw; }
+}
+@media (max-width: 560px) {
+  body { font-size: 13px; }
+  .container { padding: 0 10px; }
+  .page-head h1 { font-size: 20px; }
+  .bar { width: 10px; }
+  .cal-cell { min-height: 38px; }
+  .cal-money { font-size: 9px; }
+  .footer { padding: 16px 10px 24px; overflow-x: auto; }
+  .login-card form { flex-direction: column; }
+}
+@media print {
+  .topbar, .footer, .top-search, .theme-toggle, .lock-link, .flash, .no-print { display: none !important; }
+}

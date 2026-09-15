@@ -8,11 +8,14 @@ from __future__ import annotations
 import calendar as _cal
 import io
 import json
+import os
+import re
 from collections import defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
+import zipfile
 
-from flask import Flask, abort, flash, redirect, render_template, request, send_file, url_for
+from flask import Flask, abort, flash, redirect, render_template, request, send_file, session, url_for
 
 import readers
 import writers
@@ -30,7 +33,50 @@ app.jinja_env.filters["da"] = fmt_da
 
 @app.context_processor
 def inject_vault():
-    return {"vault": str(readers.BASE), "now": datetime.now().strftime("%Y-%m-%d")}
+    return {"vault": str(readers.BASE), "now": datetime.now().strftime("%Y-%m-%d"),
+            "locked": bool(_lock_password())}
+
+
+# --------------------------------------------------------------------------- lock screen
+def _lock_password() -> str:
+    """Password for the opt-in lock screen: env ITS_APP_PASSWORD or its-app/.password file."""
+    env = os.environ.get("ITS_APP_PASSWORD")
+    if env:
+        return env
+    pfile = Path(__file__).resolve().with_name(".password")
+    if pfile.exists():
+        pw = pfile.read_text(encoding="utf-8").strip()
+        if pw:
+            return pw
+    return ""
+
+
+@app.route("/login", methods=["GET", "POST"])
+def login_page():
+    if request.method == "POST":
+        if request.form.get("password") == _lock_password():
+            session["unlocked"] = True
+            return redirect(request.args.get("next") or url_for("dashboard"))
+        flash("Wrong password", "err")
+    return render_template("login.html")
+
+
+@app.get("/logout")
+def logout():
+    session.pop("unlocked", None)
+    flash("Locked", "ok")
+    return redirect(url_for("login_page"))
+
+
+@app.before_request
+def _lock_gate():
+    if request.endpoint == "static" or not _lock_password():
+        return None
+    if session.get("unlocked"):
+        return None
+    if request.endpoint == "login_page":
+        return None
+    return redirect(url_for("login_page", next=request.path))
 
 
 # --------------------------------------------------------------------------- forms
@@ -385,6 +431,9 @@ def search_page():
 def daily_page():
     notes = readers.daily_notes()
     month = request.args.get("month", "")
+    focus = request.args.get("date", "")
+    if focus and re.fullmatch(r"\d{4}-\d{2}-\d{2}", focus):
+        month = month or focus[:7]
     if month:
         notes = [n for n in notes if n["date"].startswith(month)]
     months = sorted({n["date"][:7] for n in readers.daily_notes()}, reverse=True)
@@ -402,7 +451,7 @@ def daily_page():
                                "note_expense": note_exp, "fin_expense": fin_exp})
     return render_template("daily.html", notes=notes, months=months, month=month,
                            n_income=n_income, n_expense=n_expense, hours=hours,
-                           mismatches=mismatches)
+                           mismatches=mismatches, focus=focus if any(n["date"] == focus for n in notes) else "")
 
 
 @app.post("/daily/update/<date>")
@@ -756,6 +805,35 @@ def backup_page():
     zpath = writers.create_backup()
     flash(f"Backup created: {zpath.name}", "ok")
     return send_file(zpath, as_attachment=True, download_name=zpath.name)
+
+
+@app.get("/backups")
+def backups_list():
+    backups = []
+    try:
+        for zp in sorted(writers.BACKUP_DIR.glob("ITS_Backup_*.zip"), reverse=True):
+            backups.append({"name": zp.name,
+                            "size_mb": round(zp.stat().st_size / 1024 / 1024, 1),
+                            "modified": datetime.fromtimestamp(zp.stat().st_mtime).strftime("%Y-%m-%d %H:%M")})
+    except OSError:
+        pass
+    return render_template("backups.html", backups=backups)
+
+
+@app.post("/backup/restore/<path:name>")
+def backup_restore(name):
+    target = (writers.BACKUP_DIR / name).resolve()
+    try:
+        if not target.is_relative_to(writers.BACKUP_DIR.resolve()):
+            raise ValueError("Bad name")
+        restored, skipped = writers.restore_backup(name)
+        flash(f"Restored {restored} file{'s' if restored != 1 else ''} from {name}"
+              + (f" · {skipped} skipped" if skipped else ""), "ok")
+    except FileNotFoundError:
+        flash("That backup file does not exist", "err")
+    except (ValueError, zipfile.BadZipFile) as e:
+        flash(f"Restore failed: {e}", "err")
+    return redirect(url_for("backups_list"))
 
 
 # ------------------------------------------------------------------ documents

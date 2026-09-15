@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Backups — ITS Command Center{% endblock %}
+{% block content %}
+
+<div class="page-head">
+  <h1>Backups</h1>
+  <p class="muted">Kept in <code>its-app/backups/</code> · newest {{ 10 }} kept. Restoring overwrites files in the vault with the zip contents (the current file is kept as a <code>.bak</code> first).</p>
+  <div class="row-form" style="margin-top:8px">
+    <a class="btn" href="{{ url_for('backup_page') }}">Create new backup</a>
+    <a class="btn small" href="{{ url_for('dashboard') }}">Dashboard</a>
+  </div>
+</div>
+
+<section class="card">
+  <h2>{{ backups|length }} backup{{ 's' if backups|length != 1 }}</h2>
+  <table class="table">
+    <tr><th>File</th><th>Size</th><th>Modified</th><th></th></tr>
+    {% for b in backups %}
+    <tr>
+      <td><code>{{ b.name }}</code></td>
+      <td class="num">{{ b.size_mb }} MB</td>
+      <td>{{ b.modified }}</td>
+      <td class="cell-actions">
+        <form method="post" action="{{ url_for('backup_restore', name=b.name) }}"
+              onsubmit="return confirm('Restore {{ b.name }}? This overwrites vault files with the backup copy (current files first get a .bak).')">
+          <button class="small" type="submit">Restore</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr><td colspan="4" class="muted">No backups yet — click "Create new backup" above.</td></tr>
+    {% endfor %}
+  </table>
+</section>
+
+{% endblock %}

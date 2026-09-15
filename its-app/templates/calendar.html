@@ -18,12 +18,12 @@
   <div class="cal-grid">
     {% for _ in range(first_weekday) %}<div class="cal-empty"></div>{% endfor %}
     {% for day in days %}
-    <div class="cal-cell {{ day.cls }}">
+    <a class="cal-cell {{ day.cls }}" href="{{ url_for('daily_page', month=day.date[:7], date=day.date) }}">
       <div class="cal-date">{{ day.d }}</div>
       {% if day.income %}<span class="cal-money cal-income">{{ day.income|da }}</span>{% endif %}
       {% if day.expense %}<span class="cal-money cal-expense">{{ day.expense|da }}</span>{% endif %}
       {% if day.note %}<span class="cal-dot" title="Has daily note"></span>{% endif %}
-    </div>
+    </a>
     {% endfor %}
   </div>
   <div class="cal-legend">

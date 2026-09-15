@@ -10,6 +10,8 @@
     </select>
     <button type="submit">Show</button>
     <a class="btn small" href="{{ url_for('report_export', month=month) }}">Export .xlsx</a>
+    <a class="btn small" href="{{ url_for('finance_export') }}">Export CSV</a>
+    <button class="small no-print" type="button" onclick="window.print()">Print / Save PDF</button>
   </form>
 </div>
 
@@ -94,5 +96,16 @@
     {% endfor %}
   </table>
 </section>
+
+<style>
+  @media print {
+    .no-print, .topbar, .footer { display: none !important; }
+    body { background: #fff; color: #000; }
+    .container { max-width: 100%; margin: 0; padding: 0 8px; }
+    .card { border: 1px solid #ccc; box-shadow: none; break-inside: avoid; }
+    .page-head, .kpis { break-inside: avoid; }
+    .filters, input, select { display: none !important; }
+  }
+</style>
 
 {% endblock %}

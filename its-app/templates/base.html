@@ -24,11 +24,13 @@
     <a href="{{ url_for('leads_page') }}" class="{{ 'active' if request.path.startswith('/leads') }}">Leads</a>
     <a href="{{ url_for('clients_page') }}" class="{{ 'active' if request.path.startswith('/clients') and request.path != '/clients' }}">Clients</a>
     <a href="{{ url_for('invoices_page') }}" class="{{ 'active' if request.path.startswith('/invoices') and '/print' not in request.path }}">Invoices</a>
+    <a href="{{ url_for('backups_list') }}" class="{{ 'active' if request.path.startswith('/backup') }}">Backups</a>
     <a href="{{ url_for('documents_page') }}" class="{{ 'active' if request.path.startswith('/documents') }}">Docs</a>
   </nav>
   <form class="top-search" method="get" action="{{ url_for('search_page') }}">
     <input type="search" name="q" placeholder="Search…" aria-label="Search">
   </form>
+  {% if locked %}<a class="lock-link" href="{{ url_for('logout') }}" title="Lock the app">&#128272;</a>{% endif %}
   <button class="theme-toggle" onclick="toggleTheme()" title="Toggle dark mode" type="button">&#9681;</button>
 </header>
 

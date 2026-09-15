@@ -22,6 +22,10 @@
   <button type="submit">Filter</button>
 </form>
 
+{% if focus %}
+<div class="flash flash-ok">Viewing day <strong>{{ focus }}</strong> — its edit form is open below. <a href="{{ url_for('daily_page') }}">Show all days</a></div>
+{% endif %}
+
 {% if mismatches %}
 <section class="card card-alert">
   <h2>Sync health — {{ mismatches|length }} day{{ 's' if mismatches|length != 1 }} don't match Finance</h2>
@@ -58,7 +62,7 @@
       <td class="num bad-text">{{ (n.expense_parts + n.expense_tools + n.expense_transport + n.expense_overhead + n.expense_other)|da }}</td>
       <td><span class="pill" title="Expenses: parts {{ n.expense_parts|da }} · tools {{ n.expense_tools|da }} · transport {{ n.expense_transport|da }} · overhead {{ n.expense_overhead|da }} · other {{ n.expense_other|da }}">{{ n.status or '—' }}</span></td>
       <td class="cell-actions">
-        <details class="inline-edit">
+        <details class="inline-edit" id="note-{{ n.date }}" {% if n.date == focus %}open{% endif %}>
           <summary>Edit</summary>
           <form class="row-form tight" method="post" action="{{ url_for('daily_update', date=n.date) }}">
             <div class="edit-grid">

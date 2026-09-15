@@ -512,6 +512,43 @@ def create_backup(max_keep: int = 10) -> Path:
     return zpath
 
 
+def restore_backup(name: str):
+    """Restore every file in an ITS_Backup zip back into the vault.
+
+    Only trusts zip members whose resolved path stays inside the vault.
+    Returns (restored_count, skipped_count).
+    """
+    zpath = (BACKUP_DIR / name).resolve()
+    if not zpath.is_relative_to(BACKUP_DIR.resolve()) or not zpath.is_file():
+        raise FileNotFoundError(name)
+    if zpath.suffix.lower() != ".zip":
+        raise ValueError("Only .zip backups can be restored")
+    restored = 0
+    skipped = 0
+    root = BASE.resolve()
+    with zipfile.ZipFile(zpath, "r") as zf:
+        names = zf.namelist()
+        targets = []
+        for n in names:
+            if n.endswith("/"):
+                continue
+            clean = Path(n)
+            target = (root / clean).resolve()
+            if not target.is_relative_to(root):
+                skipped += 1
+                continue
+            targets.append((n, target))
+        for n, target in targets:
+            if not target.parent.exists():
+                target.parent.mkdir(parents=True, exist_ok=True)
+            if target.exists():
+                backup(target)
+            with zf.open(n) as src, open(target, "wb") as dst:
+                shutil.copyfileobj(src, dst)
+            restored += 1
+    return restored, skipped
+
+
 # --------------------------------------------------------------------------- next number helper
 def next_invoice_number() -> str:
     from readers import invoices
