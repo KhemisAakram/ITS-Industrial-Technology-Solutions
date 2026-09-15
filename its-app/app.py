@@ -5,10 +5,11 @@ every edit writes straight back into them (with a .bak safety copy).
 """
 from __future__ import annotations
 
+import calendar as _cal
 import io
 import json
 from collections import defaultdict
-from datetime import datetime
+from datetime import datetime, timedelta
 from pathlib import Path
 
 from flask import Flask, abort, flash, redirect, render_template, request, send_file, url_for
@@ -46,6 +47,14 @@ def form_num(name: str, default=0):
         return float(default)
 
 
+def _today() -> str:
+    return datetime.now().strftime("%Y-%m-%d")
+
+
+def _this_month() -> str:
+    return datetime.now().strftime("%Y-%m")
+
+
 # --------------------------------------------------------------------------- routes
 @app.route("/")
 def dashboard():
@@ -59,12 +68,26 @@ def dashboard():
         ym = t["date"][:7]
         by_month[ym][t["type"]] += t["amount"]
     months = sorted(by_month, reverse=True)[:8]
-    monthly = [{"month": m, **by_month[m]} for m in months]
+    monthly = [{"month": m, "income": by_month[m]["income"], "expense": by_month[m]["expense"]}
+               for m in months]
+    max_month = max([by_month[m]["income"] for m in months] + [by_month[m]["expense"] for m in months]
+                    + [1])
 
-    by_category = defaultdict(float)
+    cum = 0.0
+    profit_series = []
+    for m in sorted(by_month):
+        cum += by_month[m]["income"] - by_month[m]["expense"]
+        profit_series.append({"month": m, "cum": cum})
+
+    cat_income = defaultdict(float)
+    cat_expense = defaultdict(float)
     for t in tx:
-        if t["type"] == "income":
-            by_category[t["category"]] += t["amount"]
+        (cat_income if t["type"] == "income" else cat_expense)[t["category"]] += t["amount"]
+    income_cats = sorted(cat_income, key=lambda k: cat_income[k], reverse=True)
+    expense_cats = sorted(cat_expense, key=lambda k: cat_expense[k], reverse=True)
+
+    invoices = readers.invoices()
+    receivables = sum(i["amount"] for i in invoices if not i["paid"] and i["amount"] > 0)
 
     notes = readers.daily_notes()
     worked = sum(n["hours_worked"] for n in notes)
@@ -77,7 +100,7 @@ def dashboard():
             energy[n["energy"]] += 1
 
     jobs = readers.jobs()
-    open_jobs = [j for j in jobs if j["status"] and j["status"].lower() not in ("picked up", "cancelled", "closed")]
+    open_jobs = [j for j in jobs if j["status"] and j["status"].lower() not in readers.JOB_TERMINAL]
     job_income = sum(j["paid"] for j in jobs)
     lead_rows = readers.leads()
     leads_by_status = defaultdict(int)
@@ -88,14 +111,73 @@ def dashboard():
     active_projects = [p for p in projects if p["status"] in ("in-progress", "active", "ongoing", "planned")]
     week_no = datetime.now().isocalendar()[1]
 
+    attention = _attention_items(projects, lead_rows, jobs, invoices)
+
+    backups = []
+    try:
+        for zp in sorted(writers.BACKUP_DIR.glob("ITS_Backup_*.zip"), reverse=True)[:4]:
+            backups.append({"name": zp.name, "size_mb": round(zp.stat().st_size / 1024 / 1024, 1)})
+    except OSError:
+        pass
+
     return render_template("dashboard.html",
                            income=income, expense=expense, profit=profit,
-                           n_tx=len(tx), monthly=monthly, by_category=by_category,
+                           n_tx=len(tx), monthly=monthly, max_month=max_month,
+                           profit_series=profit_series,
+                           income_cats=income_cats, cat_income=cat_income,
+                           expense_cats=expense_cats, cat_expense=cat_expense,
+                           receivables=receivables, n_unpaid=sum(1 for i in invoices if not i["paid"]),
                            worked=worked, billable=billable, notes_income=notes_income,
                            yield_per_hr=yield_per_hr, energy=energy, n_notes=len(notes),
                            open_jobs=open_jobs, job_income=job_income,
                            leads_by_status=leads_by_status, n_leads=len(lead_rows),
-                           active_projects=active_projects, week_no=week_no)
+                           active_projects=active_projects, week_no=week_no,
+                           attention=attention, backups=backups)
+
+
+def _attention_items(projects, lead_rows, jobs, invoices):
+    """Things needing the owner's attention right now."""
+    out = []
+    today = datetime.now().date()
+    for inv in invoices:
+        if not inv["paid"] and inv["amount"] > 0:
+            due = ""
+            try:
+                age = (today - datetime.strptime(inv["date"][:10], "%Y-%m-%d").date()).days
+                due = f" · {age}d outstanding"
+            except Exception:
+                due = ""
+            out.append({"type": "invoice", "label": f"Invoice {inv['number']} unpaid",
+                        "detail": f"{inv['client'] or '—'} · {fmt_da(inv['amount'])} DA{due}"})
+    for p in projects:
+        if p["status"] in ("done", "completed", "delivered", "cancelled", "archived"):
+            continue
+        if p["due"]:
+            try:
+                if datetime.strptime(p["due"][:10], "%Y-%m-%d").date() < today:
+                    out.append({"type": "project", "label": f"Project past due: {p['title']}",
+                                "detail": f"due {p['due']}"})
+            except Exception:
+                pass
+    for l in lead_rows:
+        if l["status"].lower() in ("won", "done", "closed", "lost", "converted"):
+            continue
+        if l["last_contact"]:
+            try:
+                age = (today - datetime.strptime(l["last_contact"][:10], "%Y-%m-%d").date()).days
+            except Exception:
+                age = 999
+            if age > 14:
+                out.append({"type": "lead", "label": f"Lead cold: {l['company'] or l['contact']}",
+                            "detail": f"last contact {l['last_contact']} ({age}d)"})
+    for j in jobs:
+        if j["status"].lower() in readers.JOB_TERMINAL:
+            continue
+        age = readers.job_age_days(j["date_in"])
+        if age > 15 and j["status"].lower() != "done":
+            out.append({"type": "job", "label": f"Job stuck: {j['wo'] or 'WO'}",
+                        "detail": f"{j['customer'] or j['company'] or '—'} · {age}d since in"})
+    return out[:8]
 
 
 # ------------------------------------------------------------------ finance
@@ -120,7 +202,7 @@ def finance_page():
 
 @app.post("/finance/add")
 def finance_add():
-    date = form_str("date", datetime.now().strftime("%Y-%m-%d"))
+    date = form_str("date", _today())
     writers.add_finance({
         "date": date,
         "type": form_str("type", "income"),
@@ -179,6 +261,104 @@ def finance_export():
                      download_name="ITS_Finance_Export.csv", mimetype="text/csv")
 
 
+# ------------------------------------------------------------------ report
+@app.route("/report")
+def report_page():
+    month = form_str("month", _this_month()) if request.args.get("month") else _this_month()
+    month = request.args.get("month") or _this_month()
+    tx = [t for t in readers.finance() if t["date"].startswith(month)]
+    income = sum(t["amount"] for t in tx if t["type"] == "income")
+    expense = sum(t["amount"] for t in tx if t["type"] == "expense")
+    cat_income = defaultdict(float)
+    cat_expense = defaultdict(float)
+    daily = defaultdict(lambda: {"income": 0.0, "expense": 0.0})
+    for t in tx:
+        if t["type"] == "income":
+            cat_income[t["category"]] += t["amount"]
+            daily[t["date"]]["income"] += t["amount"]
+        else:
+            cat_expense[t["category"]] += t["amount"]
+            daily[t["date"]]["expense"] += t["amount"]
+    clients = {}
+    for name in readers.known_client_names():
+        d = readers.client_detail(name)
+        if d["income"] or d["expense"]:
+            clients[name] = {"income": d["income"], "expense": d["expense"],
+                             "profit": d["profit"]}
+    months = sorted({t["date"][:7] for t in readers.finance()}, reverse=True)
+    return render_template("report.html", month=month, months=months,
+                           income=income, expense=expense, net=income - expense, tx=tx,
+                           cat_income=dict(sorted(cat_income.items(), key=lambda kv: -kv[1])),
+                           cat_expense=dict(sorted(cat_expense.items(), key=lambda kv: -kv[1])),
+                           daily_rows=sorted(daily.items()),
+                           clients=dict(sorted(clients.items())))
+
+
+@app.get("/report/export.xlsx")
+def report_export():
+    from openpyxl import Workbook
+    month = request.args.get("month") or _this_month()
+    tx = [t for t in readers.finance() if t["date"].startswith(month)]
+    income = sum(t["amount"] for t in tx if t["type"] == "income")
+    expense = sum(t["amount"] for t in tx if t["type"] == "expense")
+
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Summary"
+    ws.append(["ITS — Monthly report", month])
+    ws.append([])
+    ws.append(["Income", income])
+    ws.append(["Expenses", expense])
+    ws.append(["Net", income - expense])
+
+    ws2 = wb.create_sheet("Transactions")
+    ws2.append(readers.FINANCE_HEADER)
+    for t in tx:
+        ws2.append([t["date"], t["type"], t["category"], t["description"], t["amount"]])
+
+    cat_income = defaultdict(float)
+    cat_expense = defaultdict(float)
+    for t in tx:
+        (cat_income if t["type"] == "income" else cat_expense)[t["category"]] += t["amount"]
+    ws3 = wb.create_sheet("By Category")
+    ws3.append(["Type", "Category", "Amount"])
+    for k, v in sorted(cat_income.items()):
+        ws3.append(["income", k, v])
+    for k, v in sorted(cat_expense.items()):
+        ws3.append(["expense", k, v])
+
+    ws4 = wb.create_sheet("Clients")
+    ws4.append(["Client", "Income", "Expenses", "Profit"])
+    for name in readers.known_client_names():
+        d = readers.client_detail(name)
+        if d["income"] or d["expense"]:
+            ws4.append([name, d["income"], d["expense"], d["profit"]])
+
+    daily = defaultdict(lambda: {"income": 0.0, "expense": 0.0})
+    for t in tx:
+        daily[t["date"]][t["type"]] += t["amount"]
+    ws5 = wb.create_sheet("Daily")
+    ws5.append(["Date", "Income", "Expenses", "Net"])
+    for d, v in sorted(daily.items()):
+        ws5.append([d, v["income"], v["expense"], v["income"] - v["expense"]])
+
+    buf = io.BytesIO()
+    wb.save(buf)
+    buf.seek(0)
+    return send_file(buf, as_attachment=True, download_name=f"ITS_Report_{month}.xlsx",
+                     mimetype="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+
+
+# ------------------------------------------------------------------ search
+@app.route("/search")
+def search_page():
+    q = request.args.get("q", "").strip()
+    results = readers.search(q) if q else {}
+    counts = {k: len(v) for k, v in results.items()} if results else {}
+    total = sum(counts.values()) if counts else 0
+    return render_template("search.html", q=q, results=results, counts=counts, total=total)
+
+
 # ------------------------------------------------------------------ daily
 @app.route("/daily")
 def daily_page():
@@ -190,8 +370,18 @@ def daily_page():
     n_income = sum(n["income_da"] for n in notes)
     n_expense = sum(n["expense_parts"] + n["expense_tools"] + n["expense_transport"] + n["expense_overhead"] + n["expense_other"] for n in notes)
     hours = sum(n["hours_worked"] for n in notes)
+
+    mismatches = []
+    for n in notes:
+        fin_inc, fin_exp = readers.note_totals(n["date"])
+        note_inc = n["income_da"]
+        note_exp = n["expense_parts"] + n["expense_tools"] + n["expense_transport"] + n["expense_overhead"] + n["expense_other"]
+        if abs(fin_inc - note_inc) > 0.5 or abs(fin_exp - note_exp) > 0.5:
+            mismatches.append({"date": n["date"], "note_income": note_inc, "fin_income": fin_inc,
+                               "note_expense": note_exp, "fin_expense": fin_exp})
     return render_template("daily.html", notes=notes, months=months, month=month,
-                           n_income=n_income, n_expense=n_expense, hours=hours)
+                           n_income=n_income, n_expense=n_expense, hours=hours,
+                           mismatches=mismatches)
 
 
 @app.post("/daily/update/<date>")
@@ -222,6 +412,46 @@ def daily_update(date):
     return redirect(url_for("daily_page", month=date[:7]))
 
 
+# ------------------------------------------------------------------ calendar
+@app.route("/calendar")
+def calendar_page():
+    ym = request.args.get("month") or _this_month()
+    try:
+        year, month = int(ym[:4]), int(ym[5:7])
+    except ValueError:
+        year, month = datetime.now().year, datetime.now().month
+    month_days = _cal.monthrange(year, month)[1]
+    first_weekday = _cal.monthrange(year, month)[0]  # Monday == 0
+    prev_m = (datetime(year, month, 1) - timedelta(days=1)).strftime("%Y-%m")
+    next_m = (datetime(year, month, month_days) + timedelta(days=1)).strftime("%Y-%m")
+
+    fin_by_day = defaultdict(lambda: [0.0, 0.0])
+    for t in readers.finance():
+        if t["date"].startswith(ym):
+            fin_by_day[t["date"][-2:]][0 if t["type"] == "income" else 1] += t["amount"]
+    note_by_day = {n["date"][-2:]: n for n in readers.daily_notes() if n["date"].startswith(ym)}
+
+    days = []
+    for d in range(1, month_days + 1):
+        dd = f"{d:02d}"
+        inc, exp = fin_by_day[dd]
+        note = note_by_day.get(dd)
+        cls = "day-empty"
+        if inc and exp:
+            cls = "day-both"
+        elif inc:
+            cls = "day-income"
+        elif exp:
+            cls = "day-expense"
+        if note:
+            cls += " has-note"
+        days.append({"d": d, "date": f"{ym}-{dd}", "income": inc, "expense": exp,
+                     "note": bool(note), "cls": cls})
+    return render_template("calendar.html", ym=ym, first_weekday=first_weekday,
+                           month_days=month_days, days=days,
+                           prev_month=prev_m, next_month=next_m)
+
+
 # ------------------------------------------------------------------ projects
 @app.route("/projects")
 def projects_page():
@@ -250,12 +480,25 @@ def jobs_page():
     return render_template("jobs.html", jobs=readers.jobs())
 
 
+@app.route("/jobs/board")
+def jobs_board():
+    jobs = readers.jobs()
+    columns = []
+    for s in readers.JOB_STAGES:
+        columns.append({"stage": s, "terminal": s.lower() in readers.JOB_TERMINAL,
+                        "jobs": [j for j in jobs if (j["status"] or "Received").lower() == s.lower()]})
+    others = [j for j in jobs if (j["status"] or "Received") not in [s.lower() for s in readers.JOB_STAGES]]
+    if others:
+        columns.append({"stage": "Other", "terminal": True, "jobs": others})
+    return render_template("board.html", columns=columns)
+
+
 @app.post("/jobs/add")
 def jobs_add():
     from writers import write_jobs, JOBS_COLS
     rows = [dict(j) for j in readers.jobs()]
     rows.append({
-        "date_in": form_str("date_in", datetime.now().strftime("%Y-%m-%d")),
+        "date_in": form_str("date_in", _today()),
         "wo": form_str("wo"),
         "customer": form_str("customer"),
         "company": form_str("company"),
@@ -362,7 +605,13 @@ def leads_delete(lead_id):
 # ------------------------------------------------------------------ clients
 @app.route("/clients")
 def clients_page():
-    return render_template("clients.html", clients=readers.clients())
+    return render_template("clients.html", clients=readers.clients(),
+                           known=readers.known_client_names())
+
+
+@app.route("/clients/<name>")
+def client_detail_route(name):
+    return render_template("client.html", client=readers.client_detail(name))
 
 
 @app.post("/clients/add")
@@ -418,10 +667,13 @@ def invoices_page():
 @app.post("/invoices/add")
 def invoices_add():
     number = form_str("number", writers.next_invoice_number())
+    client = form_str("client")
+    date = form_str("date", _today())
+    items = writers.parse_line_items(request.form.get("line_items", ""))
+    amount = round(sum(it["amount"] for it in items), 2) if items else form_num("amount")
     try:
-        writers.create_invoice(number, form_str("client"), form_str("date"),
-                               form_num("amount"), line_items=None)
-        flash(f"Invoice {number} created", "ok")
+        writers.create_invoice(number, client, date, amount, line_items=items or None)
+        flash(f"Invoice {number} created — 'Mark paid' will auto-log income in Finance", "ok")
     except FileExistsError:
         flash(f"Invoice {number} already exists", "err")
     return redirect(url_for("invoices_page"))
@@ -431,7 +683,27 @@ def invoices_add():
 def invoices_toggle(number):
     try:
         writers.toggle_invoice_paid(number)
-        flash(f"Invoice {number} status toggled", "ok")
+        created = writers.sync_invoice_to_finance(number)
+        msg = f"Invoice {number} marked {'paid' if created else 'unpaid'}"
+        if created:
+            msg += " · income auto-logged in Finance"
+        flash(msg, "ok")
+    except FileNotFoundError:
+        flash("Invoice not found", "err")
+    return redirect(url_for("invoices_page"))
+
+
+@app.post("/invoices/update/<number>")
+def invoices_update(number):
+    client = form_str("client")
+    date = form_str("date")
+    items = writers.parse_line_items(request.form.get("line_items", ""))
+    amount = round(sum(it["amount"] for it in items), 2) if items else form_num("amount")
+    try:
+        writers.update_invoice(number, client=client or None, date=date or None,
+                               amount=(amount or None), line_items=(items or None))
+        writers.sync_invoice_to_finance(number)
+        flash(f"Invoice {number} updated", "ok")
     except FileNotFoundError:
         flash("Invoice not found", "err")
     return redirect(url_for("invoices_page"))
@@ -439,9 +711,29 @@ def invoices_toggle(number):
 
 @app.post("/invoices/delete/<number>")
 def invoices_delete(number):
+    writers.sync_invoice_to_finance(number, keep=False)
     writers.delete_invoice(number)
-    flash(f"Invoice {number} deleted", "ok")
+    flash(f"Invoice {number} deleted — its Finance income row removed", "ok")
     return redirect(url_for("invoices_page"))
+
+
+@app.route("/invoices/<number>/print")
+def invoice_print(number):
+    inv = readers.invoice_by_number(number)
+    if not inv:
+        abort(404)
+    amount = inv["amount"] or 0
+    ht = round(amount / 1.19, 2)
+    tva = round(amount - ht, 2)
+    return render_template("invoice_print.html", inv=inv, ht=ht, tva=tva)
+
+
+# ------------------------------------------------------------------ backup
+@app.get("/backup")
+def backup_page():
+    zpath = writers.create_backup()
+    flash(f"Backup created: {zpath.name}", "ok")
+    return send_file(zpath, as_attachment=True, download_name=zpath.name)
 
 
 # ------------------------------------------------------------------ documents

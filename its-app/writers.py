@@ -7,6 +7,7 @@ from __future__ import annotations
 import csv
 import re
 import shutil
+import zipfile
 from datetime import datetime
 from pathlib import Path
 
@@ -310,51 +311,170 @@ def _write_csv(path: Path, cols: list, rows) -> None:
 
 
 # --------------------------------------------------------------------------- invoices
+INVOICE_TAG = "[invoice "
+
+
+def _is_invoice_tagged(row) -> bool:
+    return str(row.get("description", "")).startswith(INVOICE_TAG)
+
+
+def sync_invoice_to_finance(number: str, keep=True):
+    """Reconcile finance rows for one invoice.
+
+    Removes any '[invoice <number>]' income row, then — if the invoice is
+    Paid and keep=True — re-adds a single tagged row so income is never
+    double counted. Returns list of created rows.
+    """
+    import readers
+    inv = readers.invoice_by_number(number)
+    rows = [dict(r) for r in readers.finance()]
+    tag = f"{INVOICE_TAG}{number}]"
+    kept = [r for r in rows if not str(r.get("description", "")).startswith(tag)]
+    removed = len(kept) != len(rows)
+    rows = kept
+    created = []
+    if inv and inv["paid"] and inv["amount"] > 0 and keep:
+        date = inv["date"] or datetime.now().strftime("%Y-%m-%d")
+        desc = tag if not inv["client"] else f"{tag} {inv['client']}"
+        row = {"date": date, "type": "income", "category": "General",
+               "description": desc, "amount": inv["amount"]}
+        rows.append(row)
+        created.append(row)
+    if created or removed:
+        write_finance(rows)
+    return created
+
+
+def _is_num(s) -> bool:
+    try:
+        float(str(s).replace(",", ""))
+        return True
+    except (ValueError, TypeError):
+        return False
+
+
+def _num(s, default=0):
+    try:
+        return float(str(s).replace(" ", "").replace(",", "")) if str(s).strip() else float(default)
+    except (ValueError, TypeError):
+        return float(default)
+
+
+def parse_line_items(raw: str):
+    """Parse 'description, qty, rate' lines into line-item dicts."""
+    items = []
+    for ln in (raw or "").splitlines():
+        ln = ln.strip().rstrip("|")
+        if not ln:
+            continue
+        parts = [p.strip() for p in re.split(r"[,|;]", ln) if p.strip()]
+        if not parts:
+            continue
+        desc = parts[0]
+        qty = int(_num(parts[1], 1)) if len(parts) > 1 and _is_num(parts[1]) else 1
+        unit = "pcs"
+        rate = _num(parts[2]) if len(parts) > 2 and _is_num(parts[2]) else 0
+        if len(parts) == 2 and not _is_num(parts[1]):
+            desc = parts[0]
+            qty, unit, rate = 1, parts[1], 0
+        if len(parts) > 3 and not _is_num(parts[1]):
+            qty, unit = 1, parts[1]
+            rate = _num(parts[2]) if len(parts) > 2 else 0
+        items.append({
+            "description": desc, "qty": qty, "unit": unit,
+            "rate": rate, "amount": round(qty * rate, 2),
+        })
+    return items
+
+
+def _invoice_body(number: str, client: str, date: str, amount, line_items=None,
+                  status_note: str = "") -> str:
+    content = (
+        f"# ITS — Invoice\n\n"
+        f"**Invoice #:** {number}\n"
+        f"**Date:** {date}\n"
+        f"**Due:** On receipt\n\n"
+        f"---\n\n## Bill To\n\n"
+        f"**Client:** {client or ''}\n"
+    )
+    if status_note:
+        content += f"**Status:** {status_note}\n"
+    content += "\n---\n\n## Line Items\n\n"
+    content += (f"| # | Description | Qty | Unit | Rate (DA) | Amount (DA) |\n"
+                f"|---|-------------|-----|------|-----------|-------------|\n")
+    if line_items:
+        for i, it in enumerate(line_items, start=1):
+            content += (f"| {i} | {it.get('description', '')} | {it.get('qty', 1)} | "
+                        f"{it.get('unit', 'pcs')} | {it.get('rate', 0)} | {it.get('amount', 0)} |\n")
+        total = sum(it.get("amount", 0) for it in line_items)
+    else:
+        total = amount
+    content += (
+        f"\n---\n\n## Summary\n\n"
+        f"| | Amount (DA) |\n|---|-------------|\n"
+        f"| **Total** | **{int(round(total)):,}** |\n\n"
+        f"---\n\n## Notes\n\n"
+        f"- All prices in DA (Algerian Dinar)\n"
+        f"- TVA 19% included\n\n"
+        f"---\n\n**ITS — Industrial Technology Solutions**\n"
+        f"El Harrouch, Skikda\n"
+    )
+    return content
+
+
 def create_invoice(number: str, client: str, date: str, amount, line_items=None) -> Path:
     INVOICES_DIR.mkdir(parents=True, exist_ok=True)
     path = INVOICES_DIR / f"{number}.md"
     if path.exists():
         raise FileExistsError(f"Invoice {number} already exists")
     today = date or datetime.now().strftime("%Y-%m-%d")
-    content = (
-        f"# ITS — Invoice\n\n"
-        f"**Invoice #:** {number}\n"
-        f"**Date:** {today}\n"
-        f"**Due:** On receipt\n\n"
-        f"---\n\n## Bill To\n\n"
-        f"**Client:** {client}\n\n"
-        f"---\n\n## Line Items\n\n"
-        f"| # | Description | Qty | Unit | Rate (DA) | Amount (DA) |\n"
-        f"|---|-------------|-----|------|-----------|-------------|\n"
-    )
-    if line_items:
-        for i, it in enumerate(line_items, start=1):
-            content += (f"| {i} | {it.get('description', '')} | {it.get('qty', 1)} | "
-                        f"{it.get('unit', 'pcs')} | {it.get('rate', 0)} | {it.get('amount', 0)} |\n")
-    content += (
-        f"\n---\n\n## Summary\n\n"
-        f"| | Amount (DA) |\n|---|-------------|\n"
-        f"| **Total** | **{int(amount):,}** |\n\n"
-        f"---\n\n## Notes\n\n"
-        f"- All prices in DA (Algerian Dinar)\n\n"
-        f"---\n\n**ITS — Industrial Technology Solutions**\n"
-        f"El Harrouch, Skikda\n"
-    )
-    path.write_text(content, encoding="utf-8")
+    path.write_text(_invoice_body(number, client, today, amount, line_items),
+                    encoding="utf-8")
     return path
 
 
-def toggle_invoice_paid(number: str) -> None:
-    path = INVOICES_DIR / f"{number}.md"
-    if not path.exists():
+def update_invoice(number: str, *, client=None, date=None, amount=None, line_items=None) -> None:
+    """Rewrite an invoice preserving its Paid status note."""
+    import readers
+    inv = readers.invoice_by_number(number)
+    if not inv:
         raise FileNotFoundError(f"Invoice {number} not found")
+    status_note = ""
+    if inv["paid"]:
+        status_note = "Paid"
+        if inv["note"]:
+            m = re.search(r"Paid\s*\((.+?)\)", inv["note"])
+            if m:
+                status_note = f"Paid ({m.group(1)})"
+    body = _invoice_body(
+        number,
+        client if client is not None else inv["client"],
+        date if date is not None else inv["date"],
+        amount if amount is not None else inv["amount"],
+        line_items if line_items is not None else inv["line_items"],
+        status_note,
+    )
+    path = INVOICES_DIR / f"{number}.md"
+    backup(path)
+    path.write_text(body, encoding="utf-8")
+
+
+def toggle_invoice_paid(number: str) -> None:
+    import readers
+    inv = readers.invoice_by_number(number)
+    if not inv:
+        raise FileNotFoundError(f"Invoice {number} not found")
+    path = INVOICES_DIR / f"{number}.md"
     text = path.read_text(encoding="utf-8")
     backup(path)
-    if re.search(r"(?mi)^\*\*Status:\*\*\s*Paid", text):
-        text = re.sub(r"(?mi)^\*\*Status:\*\*\s*Paid.*$\n", "", text)
-    else:
+    if not inv["paid"]:
         date = datetime.now().strftime("%Y-%m-%d")
-        text = re.sub(r"(?m)^(\*\*Client:\*\*.*)$", r"\1\n**Status:** Paid (" + date + ")", text, count=1)
+        if re.search(r"(?mi)^\*\*Status:\*\*", text):
+            text = re.sub(r"(?mi)^\*\*Status:\*\*.*$", f"**Status:** Paid ({date})", text, count=1)
+        else:
+            text = re.sub(r"(?m)^(\*\*Client:\*\*.*)$", r"\1\n**Status:** Paid (" + date + ")", text, count=1)
+    else:
+        text = re.sub(r"(?mi)^\*\*Status:\*\*.*$\n?", "", text, count=1)
     path.write_text(text, encoding="utf-8")
 
 
@@ -363,6 +483,33 @@ def delete_invoice(number: str) -> None:
     if path.exists():
         backup(path)
         path.unlink()
+
+
+# --------------------------------------------------------------------------- backup
+BACKUP_DIR = Path(__file__).resolve().parent / "backups"
+_BACKUP_NOISE = {".git", "__pycache__", "backups", ".venv", "venv", "node_modules"}
+
+
+def create_backup(max_keep: int = 10) -> Path:
+    """Zip the whole ITS Profile (minus noise), keep a dated copy on disk."""
+    BACKUP_DIR.mkdir(parents=True, exist_ok=True)
+    stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    zpath = BACKUP_DIR / f"ITS_Backup_{stamp}.zip"
+    with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as zf:
+        for p in BASE.rglob("*"):
+            if p.is_dir() or p.suffix == ".bak":
+                continue
+            parts = p.relative_to(BASE).parts
+            if any(part in _BACKUP_NOISE for part in parts):
+                continue
+            zf.write(p, str(p.relative_to(BASE)).replace("\\", "/"))
+    prev = sorted(BACKUP_DIR.glob("ITS_Backup_*.zip"), reverse=True)
+    for old in prev[max_keep:]:
+        try:
+            old.unlink()
+        except OSError:
+            pass
+    return zpath
 
 
 # --------------------------------------------------------------------------- next number helper

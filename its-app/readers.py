@@ -349,9 +349,41 @@ def invoices():
             "amount": amount,
             "paid": paid_flag,
             "note": note,
+            "line_items": _parse_line_items(text),
             "short": text[:2000],
         })
     return out
+
+
+def _parse_line_items(text):
+    """Parse the line-items table block out of an invoice markdown body."""
+    items = []
+    in_table = False
+    for ln in text.splitlines():
+        s = ln.strip()
+        if not s.startswith("|"):
+            if "summary" in s.lower():
+                break
+            continue
+        if s.startswith("| # |"):
+            in_table = True
+            continue
+        if not in_table:
+            continue
+        if re.match(r"^\|[-|: ]+\|$", s):
+            continue
+        cells = [c.strip() for c in s.strip("|").split("|")]
+        if cells and cells[0].startswith("**"):
+            break
+        if cells and cells[0].isdigit() and len(cells) >= 4:
+            items.append({
+                "description": cells[1] if len(cells) > 1 else "",
+                "qty": cells[2] if len(cells) > 2 else 1,
+                "unit": cells[3] if len(cells) > 3 else "",
+                "rate": _num(cells[4]) if len(cells) > 4 else 0,
+                "amount": _num(cells[5]) if len(cells) > 5 else 0,
+            })
+    return items
 
 
 # --------------------------------------------------------------------------- documents registry
@@ -387,3 +419,146 @@ def categories():
     for t in finance():
         cats.setdefault(t["type"], set()).add(t["category"])
     return {k: sorted(v) for k, v in cats.items()}
+
+
+# --------------------------------------------------------------------------- invoices lookup
+def invoice_by_number(number: str):
+    for inv in invoices():
+        if inv["number"] == number:
+            return inv
+    return None
+
+
+# --------------------------------------------------------------------------- clients aggregation
+def known_client_names():
+    """All client-like names referenced anywhere in the vault data."""
+    names = set()
+    for c in clients():
+        if c.get("name"):
+            names.add(c["name"].strip())
+        if c.get("company"):
+            names.add(c["company"].strip())
+    for t in finance():
+        if t["type"] == "income" and t["category"]:
+            names.add(t["category"].strip())
+    for inv in invoices():
+        if inv["client"]:
+            names.add(inv["client"].strip())
+    for j in jobs():
+        for v in (j["customer"], j["company"]):
+            if v:
+                names.add(v.strip())
+    for l in leads():
+        if l["company"]:
+            names.add(l["company"].strip())
+    return sorted(n for n in names if n)
+
+
+def client_detail(name: str):
+    """Aggregate everything about one client/labour across the vault."""
+    q = name.lower()
+    fin = [t for t in finance()
+           if q in t["category"].lower() or q in t["description"].lower()]
+    invs = [i for i in invoices() if q in (i["client"] or "").lower()]
+    js = [j for j in jobs() if q in (j["customer"] or "").lower()
+          or q in (j["company"] or "").lower()]
+    lds = [l for l in leads() if q in (l["company"] or "").lower()]
+    income = sum(t["amount"] for t in fin if t["type"] == "income")
+    expense = sum(t["amount"] for t in fin if t["type"] == "expense")
+    return {
+        "name": name,
+        "finance": fin,
+        "invoices": invs,
+        "jobs": js,
+        "leads": lds,
+        "income": income,
+        "expense": expense,
+        "profit": income - expense,
+        "unpaid": sum(i["amount"] for i in invs if not i["paid"]),
+    }
+
+
+# --------------------------------------------------------------------------- jobs workflow
+JOB_STAGES = ["Received", "Diagnosed", "Quoted", "Accepted",
+              "In Progress", "Done", "Delivered", "Picked up"]
+JOB_TERMINAL = {"picked up", "cancelled", "closed", "delivered"}
+
+
+def next_job_stage(status: str) -> str:
+    status = (status or "").strip()
+    if status.lower() == "in progress":
+        return "Done"
+    for i, s in enumerate(JOB_STAGES):
+        if status.lower() == s.lower():
+            return JOB_STAGES[i + 1] if i + 1 < len(JOB_STAGES) else "Done"
+    return "Received"
+
+
+def job_age_days(date_in: str) -> int:
+    try:
+        return (datetime.now() - datetime.strptime(date_in[:10], "%Y-%m-%d")).days
+    except Exception:
+        return 0
+
+
+# --------------------------------------------------------------------------- global search
+def _doc_snippet(path: Path, maxlen: int = 320):
+    if path.suffix.lower() not in (".md", ".txt", ".csv", ".html", ".json"):
+        return ""
+    try:
+        text = path.read_text(encoding="utf-8", errors="ignore")
+    except Exception:
+        return ""
+    return re.sub(r"\s+", " ", text)[:maxlen]
+
+
+def search(q: str):
+    """Live grouped search across the whole vault."""
+    ql = q.lower().strip()
+    out = {"documents": [], "daily": [], "finance": [], "projects": [],
+           "invoices": [], "jobs": [], "clients": [], "leads": []}
+    if not ql:
+        return out
+    for d in documents():
+        if ql in d["name"].lower() or ql in d["folder"].lower():
+            d = dict(d)
+            d["snippet"] = _doc_snippet(BASE / d["path"])
+            out["documents"].append(d)
+    for n in daily_notes():
+        hay = " ".join(str(x) for x in (n["date"], n["focus"], n["status"], n["energy"]))
+        if ql in hay.lower():
+            out["daily"].append(n)
+    for t in finance():
+        if ql in t["description"].lower() or ql in t["category"].lower():
+            out["finance"].append(t)
+    for p in projects():
+        hay = " ".join([p["title"], " ".join(p["tags"]), p["status"], p["type"]])
+        if ql in hay.lower():
+            out["projects"].append(p)
+    for inv in invoices():
+        if ql in inv["number"].lower() or ql in (inv["client"] or "").lower():
+            out["invoices"].append(inv)
+    for j in jobs():
+        hay = " ".join(str(x) for x in (j["wo"], j["customer"], j["company"],
+                                        j["board"], j["equipment"], j["status"]))
+        if ql in hay.lower():
+            out["jobs"].append(j)
+    for c in clients():
+        if ql in " ".join(str(x) for x in c.values()).lower():
+            out["clients"].append(c)
+    for l in leads():
+        if ql in " ".join(str(x) for x in (l["company"], l["contact"], l["notes"], l["zone"])).lower():
+            out["leads"].append(l)
+    return out
+
+# --------------------------------------------------------------------------- syncing health
+def note_totals(date: str):
+    """(income, expense) actually tracked in finance for one date."""
+    inc = exp = 0.0
+    for t in finance():
+        if t["date"] == date:
+            if t["type"] == "income":
+                inc += t["amount"]
+            else:
+                exp += t["amount"]
+    return inc, exp
