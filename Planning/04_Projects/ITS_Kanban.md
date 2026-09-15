@@ -18,7 +18,9 @@ tags:
 ## In Progress
 
 - [ ] VFD job (3 units) → [[Client_Jobs]]
-- [ ] PCB wash machine — source + order → [[Client_Jobs]]
+- [ ] PCB washing machine — repair → [[Client_Jobs]]
+- [ ] Water filter prototype — design + build → [[Client_Jobs]]
+- [ ] Shop equipment list → [[Client_Jobs]]
 
 
 ## Done
